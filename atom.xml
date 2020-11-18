@@ -1,0 +1,2685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Thibaud’s blog]]></title>
+  <link href="https://thib.me/atom.xml" rel="self"/>
+  <link href="https://thib.me/"/>
+  <updated>2020-11-18T16:25:36+00:00</updated>
+  <id>https://thib.me/</id>
+  <author>
+    <name><![CDATA[Thibaud Colas]]></name>
+    
+  </author>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Detecting Wagtail in the wild]]></title>
+    <link href="https://thib.me/detecting-wagtail-in-the-wild"/>
+    <updated>2020-11-18T15:15:22+00:00</updated>
+    <id>https://thib.me/detecting-wagtail-in-the-wild</id>
+    <content type="html"><![CDATA[<p>How can you tell if a site is made with Wagtail or not? There are more ways than people might think at first sight, and after a few years of toying with the idea I finally put together a way to detect Wagtail sites that strikes a good balance between reliability and convenience. Let’s go birdwatching.</p>
+
+<!-- more -->
+
+<h2 id="ways-to-detect-wagtail">Ways to detect Wagtail</h2>
+
+<p>I could think of a few <a href="https://github.com/springload/madewithwagtail/issues/62">when I first started thinking of this problem</a>:</p>
+
+<ul>
+  <li>Determine if the site is built with Django. See https://stackoverflow.com/questions/721934/how-can-you-tell-if-a-site-has-been-made-with-django (that’s a start)</li>
+  <li>Check if the site uses a Wagtail badge (https://wagtail.io/wagtail-badges/) (not too frequently used)</li>
+  <li>Load <code class="language-plaintext highlighter-rouge">/admin/login</code> and check for “wagtail” in the response (either in the page title, or wagtailadmin JS file – that’s a 100% tell I think).</li>
+</ul>
+
+<p>The problem with a lot of those approaches is that they rely on crawling the site, which isn’t very reliable, and can be complicated to do in batches across a lot of sites. It’s also unclear how common the signs above would be across the breadth of Wagtail sites.</p>
+
+<p>The ideal approach would be HTTP response headers – which could be obtained from any pages with a lightweight HEAD request. Wagtail unfortunately doesn’t have any, so the next best thing is to inspect the pages’ markup:</p>
+
+<ul>
+  <li>Wagtail’s (legacy) rich text uses the <code class="language-plaintext highlighter-rouge">rich-text</code> class to wrap the HTML of rich text fields</li>
+  <li>Rich text images use hard-coded classes like <a href="https://github.com/wagtail/wagtail/blob/bb2e460c0b92fba802fc3f369730004d6b648e64/wagtail/images/formats.py#L91-L94"><code class="language-plaintext highlighter-rouge">richtext-image full-width</code></a></li>
+  <li>Wagtail’s documents are served from a <a href="https://github.com/wagtail/wagtail/blob/bb2e460c0b92fba802fc3f369730004d6b648e64/wagtail/documents/urls.py#L6"><code class="language-plaintext highlighter-rouge">/documents/</code></a> sub-path.</li>
+  <li>And many more of these</li>
+</ul>
+
+<p>The Wagtail markup that’s the most common is <a href="https://docs.wagtail.io/en/stable/topics/images.html?highlight=renditions#generating-image-renditions-in-python">image renditions</a> URLs. This does mean that this detection only works on pages that contain user-uploaded images (as opposed to static images). Here are a few examples of URLs from renditions:</p>
+
+<pre><code class="language-txt">https://www.jazzfestival.nz/media/images/video-fallback-image_1.width-1920.png
+/media/images/bevi_3_mob.original.format-png.png
+/media/original_images/Social_Distancing_Dashboard_-_image_1_TU_DelftAMS_Institute.png
+https://buckup-ff-stories.s3.amazonaws.com/original_images/Lockup_Logo_-_JPEG-1.png
+/media/images/UE4LowPolyVehicleTh.2e16d0ba.fill-960x540-c0.jpg
+</code></pre>
+
+<p>The distinctive features are the folders – always either <code class="language-plaintext highlighter-rouge">images</code> or <code class="language-plaintext highlighter-rouge">original_images</code>, either placed directly at the root of a site, or from a <code class="language-plaintext highlighter-rouge">/media</code> subfolder at the root, or a single level up. And then the fact that all of the site’s images are placed in those two folders without any additional sub-folders, with file name suffixes following a set format for all files under <code class="language-plaintext highlighter-rouge">images/</code> like <code class="language-plaintext highlighter-rouge">.width-1920</code> or <code class="language-plaintext highlighter-rouge">.fill-960x450-c0</code> above. I came up with the particular regex used here after trying out different variations on 800’000 homepages from the <a href="https://majestic.com/reports/majestic-million">Majestic Million</a> list of domains.</p>
+
+<h2 id="the-regex">The regex</h2>
+
+<p>Here is a simplified diagram of the logic (created with <a href="https://regexper.com/#%5C%2F%28original_images%5C%2F%5B%5Cw-%5D%2B%5C.%7Cimages%5C%2F%5B%5Cw-.%5D%2B%5C.%28%28fill%7Cmax%7Cmin%7Cwidth%7Cheight%7Cscale%29-%5Cd%7Coriginal%29%29">regexper</a>):</p>
+
+<p><img src="/images/blog/detecting-wagtail-in-the-wild/regexper-diagram.svg" alt="regexper train diagram of Wagtail regular expressions" /></p>
+
+<h2 id="real-world-usage">Real-world usage</h2>
+
+<p>It could be more complex and precise but this wouldn’t actually change much to its real-world usefulness, so I gradually simplified it to the above. With this in place, we can then create different ways to run this detection on arbitrary websites:</p>
+
+<ul>
+  <li>The online website, <a href="https://detect-wagtail.netlify.app/">detect-wagtail.netlify.app</a>.</li>
+  <li>A bookmarket, also available from <a href="https://detect-wagtail.netlify.app/">detect-wagtail.netlify.app</a>.</li>
+  <li>A browser extension thanks to <a href="https://github.com/AliasIO/wappalyzer">Wappalyzer</a>.</li>
+  <li>A Node CLI, also thanks to <a href="https://github.com/AliasIO/wappalyzer">Wappalyzer</a>.</li>
+  <li>As an npm package for more custom needs, <a href="https://www.npmjs.com/package/detect-wagtail">detect-wagtail</a></li>
+</ul>
+
+<h2 id="real-world-data">Real-world data</h2>
+
+<p>With this regex in place, I tried it out on a few lists of websites. See <a href="https://github.com/thibaudcolas/detect-wagtail/tree/main/docs/analysis">detect-wagtail/docs/analysis</a> for the full details.</p>
+
+<h3 id="eu-public-sector-websites">EU public sector websites</h3>
+
+<p>From <a href="https://www.funka.com/en/projekt/we4authors/">We4authors</a>. Based on this analysis, 3 national-level public sector websites are built with Wagtail:</p>
+
+<pre><code class="language-txt">www.danepubliczne.gov.pl
+www.nhs.uk
+www.nesta.org.uk
+</code></pre>
+
+<h3 id="us-federal-websites">US federal websites</h3>
+
+<p>Analysis of the US federal websites from the <a href="https://github.com/GSA/digitalgov.gov/blob/main/content/resources/content-management-systems-used-by-government-agencies.md">digital.gov list</a>.</p>
+
+<pre><code class="language-txt">fec.gov
+www.peacecorps.gov
+www.consumerfinance.gov
+</code></pre>
+
+<h3 id="made-with-wagtail">Made with Wagtail</h3>
+
+<p><a href="https://madewithwagtail.org/">Made with Wagtail</a> is a showcase of a lot of Wagtail sites and apps. About two thirds of sites listed are detected with the following regular expressions.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ag <span class="s1">'\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min|width|height|scale)-\d|original))'</span> mww <span class="nt">--stats-only</span>
+<span class="c"># 382 files contained matches</span>
+ag <span class="s1">'\/media\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min)-\d+x\d+(-c\d+)?|(width|height|scale)-\d+|original)\.)'</span> mww <span class="nt">--stats-only</span>
+<span class="c"># 292 files contained matches</span>
+</code></pre></div></div>
+
+<h3 id="majestic-million">Majestic Million</h3>
+
+<p>The <a href="https://majestic.com/reports/majestic-million">Majestic Million</a> is a dataset of 1M domain names ordered by popularity. We can also use the above methodology to assess how many websites are made with Wagtail on this list (about 0.05%).</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ag <span class="s1">'\/media\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min)-\d+x\d+(-c\d+)?|(width|height|scale)-\d+|original)\.)'</span> million <span class="nt">--stats-only</span>
+<span class="c"># 296 files contained matches</span>
+ag <span class="s1">'\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min|width|height|scale)-\d|original))'</span> ../detect-wagtail-data/million <span class="nt">--stats-only</span>
+<span class="c"># 528 files contained matches</span>
+</code></pre></div></div>
+
+<h2 id="security-implications">Security implications</h2>
+
+<p>Based on this research, it’s now obvious telling whether a site is built with Wagtail or not really doesn’t take that much effort. It’s also clear that this is completely doable at a large scale, scanning the web for vulnerable Wagtail sites, as is commonplace for other platforms. The common wisdom is to avoid relying on <a href="https://en.wikipedia.org/wiki/Security_through_obscurity">security through obscurity</a>. Some people do argue that some obscurity doesn’t hurt. Don’t count on it. Take the time to establish a threat model for your site, and protect it accordingly by restricting its access, and implementing brute force protections where relevant.</p>
+
+<p>Also keep your site up-to-date with security fixes for all its dependencies. While the approach described here doesn’t make it possible to determine which version of Wagtail is used – there are other very viable approach that make this equally as easy (see <a href="https://github.com/caioariede/detect-django-version">detect-django-version</a> for inspiration).</p>
+
+<h2 id="applications">Applications</h2>
+
+<p>There are a lot more applications to being able to detect Wagtail websites than just knowing how many there are out there. <a href="WhatCMS.org">WhatCMS.org</a> has had some amount of Wagtail data for years and is a good example of the potential for market analysis. For me, I’m more interested in seeing how Wagtail is used in the wild. Here are interesting questions this could help with:</p>
+
+<ul>
+  <li>Wagtail headless usage – which static site generators are the most common with Wagtail, that would be worth documenting the usage of better.</li>
+  <li>Security best practices – how many websites have the Wagtail admin accessible from any IP vs being restricted.</li>
+  <li>Accessibility – how accessible Wagtail sites are.</li>
+</ul>
+
+<p>This last point is the one I’m the most interested in – in particular, comparing Wagtail’s results to those of other technologies in the <a href="https://webaim.org/projects/million/">WebAIM Million</a>. We’ll see how that goes!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessibility wins for Django projects]]></title>
+    <link href="https://thib.me/accessibility-wins-for-django-projects"/>
+    <updated>2020-09-15T22:15:22+00:00</updated>
+    <id>https://thib.me/accessibility-wins-for-django-projects</id>
+    <content type="html"><![CDATA[<p>Talk at DjangoCon EU 2020</p>
+
+<!-- more -->
+
+<ul>
+  <li><a href="https://docs.google.com/presentation/d/1JWroGeYl7JlP2OHbG4a4h0SxSlMsWJvRTvDm0kFkqhQ/edit">Google Slides: DjangoCon EU 2020 - Accessibility wins for Django projects</a></li>
+  <li><a href="https://drive.google.com/file/d/12tedghT8bRGhnZgWt7tXWv_qtvJ1YKCA/view?usp=sharing">PDF: DjangoCon EU 2020 - Accessibility wins for Django projects</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing accessibility in Continuous Integration with Pa11y and beyond]]></title>
+    <link href="https://thib.me/testing-accessibility-in-ci-with-pa11y-and-beyond"/>
+    <updated>2020-08-13T21:21:08+00:00</updated>
+    <id>https://thib.me/testing-accessibility-in-ci-with-pa11y-and-beyond</id>
+    <content type="html"><![CDATA[<p>Here are tools I recommend to test for accessibility issues in continuous integration, where automation is the only option, and reliability is paramount.</p>
+
+<!-- more -->
+
+<h2 id="the-requirements-of-ci">The requirements of CI</h2>
+
+<p>It’s worth pointing out early – no accessibility testing tool can <a href="https://alphagov.github.io/accessibility-tool-audit/">find all issues</a> . With this in mind, in CI, we need to focus on tools that find as much as possible… but don’t create false positives, which are very damaging when they fail your build. It’s more important for a tool to have a <a href="https://en.wikipedia.org/wiki/Precision_and_recall">high precision, than a high recall</a>).</p>
+
+<h2 id="static-analysis">Static analysis</h2>
+
+<p>This is always a valuable first line of defense.</p>
+
+<ul>
+  <li>
+    <p>Basic checks for stylesheets: <a href="https://github.com/YozhikM/stylelint-a11y">stylelint-a11y</a></p>
+  </li>
+  <li>Relatively advanced checks for React code: <a href="https://github.com/yannickcr/eslint-plugin-react">eslint-plugin-react</a>, <a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a></li>
+  <li>And a Vue equivalent: <a href="https://github.com/maranran/eslint-plugin-vue-a11y">eslint-plugin-vue-a11y</a></li>
+  <li>For HTML templates, you can try my own experimental HTML templates linter, <a href="https://github.com/thibaudcolas/curlylint">Curlylint</a>.</li>
+</ul>
+
+<h2 id="accessibility-tests-in-unit-and-integration-tests">Accessibility tests in unit and integration tests</h2>
+
+<p>Here are the options, from simplest to most complex:</p>
+
+<ul>
+  <li><a href="https://github.com/nickcolley/jest-axe">jest-axe</a> in jsdom for React projects. It’s very lightweight to set up, and gives surprisingly good results.</li>
+  <li><a href="https://github.com/nickcolley/jest-axe">jest-axe</a> in Puppeteer. It’s not lightweight to set up, far from it, but does a bit more.</li>
+  <li><a href="https://pa11y.org/">Pa11y</a>, or <a href="https://github.com/pa11y/pa11y-ci">pa11y-ci</a>. Not lightweight either, but simple to configure.</li>
+  <li>Google’s Lighthouse also has a <a href="https://github.com/GoogleChrome/lighthouse-ci">Lighthouse CI</a> variant which may be useful when also wanting to have performance and best practice checks.</li>
+  <li>An alternative could also be to run HTML validation with <a href="https://validator.github.io/validator/">V.Nu HTML5 validator</a>.</li>
+</ul>
+
+<h2 id="what-to-test">What to test</h2>
+
+<p>It’s not always easy to have test content to run the checks against of in CI. My personal preference is to run the tests against a pattern library’s components, for example <a href="https://storybook.js.org/">Storybook</a> or <a href="https://github.com/torchbox/django-pattern-library">django-pattern-library</a>. As part of creating the components, we naturally create test data for them similarly to unit tests (TDD or not) – this test content can then be used to test the components’ variations for accessibility issues.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reusable UI components – A journey from React to Wagtail]]></title>
+    <link href="https://thib.me/reusable-ui-components-journey-from-react-to-wagtail"/>
+    <updated>2020-07-31T01:15:22+00:00</updated>
+    <id>https://thib.me/reusable-ui-components-journey-from-react-to-wagtail</id>
+    <content type="html"><![CDATA[<p>This is Ben Dickinson and I’s joint <a href="https://us.wagtail.space/">Wagtail Space US 2020</a> talk about pattern libraries at Torchbox, introducing <a href="https://github.com/torchbox/django-pattern-library">django-pattern-library</a>.</p>
+
+<!-- more -->
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/isrOufI7TKc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>Slides: <a href="https://docs.google.com/presentation/d/1pZAbunn0Ci8B9NR0mS5taOPe7BMdAiDrKNIcd9xBWO4/edit">Wagtail Space US 2020 - Reusable UI components – A journey from React to Wagtail</a></p>
+
+<hr />
+
+<h2 id="pattern-libraries-as-a-methodology">Pattern libraries as a methodology</h2>
+
+<h3 id="atomic-design">Atomic Design</h3>
+
+<h3 id="pattern-lab">Pattern Lab</h3>
+
+<h2 id="react">React</h2>
+
+<h3 id="a-paradigm-shift">A paradigm shift</h3>
+
+<ul>
+  <li>Component-driven UIs</li>
+  <li>Functional programming for UIs</li>
+  <li>Not a template language</li>
+</ul>
+
+<h3 id="what-makes-react-good-in-practice">What makes React good in practice</h3>
+
+<ul>
+  <li>Nice developer experience</li>
+  <li>Reusable components</li>
+  <li>Maintainable, testable code</li>
+  <li>Component-driven development with Storybook</li>
+</ul>
+
+<h3 id="pattern-libraries-at-torchbox">Pattern libraries at Torchbox</h3>
+
+<p>The codified interface between front-end and back-end work</p>
+
+<ul>
+  <li>Clarifies responsibilities, separates concerns, both in code, and as members of a development team</li>
+  <li>If needed, makes it possible for front-end developers to work on pages and block templates before the models are done</li>
+  <li>Encourages code reuse – defining independent UI components, easy to port to other projects</li>
+</ul>
+
+<h3 id="current-trends-design-systems">Current trends: design systems</h3>
+
+<ul>
+  <li><a href="https://designsystem.digital.gov/">USWDS</a></li>
+  <li><a href="https://design-system.service.gov.uk/">GOV.UK Design System</a></li>
+  <li><a href="https://luna.sainsburys.co.uk/">Sainsbury’s Luna</a></li>
+  <li><a href="https://decanter.stanford.edu/">Stanford’s Decanter</a></li>
+</ul>
+
+<h2 id="why-develop-another-pattern-library-tool">Why develop another pattern library tool?</h2>
+
+<h3 id="challenges">Challenges</h3>
+
+<ul>
+  <li>Most of our projects are not API-driven React SPAs - they’re vanilla Django/Wagtail</li>
+  <li>Django has a proprietary template language</li>
+  <li>Translating non-Django templates from a pattern library is time-consuming and error-prone</li>
+  <li>Duplicating templates is a maintenance burden and often leads to divergence</li>
+</ul>
+
+<h3 id="more-challenges">More challenges!</h3>
+
+<ul>
+  <li>Template tags are great, but are discouraged by using a pattern library that doesn’t support them</li>
+  <li>Tags often depend on the database (e.g. <code class="language-plaintext highlighter-rouge">include_block foo</code>)</li>
+  <li>Visual testing requires time-consuming manual setup</li>
+  <li>Django’s native testing tools are inadequate for visual testing - especially cross-browser</li>
+</ul>
+
+<h3 id="pattern-lab-goes-django">Pattern Lab goes Django!</h3>
+
+<p>pip install django-pattern-library</p>
+
+<h3 id="features">Features</h3>
+
+<ul>
+  <li>Component playground for Django template partials</li>
+  <li>Mock template context from YAML files</li>
+  <li>Template documentation in markdown</li>
+  <li>Mock out template tags (both built-in and user-defined tags)</li>
+</ul>
+
+<h3 id="advantages">Advantages</h3>
+
+<ul>
+  <li>No duplication of templates - the pattern library uses the real templates</li>
+  <li>All components can be viewed in one place</li>
+  <li>Easier visual testing</li>
+  <li>No need for content in the DB</li>
+  <li>Front-end development can happen before the models are ready</li>
+</ul>
+
+<h3 id="known-issues">Known issues</h3>
+
+<ul>
+  <li>Documentation is good but could be much better</li>
+  <li>Context merging is fragile and requires some repetition in YAML files</li>
+  <li>Template tag mocking is not flexible enough</li>
+  <li>No support for mocking filters yet</li>
+  <li>Richer objects are fiddly to mock (e.g. ``)</li>
+</ul>
+
+<h2 id="demo-time">Demo time!</h2>
+
+<h3 id="first-demo">First demo</h3>
+
+<h3 id="second-demo">Second demo</h3>
+
+<p><a href="https://storybook-django.herokuapp.com/?path=/docs/django-patterns-streamfield-quote-block--default">storybook-django</a></p>
+
+<h2 id="takeaways-">Takeaways 🌈</h2>
+
+<h3 id="why-we-recommend-this-approach">Why we recommend this approach</h3>
+
+<ul>
+  <li>As a methodology: speeds up the process for medium to large sites</li>
+  <li>Reusable components: Encourages code reuse and UI consistency across the site</li>
+  <li>Testing opportunities: Manual “unit tests” for UI components, &amp; opportunities for automated visual regression / E2E / accessibility tests</li>
+</ul>
+
+<h3 id="ready-to-use">Ready to use</h3>
+
+<ul>
+  <li>Used for all production Wagtail sites at Torchbox: <a href="https://github.com/torchbox/django-pattern-library">django-pattern-library</a></li>
+  <li>Experimental, used on two projects, feedback welcome: <a href="https://github.com/torchbox/storybook-django">storybook-django</a></li>
+  <li>For all our React projects: <a href="https://storybook.js.org/">Storybook</a></li>
+</ul>
+
+<h3 id="ready-for-contributions-">Ready for contributions 😬</h3>
+
+<ul>
+  <li>Open-sourced <a href="https://github.com/torchbox/django-pattern-library">django-pattern-library</a> a few months ago</li>
+  <li><a href="https://github.com/torchbox/storybook-django">storybook-django</a> still very experimental</li>
+  <li>Feedback welcome</li>
+</ul>
+
+<p>Backlog for the next three months: <a href="https://github.com/torchbox/django-pattern-library/projects/3">github.com/torchbox/django-pattern-library/projects/3</a></p>
+
+<h2 id="thank-you">Thank you!</h2>
+
+<p>Thank you to Dan, Tom, William, Nick for helping us rehearse!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessibility wins for Wagtail projects]]></title>
+    <link href="https://thib.me/accessibility-wins-for-wagtail-projects"/>
+    <updated>2020-07-30T01:15:22+00:00</updated>
+    <id>https://thib.me/accessibility-wins-for-wagtail-projects</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk at <a href="https://us.wagtail.space/">Wagtail Space US 2020</a> about the accessibility of Wagtail websites – following on last year’s talk about the <a href="/making-wagtail-accessible">accessibility of the Wagtail admin</a>.</p>
+
+<!-- more -->
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ZcHfUu_u4e0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>Slides: <a href="https://docs.google.com/presentation/d/14iSPklZmrjlMZlaFOBP1Mavt_tmz6vcF_t6cHVCCek8/edit">Wagtail Space US 2020 - Accessibility wins for Wagtail projects</a></p>
+
+<hr />
+
+<h2 id="why-accessibility-matters">Why accessibility matters</h2>
+
+<h3 id="inclusive-experiences">Inclusive experiences</h3>
+
+<ul>
+  <li>We want all users to have a great experience, no matter how they use the web.</li>
+  <li>Accessibility improvements lead to usability improvements for all.</li>
+</ul>
+
+<p>Search: “Curb cut effect”</p>
+
+<h3 id="accessibility-is-not-an-optional-extra">Accessibility is not an optional extra</h3>
+
+<p>USA:</p>
+
+<ul>
+  <li><a href="https://section508.gov/">Section 508</a> for recipients of federal funding, <a href="https://www.ada.gov/">ADA</a> for all*.</li>
+</ul>
+
+<p>EU/UK:</p>
+
+<ul>
+  <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016L2102">EU Directive 2016/2102</a> for the public sector, UK <a href="https://www.legislation.gov.uk/ukpga/2010/15/contents">Equality Act 2010</a> for all.</li>
+</ul>
+
+<p>In the end it’s all based on <a href="https://www.w3.org/TR/WCAG21/">WCAG 2.1 AA</a>.</p>
+
+<p>* I’m not a lawyer. See <a href="https://gizmodo.com/gimlet-media-sued-for-not-making-podcasts-accessible-to-1844369021">Gimlet Media lawsuit</a></p>
+
+<h3 id="oh-and-its-not-just-about-wagtail-sites">Oh and it’s not just about Wagtail sites</h3>
+
+<p>Intranets, CRMs, ERPs, dashboards. Django admin.</p>
+
+<p>Internal-only tools shouldn’t compromise on accessibility just because their audience is smaller.</p>
+
+<p><a href="https://alistapart.com/article/building-the-woke-web/">alistapart.com/article/building-the-woke-web</a></p>
+
+<h2 id="common-wagtail-issues">Common* Wagtail issues</h2>
+
+<p>* Very common. Go check your sites after the talk</p>
+
+<h3 id="alt-text-for-images">Alt text for images</h3>
+
+<ol>
+  <li>Images’ Title fields are auto-populated with file names on upload</li>
+  <li>Wagtail sets alt text based on image Title by default</li>
+  <li>????</li>
+</ol>
+
+<p>Solution: always have an “alt text” field wherever an image is used.</p>
+
+<p><a href="https://github.com/wagtail/rfcs/pull/51">RFC #51</a>, <a href="https://github.com/wagtail/wagtail/issues/4945">#4945</a>, <a href="https://github.com/wagtail/rfcs/pull/44">RFC #44</a>, <a href="https://github.com/wagtail/wagtail/pull/5789">#5789</a></p>
+
+<h3 id="alt-text-for-images-2">Alt text for images, #2</h3>
+
+<ul>
+  <li>Have a mandatory alt text field when images aren’t decorative…</li>
+  <li>Display it</li>
+</ul>
+
+<p>Solution: always have an “alt text” field wherever an image is used.</p>
+
+<p><a href="https://github.com/wagtail/rfcs/pull/51">RFC #51</a>, <a href="https://github.com/wagtail/wagtail/issues/4945">#4945</a>, <a href="https://github.com/wagtail/rfcs/pull/44">RFC #44</a>, <a href="https://github.com/wagtail/wagtail/pull/5789">#5789</a></p>
+
+<h3 id="alt-text-for-images-3">Alt text for images, #3</h3>
+
+<ul>
+  <li>Always have an alt text field for each usage of an image</li>
+  <li>Make sure the field is optional when appropriate so decorative images can be hidden</li>
+  <li>Give appropriate guidance to editors, <a href="https://axesslab.com/alt-texts/">axesslab.com/alt-texts</a></li>
+  <li>Wagtail’s rich text images alt text needs to become optional</li>
+</ul>
+
+<p>Solution: always have an “alt text” field wherever an image is used.</p>
+
+<p><a href="https://github.com/wagtail/rfcs/pull/51">RFC #51</a>, <a href="https://github.com/wagtail/wagtail/issues/4945">#4945</a>, <a href="https://github.com/wagtail/rfcs/pull/44">RFC #44</a>, <a href="https://github.com/wagtail/wagtail/pull/5789">#5789</a></p>
+
+<h3 id="embed-titles">Embed titles</h3>
+
+<ul>
+  <li>In some cases, Wagtail embeds don’t have a title attribute set</li>
+  <li>Screen reader users need it to know what the embed is, and decide to browse it, or skip it</li>
+</ul>
+
+<p>Solution: either check your embed provider returns a title in 100% of the cases, or add a mandatory “Title” field for all embeds.</p>
+
+<p><a href="https://github.com/wagtail/wagtail/issues/5982">#5982</a></p>
+
+<h3 id="heading-levels">Heading levels</h3>
+
+<p>Screen reader users rely on logical, lean heading outlines to navigate pages</p>
+
+<ul>
+  <li>Wagtail makes it easy to restrict which heading levels are available in any rich text field. Do it.</li>
+  <li>Also restrict which heading levels are available via StreamField</li>
+  <li>Keep your templates in check too.</li>
+</ul>
+
+<p>Solution: <a href="https://docs.wagtail.io/en/stable/advanced_topics/customisation/page_editing_interface.html#limiting-features-in-a-rich-text-field">Limiting features in a rich text field</a>. Use <a href="https://github.com/neon-jungle/wagtail-accessibility">wagtail-accessibility</a>.</p>
+
+<h3 id="heading-levels-2">Heading levels, #2</h3>
+
+<p>Heading levels</p>
+
+<p>Screen reader users rely on logical, lean heading outlines to navigate pages</p>
+
+<ul>
+  <li>Validate that no heading is left empty</li>
+  <li>Or, consider hiding empty headings with CSS (h2:empty { display: none; })</li>
+</ul>
+
+<p>Solution: <a href="https://docs.wagtail.io/en/stable/advanced_topics/customisation/page_editing_interface.html#limiting-features-in-a-rich-text-field">Limiting features in a rich text field</a>. Use <a href="https://github.com/neon-jungle/wagtail-accessibility">wagtail-accessibility</a>.</p>
+
+<p>In the future – rich text rewriting to remove empty headings? <a href="https://github.com/wagtail/wagtail/issues/4223">#4223</a></p>
+
+<h3 id="other-issues-worth-knowing-about">Other issues worth knowing about</h3>
+
+<ul>
+  <li>TableBlock
+    <ul>
+      <li>The Caption field should be mandatory</li>
+      <li>The header cells field should be mandatory (<a href="https://github.com/wagtail/wagtail/issues/5989">#5989</a>)</li>
+    </ul>
+  </li>
+  <li>Links
+    <ul>
+      <li>We need a way to flag / validate link text to avoid “Read more”, “Click here”, “Find out more”</li>
+      <li>Or having a way to add custom aria-label where relevant</li>
+      <li>Broken links should be user-friendly, not href=”None”.</li>
+    </ul>
+  </li>
+  <li>Forms
+    <ul>
+      <li>Avoid Django’s as_table, as_ul rendering.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="content-wins">Content wins</h2>
+
+<ul>
+  <li><a href="https://github.com/neon-jungle/wagtail-accessibility">wagtail-accessibility</a> (based on <a href="https://khan.github.io/tota11y/">tota11y</a>)</li>
+  <li>help_text (example: <a href="https://github.com/nhsuk/wagtail-nhsuk-frontend">wagtail-nhsuk-frontend</a>)</li>
+  <li><a href="https://docs.wagtail.io/en/stable/reference/pages/panels.html#helppanel">HelpPanel</a> – help_text but bigger</li>
+  <li><a href="https://vixdigital.github.io/draftail-plugins/">wagtail-readinglevel</a></li>
+  <li>Rich text experiments: guidelines-aware spellcheck</li>
+  <li>Rich text experiments: sentence length, <a href="https://wooorm.com/readability/">wooorm.com/readability</a></li>
+</ul>
+
+<h2 id="developer-wins">Developer wins</h2>
+
+<p><a href="https://torchbox.com/blog/accessibility-audits/">Accessibility audits: getting started</a></p>
+
+<h3 id="django-html-validator"><a href="https://github.com/peterbe/django-html-validator">django-html-validator</a></h3>
+
+<p>Based on the official v.Nu validator. Very easy to integrate into your workflow with Docker.</p>
+
+<ul>
+  <li>
+    <p>Finds <a href="https://alphagov.github.io/accessibility-tool-audit/">about 15% of issues</a></p>
+  </li>
+  <li>
+    <p>v.Nu also has a CLI which I recommend as part of accessibility audits</p>
+  </li>
+</ul>
+
+<h3 id="static-analysis">Static analysis</h3>
+
+<ul>
+  <li>React: <a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a></li>
+  <li>Vue: <a href="https://github.com/maranran/eslint-plugin-vue-a11y">eslint-plugin-vue-a11y</a></li>
+  <li>Styles: <a href="https://github.com/YozhikM/stylelint-a11y">stylelint-a11y</a></li>
+</ul>
+
+<h3 id="curlylint">Curlylint</h3>
+
+<h3 id="learn-how-to-use-a-screen-reader">Learn how to use a screen reader</h3>
+
+<p>On a Mac with VoiceOver,</p>
+
+<ul>
+  <li>Cmd + F5 to open VoiceOver. Same to close it.</li>
+  <li>Ctrl to silence it</li>
+  <li>Ctrl + U to open the rotor</li>
+</ul>
+
+<p>That’s it.</p>
+
+<p>Even simpler on iOS.</p>
+
+<p><a href="https://a11ysupport.io/learn/">a11ysupport.io / learn</a></p>
+
+<h2 id="community-wins">Community wins</h2>
+
+<p>A cultural shift?</p>
+
+<h3 id="you-can-be-the-person-on-your-team-who-advocates-for-those-issues-to-be-fixed">You can be the person on your team who advocates for those issues to be fixed</h3>
+
+<p>It matters on all projects, all audiences</p>
+
+<p>There are well-defined standards, and readily available tools.</p>
+
+<p>You can be the person who knows how to use a screen reader and shows others how to do it.</p>
+
+<p><a href="https://alistapart.com/article/building-the-woke-web/">alistapart.com/article/building-the-woke-web</a></p>
+
+<h3 id="wagtail-can-be-a-cms-thats-part-of-the-solution">Wagtail can be a CMS that’s part of the solution</h3>
+
+<p>The <a href="https://webaim.org/projects/million/">WebAIM Million</a> keeps track of the accessibility of 1M websites’ homepages</p>
+
+<ul>
+  <li>Numbers are appalling</li>
+  <li>We can do better</li>
+  <li>Wagtail can help people make accessible websites – better defaults, starter templates, documentation</li>
+</ul>
+
+<h3 id="accessibility-team-">Accessibility team 🌈</h3>
+
+<p>The <a href="https://github.com/wagtail/wagtail/wiki/Accessibility-team">accessibility team</a> focuses on improvements to the accessibility of Wagtail, and of websites built with Wagtail. Everyone is welcome regardless of skill level or background.</p>
+
+<p>Find us on the Wagtail Slack in <a href="https://github.com/wagtail/wagtail/wiki/Slack">#accessibility</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Curlylint: Accessibility linting rules]]></title>
+    <link href="https://thib.me/curlylint-accessibility-linting-rules"/>
+    <updated>2020-07-26T02:22:49+00:00</updated>
+    <id>https://thib.me/curlylint-accessibility-linting-rules</id>
+    <content type="html"><![CDATA[<p>Curlylint now comes with 7 accessibility-related rules, ready to use in HTML templates. See <a href="https://www.curlylint.org/docs/rules/all">All rules</a> for details about the individual rules.</p>
+
+<!-- more -->
+
+<p>This is an important milestone for the linter – essentially demonstrating its usefulness once and for all, if that was still needed.</p>
+
+<h2 id="html-best-practices">HTML best practices</h2>
+
+<p>Most of the rules Curlylint currently ships with are very simple “HTML linting” rules for accessibility, based on established best practice:</p>
+
+<ul>
+  <li><a href="https://www.curlylint.org/docs/rules/aria_role"><code class="language-plaintext highlighter-rouge">aria_role</code></a> just checks that <code class="language-plaintext highlighter-rouge">role</code> attributes are valid.</li>
+  <li>Same for <a href="https://www.curlylint.org/docs/rules/html_has_lang"><code class="language-plaintext highlighter-rouge">html_has_lang</code></a>, for the <code class="language-plaintext highlighter-rouge">html</code> <code class="language-plaintext highlighter-rouge">lang</code> attribute.</li>
+  <li>Same for <a href="https://www.curlylint.org/docs/rules/image_alt"><code class="language-plaintext highlighter-rouge">image_alt</code></a>, <a href="https://www.curlylint.org/docs/rules/meta_viewport"><code class="language-plaintext highlighter-rouge">meta_viewport</code></a>, <a href="https://www.curlylint.org/docs/rules/no_autofocus"><code class="language-plaintext highlighter-rouge">no_autofocus</code></a>, <a href="https://www.curlylint.org/docs/rules/tabindex_no_positive"><code class="language-plaintext highlighter-rouge">tabindex_no_positive</code></a>!</li>
+</ul>
+
+<p>See a pattern? All of these are variations on the same theme of “HTML attributes should only contain a limited range of values based on established best practices”. This is great news for this project – it means there can be quite a lot of results achieved with minimal complexity when it comes to creating individual rules.</p>
+
+<p>In the future, this could easily be taken further to cover:</p>
+
+<ul>
+  <li>Security best practices, for example <code class="language-plaintext highlighter-rouge">rel="noopener"</code>, or disallowing <code class="language-plaintext highlighter-rouge">javascript:</code> URLs in <code class="language-plaintext highlighter-rouge">href</code>.</li>
+  <li>HTML maintainability best practices, for example disallowing duplicate class attributes.</li>
+  <li>And of course, more accessibility and ARIA best practices.</li>
+</ul>
+
+<p>Obligatory mention of <a href="https://github.com/jsx-eslint/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a>, which has been a huge source of inspiration. Generally, modern React tooling has this figured out, with extensive static analysis available. For me, this isn’t just a nice-to-have – it’s hard to always keel all of those best practices in mind, and linting is there to automate this for you. Note this isn’t just React – Vue has its <a href="https://github.com/maranran/eslint-plugin-vue-a11y">eslint-plugin-vue-a11y</a> too!</p>
+
+<h2 id="templates-best-practices">Templates best practices</h2>
+
+<p>This doesn’t have to stop at HTML. Curlylint already supports parsing template syntax, attempting to be usable as a linter for Jinja, Twig, Liquid, <a href="https://www.curlylint.org/docs/template-languages">and the likes</a>. We can also have rules to enforce best practices for this template syntax.</p>
+
+<p>The first example of such a rule is <a href="https://www.curlylint.org/docs/rules/django_forms_rendering"><code class="language-plaintext highlighter-rouge">django_forms_rendering</code></a>, which restricts how forms can be rendered in Django projects, for accessibility reasons. I’m very excited about opportunities like this to codify and share best practices in a way that scales well.</p>
+
+<ul>
+  <li>Hopefully there will be more <a href="https://github.com/django/deps/pull/69">linting rules for Django</a> coming in the future.</li>
+  <li>And more linting rules <a href="https://github.com/wagtail/wagtail/issues/6090">for Wagtail</a> as well.</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Curlylint: Brand new rules documentation]]></title>
+    <link href="https://thib.me/curlylint-brand-new-rules-documentation"/>
+    <updated>2020-07-18T22:05:21+00:00</updated>
+    <id>https://thib.me/curlylint-brand-new-rules-documentation</id>
+    <content type="html"><![CDATA[<p>Have I mentioned <a href="/welcome-to-curlylint">how important I think it is for a linter to have great docs</a>? Well, now is the time for Curlylint to live up to this!</p>
+
+<!-- more -->
+
+<h2 id="new-documentation-format-for-rules">New documentation format for rules</h2>
+
+<p>Up until now the rules’ documentation was pretty sad, essentially limited to what could fit in the project’s README. Now… take a look:</p>
+
+<p><a href="https://www.curlylint.org/docs/rules/image_alt"><img src="/images/blog/curlylint-brand-new-rules-documentation/new-rules-docs.png" alt="Screen capture of the image_alt rule’s documentation" /></a></p>
+
+<ul>
+  <li>The rule’s different configuration options are clearly visible, copy-pasteable, each with a description.</li>
+  <li>Cases where the rule check “succeeds” are well documented, alongside a comment, and matching configuration.</li>
+  <li>Same for problematic cases, which even show the actual error message!</li>
+  <li>All of this is toggle-able between the different configuration formats supported by Curlylint!</li>
+  <li>There are follow-up resources available for developers who want more information about the rule.</li>
+</ul>
+
+<p>This feels like a pretty big step up compared to the previous documentation, and should hopefully make it as easy as possible for people to start using the linter for their templates.</p>
+
+<h2 id="how-this-works">How this works</h2>
+
+<p>The majority of the rules’ documentation is generated from their metadata:</p>
+
+<h3 id="json-schema">JSON Schema</h3>
+
+<p>The configuration options are all defined with <a href="https://json-schema.org/">JSON Schema</a>.Currently this is only used to generate the documentation, but in the future I would also like to make this validate configurations as Curlylint runs.</p>
+
+<p>JSON Schema is particularly good for this because it has built-in support for the schema to be self-documenting – adding titles, descriptions, and examples, which are all used to generate the documentation. Here is the schema of the <a href="https://www.curlylint.org/docs/rules/html_has_lang"><code class="language-plaintext highlighter-rouge">html_has_lang</code></a> rule as an example:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"oneOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"const"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The `lang` attribute must be present."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="kc">true</span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The `lang` attribute must match the configured language tag."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"en-US"</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="test-cases">Test cases</h3>
+
+<p>The success / fail sections are simply coming from the project’s test suite! I always prefer to invest time writing extensive unit tests for projects of this kind. Some of the test cases simply have a flag marking them as “documentation examples”:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Check lang is present"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;html lang=</span><span class="se">\"</span><span class="s2">en</span><span class="se">\"</span><span class="s2">&gt;&lt;/html&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"example"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"config"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>It’s the same story for “fail” cases, where the annotations are simply generated from the expected output (issues):</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Missing"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;html&gt;&lt;/html&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"example"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"config"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"file"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test.html"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"html_has_lang"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The `&lt;html&gt;` tag should have a `lang` attribute with a valid value, describing the main language of the page"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="mdx">MDX</h3>
+
+<p>All of this comes together with <a href="https://mdxjs.com/">MDX</a>, a Markdown-inspired syntax which makes it possible to use JSX directly inside documents, thereby making it possible to use React components, like the language tabs and code snippets with annotations:</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">Tabs</span>
+  <span class="nx">groupId</span><span class="o">=</span><span class="dl">"</span><span class="s2">config-language</span><span class="dl">"</span>
+  <span class="nx">defaultValue</span><span class="o">=</span><span class="dl">"</span><span class="s2">toml</span><span class="dl">"</span>
+  <span class="nx">values</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span> <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">TOML</span><span class="dl">"</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="dl">"</span><span class="s2">toml</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Shell</span><span class="dl">"</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="dl">"</span><span class="s2">shell</span><span class="dl">"</span> <span class="p">},</span>
+  <span class="p">]}</span>
+<span class="o">&gt;</span>
+  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value=</span><span class="s2">"toml"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nc">CodeSnippet</span>
+      <span class="na">snippet=</span><span class="si">{</span><span class="s2">`# The \`alt\` attribute must be present.\nimage_alt = true`</span><span class="si">}</span>
+      <span class="na">annotations=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
+      <span class="na">lang=</span><span class="s2">"toml"</span>
+    <span class="p">/&gt;</span>
+  <span class="p">&lt;/</span><span class="nc">TabItem</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value=</span><span class="s2">"shell"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nc">CodeSnippet</span>
+      <span class="na">snippet=</span><span class="si">{</span><span class="s2">`# The \`alt\` attribute must be present.\ncurlylint --rule 'image_alt: true' .`</span><span class="si">}</span>
+      <span class="na">annotations=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
+      <span class="na">lang=</span><span class="s2">"shell"</span>
+    <span class="p">/&gt;</span>
+  <span class="p">&lt;/</span><span class="nc">TabItem</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="err">/</span><span class="nc">Tabs</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>Docusaurus supports MDX out of the box, and provides the “Tabs” components. The CodeSnippet component is originally from Docusaurus but has been customized to support basic annotations.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Interview exercises for web developers]]></title>
+    <link href="https://thib.me/interview-exercises-for-web-developers"/>
+    <updated>2020-07-05T22:05:21+00:00</updated>
+    <id>https://thib.me/interview-exercises-for-web-developers</id>
+    <content type="html"><![CDATA[<p>Here are a couple of interview exercises I like to give, which are relatively open to varied approaches.</p>
+
+<!-- more -->
+
+<h2 id="before-the-interview-form-validation">Before the interview: Form validation</h2>
+
+<p>I’ve always liked Springload’s <a href="https://github.com/springload/form-validation-problem">form validation problem</a>. It’s a relatively simple problem in apparence – implementing form validation for a basic HTML form, with a few fields, and a few validation rules.</p>
+
+<p>What I think makes it really good is that it’s possible to approach this in many different ways – and there are lots of things for candidates to demonstrate beyond the basic implementation of the form validation – knowledge in any of those areas:</p>
+
+<ul>
+  <li>Documentation</li>
+  <li>Accessibility</li>
+  <li>Progressive enhancement</li>
+  <li>Browser support</li>
+  <li>Testing</li>
+  <li>Tooling</li>
+</ul>
+
+<p>Form validation is a particularly interesting problem in web development because there is a fair amount of state to manage – validation errors for each fields, as well as whether the fields have been interacted with or not to decide when to display the errors.</p>
+
+<p>Candidates can take a shot at this with vanilla JS, a ready-made library like <a href="https://parsleyjs.org/">Parsley</a>, or can be asked to do this with React (Redux Forms, Formik, bespoke?), or even back-end technologies.</p>
+
+<h2 id="at-the-interview-build-this">At the interview: Build This</h2>
+
+<p>This is my go-to “how would you do this” problem, initially encountered at Codemate, which can be used to interview full-stack developers (any stack), or front-end or back-end only. The candidate is shown a specific UI (via a wireframe, screenshot, or real-world app), and is then asked to explain how they would build it within the context of a real project.</p>
+
+<p>Depending on the candidate’s experience level, role, (and level of interview stress), this can be run as an open-ended conversation driven by the candidate directly, or as a series of guided themes / questions.</p>
+
+<p>The whole exercise takes 30min to 1h depending on what is covered – spend a good 5 mins on the problem statement + intro &amp; architecture, then move through the themes.</p>
+
+<p>I really like this because:</p>
+
+<ul>
+  <li>It makes for a more conversational interview – even if the questions are fixed, it’s more natural to have them with a specific app to think about.</li>
+  <li>For candidates, it makes it easier to relate to their past work, for example reflecting on similar apps they’ve built.</li>
+  <li>For interviewers, it does give enough structure to the interview that candidates’ answers can easily be categorised on the fly, and then compared to those of other candidates.</li>
+</ul>
+
+<p>This works particularly well if the wireframe has quite a few things going on visually, with different types of data, a user account, and a form or two.</p>
+
+<h2 id="template-build-this-twitter-clone">Template: Build This Twitter Clone</h2>
+
+<p><img src="/images/blog/interview-exercises-for-web-developers/twitter-wireframe.png" alt="Wireframe of a Twitter clone, showing a logged-in user’s timeline, with few tweets, a form to post a new tweet, and the user’s profile details" /></p>
+
+<p><em>Placeholder wireframe from <a href="https://www.flickr.com/photos/doos/4689874175/in/photostream/">Rob Enslin</a></em></p>
+
+<h3 id="fundamentals">Fundamentals</h3>
+
+<ul>
+  <li><strong>Introduction</strong>
+    <ul>
+      <li>Identify the features of this UI</li>
+      <li>Identify the underlying data / models</li>
+    </ul>
+  </li>
+  <li><strong>Tech stack and architecture</strong>
+    <ul>
+      <li>Rough architecture of the app (front-end and back-end)</li>
+      <li>Overall stack, centred around <code class="language-plaintext highlighter-rouge">&lt;tech we care about&gt;</code></li>
+    </ul>
+  </li>
+  <li><strong>Integrations &amp; APIs</strong>
+    <ul>
+      <li>Integration with the backend, endpoints and payloads</li>
+      <li>Client-side integrations</li>
+    </ul>
+  </li>
+  <li><strong>Data management</strong>
+    <ul>
+      <li>State management tools with <code class="language-plaintext highlighter-rouge">&lt;tech&gt;</code></li>
+      <li>Data flow for a given feature (e.g. search)</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="electives">Electives</h4>
+
+<ul>
+  <li><strong>Mobile-friendly UI</strong>
+    <ul>
+      <li>RWD, cross-browser support</li>
+      <li>Offline capabilities</li>
+    </ul>
+  </li>
+  <li><strong>Security</strong>
+    <ul>
+      <li>Security considerations for a new feature: user accounts with saved searches</li>
+    </ul>
+  </li>
+  <li><strong>Testing / Tooling</strong></li>
+  <li><strong>Accessibility</strong></li>
+  <li><strong>Performance</strong></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Procuring accessibility audits]]></title>
+    <link href="https://thib.me/procuring-accessibility-audits"/>
+    <updated>2020-07-03T18:15:08+00:00</updated>
+    <id>https://thib.me/procuring-accessibility-audits</id>
+    <content type="html"><![CDATA[<p>Following from <a href="/accessibility-audits-getting-started">Accessibility audits: getting started</a>, here are practical tips on how to procure / schedule an accessibility audit, and how to structure the report.</p>
+
+<!-- more -->
+
+<p>Accessibility audits can take anywhere from 10 minutes to a week, depending on the scope of the audit, the amount of manual testing required, and the expected report format.</p>
+
+<p>The main factors for an estimate are:</p>
+
+<ul>
+  <li>What’s the purpose of the audit? Do we want a “compliant = yes/no”, or create a backlog of improvements, or something in-between</li>
+  <li>What’s the scope? How many sites / page types / pages. Provide links to a few pages so we have a sense of how many issues we’re likely to find (the more, the longer it takes to report them).</li>
+  <li>What kind of report / output do they need? Either something for stakeholders, or developers, or both. Generally it takes nearly as much time to write the report as to find the issues.</li>
+</ul>
+
+<p>Avoid compliance pass/fail audits, which are onerous, and for which we aren’t competent. Get in touch with <a href="https://digitalaccessibilitycentre.org/">DAC</a>, <a href="https://www.rnib.org.uk/rnib-business">RNIB</a>, <a href="https://abilitynet.org.uk/accessibility-services/products-and-services">AbilityNet</a>, or <a href="https://www.deque.com/">Deque</a>.</p>
+
+<p><strong>Suggested format for medium websites</strong>: “backlog of improvements”, for which we can make a proposal for 1 to 4 days, based on automated tests, manual tests for 5 to 10 page types. A one-pager “executive summary” report, and adjoining list of issues / backlog as a spreadsheet or Trello board.</p>
+
+<h2 id="audit-strategy">Audit strategy</h2>
+
+<h3 id="target-standards">Target standards</h3>
+
+<p>First, define the target standard for the audit. Generally WCAG 2.1 AA, or Section 508. We will consider the latest Section 508 version, post January 2018 update to track WCAG2.0 AA.</p>
+
+<p>If relevant, also define which standards are out of scope, such as compliance for the Rehabilitation Act and ADA. Compliance for WCAG2.1 AAA is out of scope, but we may provide AAA issues as relevant if they seem to be easily solvable.</p>
+
+<h3 id="audit-scope">Audit scope</h3>
+
+<p>Make a clear list of URLs to audit. Define whether the audit is on a production or staging environment. If there is any dynamic functionality to audit, define to what extent.</p>
+
+<h3 id="report-format">Report format</h3>
+
+<blockquote>
+  <p>Keep it actionable. We don’t want to do pass/fail compliance audits.</p>
+</blockquote>
+
+<ul>
+  <li>“Cover sheet” / written document with overview of common issues, and a scoring of how feasible it seems to reach compliance &amp; effort involved.</li>
+  <li>Tabular data / spreadsheet with individual issues at a more granular level. Including testing tool if relevant, &amp; proposed solution if time allows.</li>
+  <li>As relevant, direct output from automated / semi-automated testing tools</li>
+</ul>
+
+<h3 id="high-level-testing-methodology">High-level testing methodology</h3>
+
+<blockquote>
+  <p>See <a href="/accessibility-audits-getting-started">Accessibility audits: getting started</a>.</p>
+</blockquote>
+
+<p>This is a baseline only, please adapt as needed. For all identified pages,</p>
+
+<ul>
+  <li>Bulk automated page checks with <a href="https://validator.github.io/validator/">V.Nu HTML5 validator</a></li>
+  <li>Bulk automated page checks with <a href="https://github.com/pa11y/pa11y">Pa11y</a> – HTML CodeSniffer, Axe.</li>
+</ul>
+
+<p>For a relevant subset of pages,</p>
+
+<ul>
+  <li>Single-page semi-automated checks with either <a href="https://accessibilityinsights.io/">Accessibility Insights</a> or similar.</li>
+  <li>Manual keyboard navigation checks</li>
+  <li>Manual colour contrast check for non-text UI elements and images</li>
+  <li>Manual screen reader navigation check with VoiceOver in macOS Safari</li>
+  <li>Manual zoom &amp; magnification testing with Chrome &amp; macOS Zoom</li>
+</ul>
+
+<p>For a smaller subset of high-value pages,</p>
+
+<ul>
+  <li>Full screen reader testing with VoiceOver in macOS Safari</li>
+  <li>Full screen reader testing with NVDA in Firefox ESR</li>
+  <li>Full screen reader testing with VoiceOver in iOS Safari</li>
+  <li>Mobile touch interaction testing with iOS Safari</li>
+</ul>
+
+<h2 id="outcome-of-the-audit">Outcome of the audit</h2>
+
+<ul>
+  <li>Report to project stakeholders</li>
+  <li>Guidance for implementers</li>
+  <li>Report to other vendors if needed</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Welcome to curlylint.org!]]></title>
+    <link href="https://thib.me/welcome-to-curlylint"/>
+    <updated>2020-06-19T22:03:29+00:00</updated>
+    <id>https://thib.me/welcome-to-curlylint</id>
+    <content type="html"><![CDATA[<p>Curlylint now has a website! 🎉</p>
+
+<!-- more -->
+
+<p>While the linter itself is still very experimental, and subject to major changes, I believe that having great documentation is a much more important step than any single feature or linting rule of the linter. Particularly:</p>
+
+<ul>
+  <li>Documenting the rules, with their respective configuration options, with lots of examples.</li>
+  <li>Documenting CLI options, and (hopefully) future editor integrations.</li>
+</ul>
+
+<p>With a standalone site (as opposed to Markdown files in GitHub), I can create clean URLs for each of the rules, that can then be used directly in the CLI’s output. This is all inspired by <a href="https://eslint.org/">ESLint</a>, which is years ahead of any other static analysis tool I’ve ever used.</p>
+
+<p><img src="/images/blog/welcome-to-curlylint/eslint-awesome.gif" alt="Screen capture of ESLint in VS Code, with link to a rule’s documentation, and options to automatically disable the rule" /></p>
+
+<blockquote>
+  <p>ESLint’s VS Code integration, with link straight to the rule’s documentation, and options to auto-disable the violation.</p>
+</blockquote>
+
+<h2 id="the-website">The website</h2>
+
+<p>The website itself is built with <a href="https://v2.docusaurus.io/">Docusaurus v2</a>. I don’t think this matters too much – the main features I was after were:</p>
+
+<ul>
+  <li>A focus on documentation websites – with versioning, code highlighting.</li>
+  <li>Being able to write docs in Markdown without having to worry about creating a theme, or manually writing HTML / CSS.</li>
+  <li>Having a blog section and blogging features directly on the same docs website.</li>
+</ul>
+
+<p>The fact that it’s built with React is a plus that will come in handy should I want to build more bespoke pages. MDX is a plus too.</p>
+
+<h2 id="up-next">Up next</h2>
+
+<p>Once the website is up and running, there are two things I’d really like to make:</p>
+
+<ul>
+  <li>An editor integration with VS Code. I’ve had some exposure to this with <a href="https://github.com/stylelint/vscode-stylelint">vscode-stylelint</a>, but still don’t have the clearest understanding of how best to do this for a Python CLI.</li>
+  <li>An online playground similar to that of <a href="https://prettier.io/">Prettier</a>. I think it’s the best demonstrator of a tool’s capabilities, and it simplifies bug reports / quick tests greatly.</li>
+</ul>
+
+<p>Onwards!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Timing attacks, everywhere]]></title>
+    <link href="https://thib.me/timing-attacks-everywhere"/>
+    <updated>2020-05-04T21:15:08+00:00</updated>
+    <id>https://thib.me/timing-attacks-everywhere</id>
+    <content type="html"><![CDATA[<p>Ever heard of <a href="https://en.wikipedia.org/wiki/Timing_attack">timing attacks</a>? Turns out timing attack vulnerabilities are pretty common. It’s unclear to me how practical those attacks are, but I wouldn’t risk it.</p>
+
+<!-- more -->
+
+<h2 id="finding-timing-attack-vulnerabilities">Finding timing attack vulnerabilities</h2>
+
+<p>The gist of a timing attack is an <em><a href="http://cwe.mitre.org/data/definitions/208.html">observable timing discrepancy</a></em> in access control code:</p>
+
+<ul>
+  <li>Some code compares two values in order to determine whether something is authorised or not, for example comparing the user input with a stored plaintext password, or even comparing a hashed version of the user input against a password hash.</li>
+  <li>Turns out, the programming language executing that comparison is smart enough to stop the comparison as early as one of the characters stops matching – instead of having to compare all of the characters of the two strings.</li>
+  <li>If the execution time of the comparison can be observed – then an attacker can determine whether their supplied input is getting closer to the compared value, by seeing the execution take gradually longer.</li>
+</ul>
+
+<p>What does this look like in practice? This:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PasswordViewRestrictionForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="p">[...]</span>
+
+    <span class="k">def</span> <span class="nf">clean_password</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">'password'</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">.</span><span class="n">restriction</span><span class="p">.</span><span class="n">password</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">forms</span><span class="p">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">"The password you have entered is not correct. Please try again."</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>or that:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">configured_username</span><span class="p">,</span> <span class="n">configured_password</span><span class="p">):</span>
+    <span class="c1"># [...]
+</span>    <span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="n">configured_username</span> <span class="ow">and</span> <span class="n">password</span> <span class="o">==</span> <span class="n">configured_password</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p>…or <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7576">in Ruby (Rails)</a>,</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nn">ClassMethods</span>
+  <span class="k">def</span> <span class="nf">http_basic_authenticate_with</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="n">before_filter</span><span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="nf">except</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:password</span><span class="p">,</span> <span class="ss">:realm</span><span class="p">))</span> <span class="k">do</span>
+      <span class="n">authenticate_or_request_with_http_basic</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="ss">:realm</span><span class="p">]</span> <span class="o">||</span> <span class="s2">"Application"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
+        <span class="nb">name</span> <span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="ss">:password</span><span class="p">]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>or <a href="https://github.com/flawyte/now-basic-auth/issues/4">in Node (Express)</a>,</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">protect</span><span class="p">(</span>
+  <span class="dl">"</span><span class="s2">/admin</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">user</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span> <span class="o">&amp;&amp;</span> <span class="nx">pass</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="na">directory</span><span class="p">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">/_static</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">realm</span><span class="p">:</span> <span class="dl">"</span><span class="s2">now-basic-auth.node-static-auth</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">onAuthFailed</span><span class="p">:</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="dl">"</span><span class="s2">Restricted area, please login (admin:admin).</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">},</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Once you know what to look for, timing attack vulnerabilities really are everywhere. In <a href="https://github.com/flawyte/now-basic-auth/issues/4">basic auth code</a>. In <a href="https://github.com/tm-kn/django-basic-auth-ip-whitelist/security/advisories/GHSA-m38j-pmg3-v5x5">more basic auth code</a>, and also in <a href="https://github.com/wagtail/wagtail/security/advisories/GHSA-jjjr-3jcw-f8v6">password-protected content</a>.</p>
+
+<p>For me, this came up because I was looking for a good Express basic auth implementation, stumbled upon <a href="https://github.com/LionC/express-basic-auth">express-basic-auth</a>, which works well, and then wondered – “oh, are other libraries using a <a href="https://nodejs.org/api/crypto.html#crypto_crypto_timingsafeequal_a_b">timing-safe comparison function</a>?” Lots weren’t.</p>
+
+<h2 id="protecting-yourself">Protecting yourself</h2>
+
+<p>As mentioned above, all sensitive comparison checks should use timing-safe comparison functions such as Node’s <a href="https://nodejs.org/api/crypto.html#crypto_crypto_timingsafeequal_a_b">crypto.timingSafeEqual</a> or Python 3.4+’s <a href="https://docs.python.org/3/library/hmac.html#hmac.compare_digest">hmac.compare_digest</a> (or Django’s <a href="https://github.com/django/django/blob/659a73bc0a2df9be856e23fcfc6cc66d0d1a35fd/django/utils/crypto.py#L77"><code class="language-plaintext highlighter-rouge">crypto.constant_time_compare</code></a>).</p>
+
+<h3 id="proactively-looking-for-similar-issues">Proactively looking for similar issues</h3>
+
+<p>You will want to look for all access control code that uses the programming language’s built-in comparison operators (<code class="language-plaintext highlighter-rouge">==</code> or <code class="language-plaintext highlighter-rouge">!=</code>). I’m very excited about the potential of platforms like <a href="https://lgtm.com/">LGTM</a> and their <a href="https://securitylab.github.com/tools/codeql">CodeQL language</a> to find vulnerabilities like this automaticaly. Here is a sample query:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">python</span>
+
+<span class="k">from</span> <span class="nx">Compare</span> <span class="nx">eq</span>
+<span class="nx">where</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%key%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%password%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%auth%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%sign%</span><span class="dl">"</span><span class="p">)</span>
+<span class="nx">select</span> <span class="nx">eq</span>
+</code></pre></div></div>
+
+<p>This is a relatively naive query, but it helped me identify issues like Wagtail’s bypass-able <a href="https://github.com/wagtail/wagtail/issues/6127">image serve signature check</a>.</p>
+
+<p>If you want to try this out for yourself, <a href="https://securitylab.github.com/tools/codeql">GitHub’s Security Labs</a> have the most extensive documentation on how to use this.</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li>Tools to probe for timing attack vulnerabilities:
+    <ul>
+      <li><a href="https://github.com/ffleming/timing_attack">https://github.com/ffleming/timing_attack</a></li>
+      <li><a href="https://github.com/SakiiR/timeauth">https://github.com/SakiiR/timeauth</a></li>
+    </ul>
+  </li>
+  <li><a href="https://www.blackhat.com/docs/us-15/materials/us-15-Morgan-Web-Timing-Attacks-Made-Practical.pdf">Timing Attacks Made Practical, Blackhat 2015</a></li>
+  <li><a href="https://gist.github.com/thibaudcolas/f68fb257abb6dc6164be0c01c4f42367">Initial research for django-basic-auth-ip-whitelist vulnerability</a>
+    <ul>
+      <li><a href="https://github.com/tm-kn/django-basic-auth-ip-whitelist/security/advisories/GHSA-m38j-pmg3-v5x5">CVE-2020-4071</a></li>
+    </ul>
+  </li>
+  <li><a href="https://gist.github.com/thibaudcolas/bf80b119225dacb8463aab7d7e527bd6">Initial research for Wagtail vulnerability</a>
+    <ul>
+      <li><a href="https://github.com/wagtail/wagtail/security/advisories/GHSA-jjjr-3jcw-f8v6">CVE-2020-11037</a></li>
+    </ul>
+  </li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessibility audits: getting started]]></title>
+    <link href="https://thib.me/accessibility-audits-getting-started"/>
+    <updated>2020-05-01T18:15:08+00:00</updated>
+    <id>https://thib.me/accessibility-audits-getting-started</id>
+    <content type="html"><![CDATA[<p>Accessibility audits can be daunting to get started with. Here are my recipes to deliver accessibility audits for web projects, combining multiple layers of automation with manual testing to get the best of both worlds.</p>
+
+<!-- more -->
+
+<h2 id="auditing-strategy">Auditing strategy</h2>
+
+<p>First, determine what standard to audit for. <a href="https://www.gov.uk/service-manual/helping-people-to-use-your-service/understanding-wcag">WCAG 2.1 AA</a> is generally a good start, as the standard that underlines many countries’ regulations. Don’t stop at any given standard though – the goal of an audit really is to identify improvements, rather than compliance box ticking.</p>
+
+<p>With this in mind, start with automated tools to find as many issues as possible. Then, we can dedicate more time to more thorough manual testing of specific pages or components.</p>
+
+<p>As a developer, I like the audit to be based on tools that can be used in automated test suites. Continuous integration capabilities are a big plus too, making it much easier for the site to keep being tested consistently after the auditing work is over.</p>
+
+<h2 id="accessibility-audits-for-beginners">Accessibility audits for beginners</h2>
+
+<p>It’s worth pointing out early – while some parts of my approach are very beginner-friendly – others rely on years of experience with accessibility guidelines and usability best practices. If you don’t know where to start, here are the easiest first steps:</p>
+
+<ul>
+  <li>If you’re familiar with command-line tools and want something quick, grab <a href="https://github.com/pa11y/pa11y">Pa11y</a> and point it at pages.</li>
+  <li>If you want to analyse a page more thoroughly, use <a href="https://accessibilityinsights.io/">Accessibility Insights</a>.</li>
+  <li>If you have money, get <a href="https://www.powermapper.com/products/sortsite/">SortSite</a> or <a href="https://tenon.io/">Tenon</a>. I haven’t used these myself, those recommendations are only based on the invaluable <a href="https://alphagov.github.io/accessibility-tool-audit/">GDS accessibility tools audit</a>.</li>
+</ul>
+
+<p><img src="/images/blog/accessibility-audits-getting-started/accessibility-insights-tab-stops.png" alt="Screenshot of Accessibility Insights tab stops" /></p>
+
+<blockquote>
+  <p>Accessibility Insights’ tab stops tool is invaluable to identify strange tab orders, and optimise keyboard navigation</p>
+</blockquote>
+
+<h2 id="intermediate-level-auditing">Intermediate-level auditing</h2>
+
+<h3 id="source-code-analysis">Source code analysis</h3>
+
+<p>If possible, this is always a valuable first step. Identifying issues directly in the code will make them much easier to fix, and improves your chances of finding issues that might not be identifiable during manual testing because they rely on a specific state of the app or site.</p>
+
+<p>Linters are very useful here:</p>
+
+<ul>
+  <li><a href="https://github.com/yannickcr/eslint-plugin-react">eslint-plugin-react</a>, <a href="https://github.com/evcohen/eslint-plugin-jsx-a11y">eslint-plugin-jsx-a11y</a> for React, which has the most advanced static analysis tools of any front-end stack.</li>
+  <li><a href="https://github.com/thibaudcolas/curlylint">curlylint</a> for HTML templates, my (experimental! 💥) attempt at bridging that gap.</li>
+</ul>
+
+<p>I also audit code manually, by searching the project’s source. Here are common patterns I search for:</p>
+
+<ul>
+  <li>Usage of the <code class="language-plaintext highlighter-rouge">role</code> attribute. It’s very easy to misuse – roles that don’t exist, that need specific parents or children, that are redundant with the element’s intrinsic role. Roles that have no practical impact without further ARIA attributes (most commonly labels, or state).</li>
+  <li>Usage of ARIA attributes. They are also <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#no_aria_better_bad_aria">easy to misuse</a>.</li>
+  <li>Tables markup. Tables need a caption, and headers that define their scope.</li>
+  <li>Button markup. Misusing anchor tags for buttons.</li>
+  <li>Forms markup. Making sure they use the correct native controls, with sensible attributes.</li>
+  <li>Tabs, menus, dropdowns, toggles. It’s quick to check whether they have any kind of keyboard navigation implemented, and whether they have the correct ARIA attributes set for any given state.</li>
+</ul>
+
+<h3 id="bulk-page-checks">Bulk page checks</h3>
+
+<p>After looking at the source, the next step is to look at pages in “bulk” mode – running automated tools that scan as much of the site as possible. My preference is for:</p>
+
+<ul>
+  <li>The <a href="https://validator.github.io/validator/">V.Nu HTML5 validator</a>. Either the Docker image, or the pre-compiled CLI binaries, <code class="language-plaintext highlighter-rouge">vnu &lt;url&gt;</code>. Generally I will either do this for the whole sitemap, or a subset of URLs.</li>
+  <li><a href="https://github.com/pa11y/pa11y-ci">pa11y-ci</a>, or Pa11y directly, for the whole sitemap or a subset of URLs if there is a need for further automation. <code class="language-plaintext highlighter-rouge">pa11y-ci --config &lt;my config&gt; --sitemap &lt;project sitemap&gt; --json &gt; sitemap-report.json</code>.</li>
+</ul>
+
+<p>Pa11y is worth a special mention here. Pa11y is a wrapper of <a href="https://github.com/dequelabs/axe-core">Axe</a> and <a href="https://github.com/squizlabs/HTML_CodeSniffer">HTML_CodeSniffer</a>, which do the actual accessibility checks. It allows those tools to be run in bulk mode, over many pages, or at different states of a page by interacting with it automatically.</p>
+
+<p><img src="/images/blog/accessibility-audits-getting-started/pa11y-ci-sitemap-mode.png" alt="Screenshot of pa11y-ci output in sitemap mode" /></p>
+
+<blockquote>
+  <p>Testing hundreds of a pages in a one-liner – thanks pa11y-ci!</p>
+</blockquote>
+
+<p>Here is a basic configuration file, summarising how I tend to use it:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">urls</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Homepage</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://www.example.com/</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">basicAuth</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">username:password</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">defaults</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">Authorization</span><span class="p">:</span> <span class="s2">`Basic </span><span class="p">${</span><span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">basicAuth</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">base64</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">standard</span><span class="p">:</span> <span class="dl">"</span><span class="s2">WCAG2AAA</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">runners</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">axe</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">htmlcs</span><span class="dl">"</span><span class="p">],</span>
+  <span class="p">},</span>
+
+  <span class="na">urls</span><span class="p">:</span> <span class="nx">urls</span><span class="p">.</span><span class="nx">map</span><span class="p">(({</span> <span class="nx">url</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">url</span><span class="p">),</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🚧 Head over to <a href="https://github.com/thibaudcolas/wagtail-tooling">wagtail-tooling</a> for a more advanced example of using Pa11y on a large-scale project.</p>
+</blockquote>
+
+<h3 id="single-page-checks">Single-page checks</h3>
+
+<p>Now let’s look at intermediate techniques to apply per page. Depending on the site’s size, number of different page types, and budget for the audit, I would generally apply those checks on a sample of between five to ten page types. First,</p>
+
+<ul>
+  <li><a href="https://github.com/pa11y/pa11y">Pa11y</a>, if not already used in CI mode. Make sure it runs both HTML_CodeSniffer and Axe.</li>
+  <li>The <a href="https://accessibilityinsights.io/">Accessibility Insights</a> extension from Microsoft, with its FastPass mode, which also uses Axe under the hood.</li>
+</ul>
+
+<p>Then in the browser, there are a lot of semi-automated tests worth doing:</p>
+
+<ul>
+  <li>With Accessibility Insights – use the colour, heading, landmark tools to quickly visualise the page structure and spot issues.</li>
+  <li>With a screen reader’s navigation (e.g. <a href="https://accessibility.psu.edu/screenreaders/voiceover/">VoiceOver Rotor</a>), inspect all of the page’s landmarks, headings, images, tables, frames, form elements, links and buttons.</li>
+</ul>
+
+<p>Only about <a href="https://alphagov.github.io/accessibility-tool-audit/">30 to 40%</a> of accessibility issues can be found with fully automated tools, so these semi-automated checks are a great way to go beyond that, without having to spend hours manually navigating pages.</p>
+
+<p><img src="/images/blog/accessibility-audits-getting-started/voiceover-rotor-safari.png" alt="Screenshot of the VoiceOver Rotor, in Safari, show a list of landmarks for a site’s homepage. Some landmarks have custom labels." /></p>
+
+<blockquote>
+  <p>The VoiceOver rotor is a very convenient way to get started with screen reader testing for beginners.</p>
+</blockquote>
+
+<h3 id="manual-testing-for-high-value-pages">Manual testing for high-value pages</h3>
+
+<p>Manual tests are the most time-consuming and require the most expertise. We want to navigate the site site in the same way a user of assistive technology would, focusing on parts of the experience that automated tests cannot assess. I generally advise to try the following:</p>
+
+<h4 id="zoom-level">Zoom level</h4>
+
+<ul>
+  <li>Is the whole page usable with 200% to 400% page-level zoom?</li>
+  <li>Does the site support browsers’ font resizing features?</li>
+  <li>Are there any issues when using an on-screen magnifier?</li>
+  <li>Are there areas of the site that require bidirectional scrolling because of the zoom level?</li>
+</ul>
+
+<h4 id="colour">Colour</h4>
+
+<ul>
+  <li>Are there any non-text UI elements for which the contrast is too low?</li>
+  <li>Any :focus or other active states that are reliant on colour alone, or too low contrast?</li>
+</ul>
+
+<h4 id="keyboard-navigation">Keyboard navigation</h4>
+
+<ul>
+  <li>Can the whole page be used with a keyboard only?</li>
+  <li>Are there <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/keyboard-operation-trapping.html">keyboard traps</a>?</li>
+  <li>Are there parts of the page where focus should be trapped but isn’t?</li>
+  <li>Are the tab stops logical?</li>
+</ul>
+
+<h4 id="screen-reader-navigation">Screen reader navigation</h4>
+
+<ul>
+  <li>Can the whole page be navigated with a screen reader?</li>
+  <li>Are there relevant things on the page that aren’t being announced?</li>
+  <li>Or things that shouldn’t be announced? E.g. decorative images, or repetitive text.</li>
+</ul>
+
+<h4 id="pointer-touch-and-click-navigation">Pointer (touch and click) navigation</h4>
+
+<ul>
+  <li>Are pointer targets big enough, and not too close to one another?</li>
+  <li>Are there areas of the page that are hard to scroll (especially on mobile)?</li>
+  <li>Are there areas on the page that require horizontal scrolling (especially on mobile)?</li>
+</ul>
+
+<p><strong>This barely scratches the surface</strong>, especially when it comes to screen reader usage. Test with <a href="https://docs.wagtail.io/en/stable/contributing/developing.html#accessibility-targets">multiple screen readers</a> if possible – my go-tos being VoiceOver with Safari on macOS &amp; iOS, and NVDA with Firefox on Windows.</p>
+
+<h2 id="expert-level-accessibility-compliance-testing">Expert-level accessibility compliance testing</h2>
+
+<p>All of the above is great in order to make a website accessible, but to assess compliance with standards, you need to know the actual standards, and test for each of the compliance criteria. For WCAG 2.1, I recommend to:</p>
+
+<ul>
+  <li>Know all of the WCAG2.1 A, AA, AAA success criteria – refer to the <a href="https://alphagov.github.io/wcag-primer/all.html#common-mistakes">GOV.UK WCAG 2.1 Primer</a> for a “cheatsheet” version.</li>
+  <li>For each commonly-used component, know which success criteria are relevant – refer to the official <a href="https://www.w3.org/WAI/WCAG21/quickref/">WCAG2.1 quick reference</a>.</li>
+  <li>Know about established <a href="https://www.w3.org/TR/wai-aria-practices-1.1/">ARIA practices</a>, and their respective browser support</li>
+</ul>
+
+<p>Once you’re ready, dive through Accessibility Insights’ <a href="https://accessibilityinsights.io/docs/en/web/getstarted/assessment">Assessment tool</a>, which is by far the most advanced freely available accessibility compliance testing tool there is.</p>
+
+<h2 id="beyond-audits">Beyond audits</h2>
+
+<p>Congratulations, you’re now equipped to audit websites! Make the most of those skills to identify improvements on the sites you build and use – but keep in mind that no single audit can deliver ongoing, sustainable accessibility.</p>
+
+<p>Going beyond audits, it’s worth investing into training to create accessible experiences as a default. Also look into opportunities to have accessibility be part of your normal process – whether that’s by having <a href="https://github.com/storybookjs/storybook/tree/master/addons/a11y">tests in your UI library</a> as a developer, or <a href="https://github.com/neon-jungle/wagtail-accessibility">accessibility features in the CMS</a> as an editor. More on that in a future post!</p>
+
+<hr />
+
+<p>Thank you to Jane, Paul, Tom, and Steven for their help with this post.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Conventions to organize React projects]]></title>
+    <link href="https://thib.me/conventions-to-organize-react-projects"/>
+    <updated>2020-04-20T22:03:29+00:00</updated>
+    <id>https://thib.me/conventions-to-organize-react-projects</id>
+    <content type="html"><![CDATA[<p>I’ve spent a lot of time thinking of how best to structure React projects over the last few years. This is especially important when React is a central part of the project’s front-end tech stack, as React in itself has very few opinions about how to organize code (it’s a library, not a framework). Here are my notes.</p>
+
+<!-- more -->
+
+<h2 id="inspiration">Inspiration</h2>
+
+<p>My favourite file structure is that of <a href="https://www.djangoproject.com/">Django</a>. In particular,</p>
+
+<ul>
+  <li>At the top level, dividing code by functional area</li>
+  <li>Within each functional area, the files’ names follow an established convention based on non-functional considerations.</li>
+  <li>If needed, code can then be broken up by functional area for each type of file</li>
+</ul>
+
+<p>What I really like about those conventions is that they give the code as much room to grow as possible – add more apps as the project grows, remove whole apps if they’re no longer needed, and sub-divide individual apps if they start getting too big.</p>
+
+<p>Here is what this looks like in practice:</p>
+
+<pre><code class="language-txt">demo
+├── feedback
+│   ├── templates
+│   ├── urls.py
+│   └── views.py
+├── polls
+│   ├── admin.py
+│   ├── migrations
+│   ├── models
+│   │   ├── questions.py
+│   │   └── choices.py
+│   ├── templates
+│   │   └── polls
+│   │       ├── question_list.html
+│   │       └── results.html
+│   ├── urls.py
+│   └── views.py
+├── settings.py
+└── urls.py
+</code></pre>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">polls</code> is a functional area</li>
+  <li>Within this, <code class="language-plaintext highlighter-rouge">urls.py</code> does all routing-level logic for <code class="language-plaintext highlighter-rouge">polls</code></li>
+  <li>If needed, that non-functional can be broken up into further features-oriented files like with <code class="language-plaintext highlighter-rouge">models</code>, which has separate files.</li>
+</ol>
+
+<h2 id="the-overarching-rules">The overarching rules</h2>
+
+<p>From that Django baseline, here are rules I like to follow when adapting this to arbitrary technologies.</p>
+
+<h3 id="folder-structure">Folder structure</h3>
+
+<ul>
+  <li>Co-locate code by feature rather than file type as much as possible.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Button.js</code>, <code class="language-plaintext highlighter-rouge">Button.css</code>, <code class="language-plaintext highlighter-rouge">Button.test.js</code>, and <code class="language-plaintext highlighter-rouge">Button.md</code> should all live side-by-side.</li>
+      <li>User profile logic, avatar &amp; bio UI components, profile details update forms – should all be close one-another if possible.</li>
+    </ul>
+  </li>
+  <li>Avoid files that are just importing and re-exporting code.
+    <ul>
+      <li>These are useful for libraries that need a clean API, and an overhead for our first-party project code.</li>
+      <li>Modern IDEs support automatically updating file paths as files move, and auto-completing imports.</li>
+    </ul>
+  </li>
+  <li>Extract code that is not feature-specific into a reusable “shared” folder.</li>
+  <li>Consider having another “modules” folder for code that is so un-specific to your project that it could just as well come from a dependency.</li>
+</ul>
+
+<h3 id="naming-conventions">Naming conventions</h3>
+
+<ul>
+  <li>Files should be named after their default export as much as possible.
+    <ul>
+      <li>The <code class="language-plaintext highlighter-rouge">Button</code> component lives in <code class="language-plaintext highlighter-rouge">Button.js</code>.</li>
+    </ul>
+  </li>
+  <li>For ancilliary files, take the name of the main file and suffix it with the “type”.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Button.test.js</code>, <code class="language-plaintext highlighter-rouge">Button.stories.js</code>, <code class="language-plaintext highlighter-rouge">Button.scss</code></li>
+      <li>Files that represent non-functional considerations can be named after the “app” they are in, for example <code class="language-plaintext highlighter-rouge">polls.models.js</code></li>
+    </ul>
+  </li>
+  <li>Each file name must be unique for the whole project, and convey what the file contains without context.
+    <ul>
+      <li>Don’t <code class="language-plaintext highlighter-rouge">models.js</code>. Do <code class="language-plaintext highlighter-rouge">polls.models.js</code>. Don’t <code class="language-plaintext highlighter-rouge">urls.js</code>. Do <code class="language-plaintext highlighter-rouge">polls.urls.js</code>.</li>
+      <li>I always use text search and filters to navigate through code, this makes it much easier.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="import">Import</h3>
+
+<ul>
+  <li>Always import by relative file path.
+    <ul>
+      <li>Those imports are compatible with the most tools – IDEs, linters, SCMs</li>
+      <li>They can be automatically generated by IDEs.</li>
+      <li>They are very short when code is co-located with its immediate dependencies, which is the most common type of import.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="react-specificites">React specificites</h3>
+
+<ul>
+  <li>Components should be in their <code class="language-plaintext highlighter-rouge">components</code> folder for each app</li>
+  <li>If your tools allow it, always start by co-locating the component’s code, documentation, styles, data dependencies, all in the same file.
+    <ul>
+      <li>Break it down into separate co-located files if it gets too big.</li>
+    </ul>
+  </li>
+  <li>Components should have their own folder if the component is made up of more than one file (<code class="language-plaintext highlighter-rouge">Button.js</code>, <code class="language-plaintext highlighter-rouge">Button.test.js</code>)</li>
+  <li>If React is your main UI building block, consider having a separate <code class="language-plaintext highlighter-rouge">pages</code> folder for page-level components, if the <code class="language-plaintext highlighter-rouge">components</code> folder gets too big.</li>
+</ul>
+
+<h3 id="redux-specificities">Redux specificities</h3>
+
+<ul>
+  <li>Follow the Ducks methodology, ideally using <a href="https://redux-starter-kit.js.org/">Redux Toolkit</a>.</li>
+  <li>Co-locate <code class="language-plaintext highlighter-rouge">connect</code> code in the component’s source. No one wants to jump back and forth between “container” and “dumb” components.</li>
+</ul>
+
+<h2 id="in-practice">In practice</h2>
+
+<p>Here is a bigger React project structured with this methodology:</p>
+
+<pre><code class="language-txt">.
+├── admin.entry.js
+├── client.entry.js
+├── counsellor.entry.js
+├── booking
+│   ├── booking.actions.js
+│   ├── booking.constants.js
+│   ├── booking.models.js
+│   ├── booking.models.test.js
+│   ├── booking.reducer.js
+│   ├── booking.routes.js
+│   ├── booking.types.js
+│   └── components
+│   ├── AvailabilityPicker
+│   │   ├── AvailabilityPicker.js
+│   │   ├── AvailabilityPicker.scss
+│   │   ├── AvailabilityPicker.stories.js
+│   │   ├── CalendarButton
+│   │   │   ├── CalendarButton.js
+│   │   │   └── CalendarButton.scss
+│   │   ├── CounsellorSlots.js
+│   │   ├── LoadingOverlay.js
+│   │   ├── LoadingOverlay.scss
+│   │   ├── SlotOverlay.js
+│   │   ├── SlotOverlay.scss
+│   │   ├── SlotPicker.js
+│   │   └── SlotPicker.scss
+│   ├── BookingContent
+│   │   ├── BookingContent.js
+│   │   └── BookingContent.test.js
+│   ├── BookingFlow.js
+│   ├── ChooseAvailability.js
+│   ├── ConfirmBooking
+│   │   ├── ConfirmBooking.js
+│   │   └── ConfirmBooking.scss
+│   ├── CounsellorBioModal
+│   │   ├── CounsellorBioModal.js
+│   │   ├── CounsellorBioModal.scss
+│   │   └── CounsellorBioModal.stories.js
+│   ├── ProgressBar
+│   │   ├── ProgressBar.js
+│   │   └── ProgressBar.scss
+│   └── Register
+│   ├── ProvisionalBookingCard.js
+│   ├── Register.js
+│   ├── Register.scss
+│   ├── RegisterPersonal.js
+│   ├── RegisterPersonal.test.js
+│   └── RegisterSituation.js
+├── counsellors
+│   ├── components
+│   │   ├── ClientDetail.js
+│   │   ├── ClientHistory
+│   │   │   ├── ClientHistory.js
+│   │   │   ├── ClientHistory.scss
+│   │   │   ├── ClientHistory.stories.js
+│   │   │   └── ClientHistoryCard
+│   │   │   ├── ClientHistoryCard.js
+│   │   │   └── ClientHistoryCard.scss
+│   │   ├── CounsellorDashboard.js
+│   │   ├── Timeline
+│   │   │   ├── Timeline.js
+│   │   │   ├── Timeline.scss
+│   │   │   ├── Timeline.stories.js
+│   │   │   └── Timeline.test.js
+│   │   └── TimelineCard
+│   │   ├── TimelineCard.js
+│   │   ├── TimelineCard.scss
+│   │   ├── TimelineCard.stories.js
+│   │   ├── TimelineCard.test.js
+│   │   └── **snapshots**
+│   │   └── TimelineCard.test.js.snap
+│   ├── counsellors.actions.js
+│   ├── counsellors.api.js
+│   ├── counsellors.reducer.js
+│   ├── counsellors.routes.js
+│   └── counsellors.types.js
+├── dashboard
+│   ├── components
+│   │   ├── BookingLanding
+│   │   │   ├── BookingLanding.js
+│   │   │   └── BookingLanding.scss
+│   │   ├── CancelBooking
+│   │   │   ├── CancelBooking.js
+│   │   │   ├── CancelBooking.scss
+│   │   │   ├── CancelBookingSuccess.js
+│   │   │   └── CancelForm.js
+│   │   ├── ChangeBooking
+│   │   │   ├── ChangeBooking.js
+│   │   │   ├── ChangeBooking.scss
+│   │   │   └── ChangeBookingConfirm.js
+│   │   ├── Dashboard.js
+│   │   ├── DonationRequest
+│   │   │   ├── DonationRequest.js
+│   │   │   └── DonationRequest.scss
+│   │   ├── EndOfSessions
+│   │   │   ├── EndOfSessions.js
+│   │   │   └── EndOfSessions.scss
+│   │   ├── NonVerifiedUserMessage
+│   │   │   ├── NonVerifiedUserMessage.js
+│   │   │   └── NonVerifiedUserMessage.scss
+│   │   └── ViewBookings
+│   │   ├── ViewBookings.js
+│   │   ├── ViewBookings.scss
+│   │   └── ViewBookings.test.js
+│   ├── dashboard.actions.js
+│   ├── dashboard.api.js
+│   ├── dashboard.constants.js
+│   ├── dashboard.reducer.js
+│   └── dashboard.routes.js
+├── main.scss
+├── shared
+│   ├── api
+│   │   ├── timekit.js
+│   │   └── video.js
+│   ├── components
+│   │   ├── AppError
+│   │   │   └── AppError.js
+│   │   ├── BookingCard
+│   │   │   ├── BookingCard.js
+│   │   │   ├── BookingCard.mixins.scss
+│   │   │   ├── BookingCard.scss
+│   │   │   ├── BookingCard.stories.js
+│   │   │   └── DNACard
+│   │   │   ├── DNACard.js
+│   │   │   └── DNACard.scss
+│   │   ├── Button
+│   │   │   ├── Button.js
+│   │   │   └── Button.stories.js
+│   │   ├── ClientApp.js
+│   │   ├── ContentCard
+│   │   │   ├── ContentCard.js
+│   │   │   ├── ContentCard.scss
+│   │   │   └── ContentCard.stories.js
+│   │   ├── CounsellorApp.js
+│   │   ├── DashboardWrapper.js
+│   │   ├── DatePicker
+│   │   │   ├── DatePicker.js
+│   │   │   ├── DatePicker.scss
+│   │   │   └── DatePicker.stories.js
+│   │   ├── ErrorModal
+│   │   │   ├── ErrorModal.js
+│   │   │   ├── ErrorModal.scss
+│   │   │   └── ErrorModal.stories.js
+│   │   ├── FormField
+│   │   │   ├── FormField.js
+│   │   │   ├── FormField.stories.js
+│   │   │   ├── RadioGroup.js
+│   │   │   └── StyledErrorMessage.js
+│   │   ├── Icon
+│   │   │   ├── Icon.js
+│   │   │   ├── Icon.stories.js
+│   │   │   └── Icon.test.js
+│   │   ├── InfoBox
+│   │   │   ├── InfoBox.js
+│   │   │   ├── InfoBox.scss
+│   │   │   └── InfoBox.stories.js
+│   │   ├── LoadingIndicator
+│   │   │   ├── LoadingIndicator.js
+│   │   │   ├── LoadingIndicator.scss
+│   │   │   └── LoadingIndicator.stories.js
+│   │   ├── MainWrapper.js
+│   │   ├── Modal
+│   │   │   ├── Modal.js
+│   │   │   ├── Modal.scss
+│   │   │   └── Modal.stories.js
+│   │   ├── NoBookings
+│   │   │   ├── NoBookings.js
+│   │   │   ├── NoBookings.scss
+│   │   │   └── NoBookings.stories.js
+│   │   ├── NotFound.js
+│   │   ├── ScrollToTop.js
+│   │   ├── SentryBoundary
+│   │   ├── SentryBoundary.js
+│   │   ├── ShowBetween
+│   │   │   ├── ShowBetween.js
+│   │   │   └── ShowBetween.test.js
+│   │   ├── mobile-menu.js
+│   │   ├── mobile-sub-menu.js
+│   │   └── read-more.js
+│   ├── fonts
+│   │   ├── IF_Std_Bold.ttf
+│   │   ├── IF_Std_Bold.woff2
+│   │   ├── IF_Std_Light.ttf
+│   │   ├── IF_Std_Light.woff2
+│   │   ├── IF_Std_Regular.ttf
+│   │   └── IF_Std_Regular.woff2
+│   ├── images
+│   │   ├── backdrop-bluecard.svg
+│   │   ├── backdrop-shape.svg
+│   │   ├── bottom-right-white-brand-blob.svg
+│   │   ├── cancellation.png
+│   │   ├── change.png
+│   │   ├── checkmark.svg
+│   │   ├── chevron-right.svg
+│   │   ├── confirmation.png
+│   │   ├── email-logo.png
+│   │   ├── fr-logo.png
+│   │   ├── reminder.png
+│   │   └── verification.png
+│   ├── sass
+│   │   ├── abstracts
+│   │   │   ├── _functions.scss
+│   │   │   ├── _mixins.scss
+│   │   │   └── _variables.scss
+│   │   ├── base
+│   │   │   ├── _base.scss
+│   │   │   ├── _fonts.scss
+│   │   │   └── _typography.scss
+│   │   ├── components
+│   │   │   ├── _blockquote.scss
+│   │   │   ├── _call-to-action.scss
+│   │   │   ├── _card.scss
+│   │   │   ├── _client-detail.scss
+│   │   │   ├── _cookie-message.scss
+│   │   │   ├── _grid.scss
+│   │   │   ├── _icon.scss
+│   │   │   ├── _menu-dropdown.scss
+│   │   │   ├── _nav.scss
+│   │   │   ├── _read-more.scss
+│   │   │   ├── _responsive-object.scss
+│   │   │   ├── _rich-text.scss
+│   │   │   ├── _section.scss
+│   │   │   ├── _select-menu.scss
+│   │   │   ├── _user-modal.scss
+│   │   │   ├── _wrapper.scss
+│   │   │   ├── button
+│   │   │   │   ├── _button-action.scss
+│   │   │   │   ├── _button-rounded.scss
+│   │   │   │   ├── _button-slot.scss
+│   │   │   │   └── _button.scss
+│   │   │   ├── case-load
+│   │   │   │   ├── _case-load-header.scss
+│   │   │   │   ├── _case-load-table.scss
+│   │   │   │   └── _case-load.scss
+│   │   │   └── form
+│   │   │   ├── _form-checkbox.scss
+│   │   │   ├── _form-item.scss
+│   │   │   ├── _form-radio.scss
+│   │   │   └── _form.scss
+│   │   ├── layout
+│   │   │   ├── _footer.scss
+│   │   │   ├── _header.scss
+│   │   │   └── _sidebar.scss
+│   │   ├── utilities
+│   │   │   └── _utilities.scss
+│   │   └── vendor
+│   │   └── _normalize.scss
+│   └── utils
+│   ├── actions.js
+│   ├── dates.js
+│   ├── dates.test.js
+│   ├── delay.js
+│   ├── delay.test.js
+│   ├── errors.js
+│   ├── hooks.js
+│   ├── notifications.js
+│   ├── phonenumbers.js
+│   ├── phonenumbers.test.js
+│   ├── storage.js
+│   └── storage.test.js
+├── store.js
+├── stories
+│   ├── TemplatePattern.js
+│   ├── addons.js
+│   ├── config.js
+│   ├── middleware.js
+│   ├── mocks
+│   │   ├── bookings.mock.js
+│   │   ├── counsellor-sample-image.jpeg
+│   │   ├── counsellors.mock.js
+│   │   ├── sample-video.mp4
+│   │   └── users.mock.js
+│   ├── storyshots.test.js
+│   └── webpack.config.js
+├── tests
+│   ├── assetMock.js
+│   ├── environment.js
+│   └── setupTests.js
+├── user
+│   ├── components
+│   │   └── UserNav.js
+│   ├── user.actions.js
+│   ├── user.api.js
+│   ├── user.constants.js
+│   ├── user.reducer.js
+│   └── user.types.js
+└── video
+├── components
+│   ├── AppointmentDetails
+│   │   ├── AppointmentDetails.js
+│   │   ├── AppointmentDetails.scss
+│   │   └── AppointmentDetails.stories.js
+│   ├── PreviewPlayer
+│   │   ├── PreviewFeed.js
+│   │   ├── PreviewPlayer.js
+│   │   ├── PreviewPlayer.scss
+│   │   └── PreviewPlayer.stories.js
+│   ├── SessionStatusForm
+│   │   ├── SessionStatusForm.js
+│   │   ├── SessionStatusForm.scss
+│   │   └── SessionStatusForm.stories.js
+│   ├── Timer
+│   │   ├── Timer.js
+│   │   ├── Timer.scss
+│   │   ├── Timer.stories.js
+│   │   └── Timer.test.js
+│   ├── TwilioVideoPlayer.js
+│   ├── Video.js
+│   ├── VideoOverlay
+│   │   ├── VideoOverlay.js
+│   │   └── VideoOverlay.scss
+│   ├── VideoPlayer
+│   │   ├── VideoPlayer.js
+│   │   ├── VideoPlayer.scss
+│   │   └── VideoPlayer.stories.js
+│   └── VideoRoom
+│   ├── ClientVideoRoom.js
+│   ├── ClientVideoRoom.stories.js
+│   ├── ConfirmEndCall.js
+│   ├── ConfirmEndCall.scss
+│   ├── CounsellorVideoRoom.js
+│   ├── CounsellorVideoRoom.stories.js
+│   ├── VideoRoom.js
+│   └── VideoRoom.scss
+├── video.actions.js
+├── video.constants.js
+├── video.reducer.js
+└── video.routes.js
+
+70 directories, 258 files
+</code></pre>
+
+<p>Smaller Create React App + Redux Toolkit project:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src/
+├── main.entry.tsx
+├── main.entry.scss
+├── nav
+│   ├── components
+│   │   ├── NavBar
+│   │   │   ├── Logo.svg
+│   │   │   ├── NavBar.stories.tsx
+│   │   │   └── NavBar.tsx
+│   │   └── PrimaryNav
+│   │       ├── PrimaryCategory.tsx
+│   │       ├── PrimaryNav.stories.tsx
+│   │       ├── PrimaryNav.test.tsx
+│   │       └── PrimaryNav.tsx
+│   ├── nav.data.ts
+│   ├── nav.slice.ts
+│   └── nav.types.ts
+├── shared
+│   ├── components
+│   │   ├── App
+│   │   │   ├── App.test.tsx
+│   │   │   ├── App.tsx
+│   │   │   └── Dashboard.tsx
+│   │   ├── Button
+│   │   │   ├── Button.stories.tsx
+│   │   │   └── Button.tsx
+│   │   └── Release
+│   │       ├── Release.module.scss
+│   │       ├── Release.test.tsx
+│   │       └── Release.tsx
+│   ├── shared.constants.ts
+│   ├── store.ts
+│   └── styles
+│       └── theme.ts
+└── user
+    ├── components
+    │   └── AccountInfo
+    │       ├── AccountInfo.stories.tsx
+    │       ├── AccountInfo.test.tsx
+    │       └── AccountInfo.tsx
+    ├── user.data.ts
+    ├── user.slice.ts
+    └── user.types.ts
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://blog.danawoodman.com/articles/organizing-react-projects">How I Organize React Projects</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[React training goals for front-end developers]]></title>
+    <link href="https://thib.me/react-training-goals-for-front-end-developers"/>
+    <updated>2020-04-17T18:21:48+00:00</updated>
+    <id>https://thib.me/react-training-goals-for-front-end-developers</id>
+    <content type="html"><![CDATA[<p>Here are my thoughts on what front-end developers should focus on when learning React. There are a lot of resources on there – this is more about identifying what exactly you should spend time on, and in what order, for people who are already well versed in building UIs with HTML, CSS, and a sprinkle of JavaScript.</p>
+
+<!-- more -->
+
+<h2 id="1-ui-development-fundamentals">#1 UI development fundamentals</h2>
+
+<h3 id="javascript-fundamentals">JavaScript fundamentals</h3>
+
+<p>No matter what you do with React, you’ll be more productive if you know your way around ES6, functional programming, DOM APIs.</p>
+
+<p>To do this in any kind of professional environment you also need to know about supporting tooling, which is central to modern JS development – Node and npm, unit tests in JS (with Jest), Babel, Webpack. Prettier. ESLint.</p>
+
+<p>TypeScript is a plus on all of the above, and is gradually becoming the de-facto standard for non-trivial codebases, but for now I wouldn’t call it a “fundamental”.</p>
+
+<p>There are a lot of resources to learn all of the above. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript">MDN has a good overview of modern JavaScript</a>. I would highly recommend taking a course on <strong>functional programming with JS</strong>, since this is an area where it’s important to understand the theory. I would also recommend reading through <a href="https://github.com/airbnb/javascript">Airbnb’s JS styleguide</a>, and the corresponding ESLint config. It’s very long, but reading it all and understanding it all is the best way to test the depths of your knowledge. I wouldn’t worry too much about learning tooling beyond hands-on experience on projects – these days, for React in particular, Create React App does most of this for you.</p>
+
+<h3 id="front-end-development">Front-end development</h3>
+
+<p>I’m not entirely sure this needs to be stated but React is mainly used for UI development, so to be proficient you need a good understanding of browsers and front-end web technologies like HTML / CSS / SVG, as well as UI dev considerations like reusable layouts vs one-off components, accessibility, performance, etc.</p>
+
+<p>I don’t think this is too important for me to develop further so will stop there. One thing to note is that quite a lot of advanced React development is done with a CSS-in-JS approach as opposed to a more traditional “CSS preprocessor” – but I think you can go quite far without knowing anything about this.</p>
+
+<h3 id="react-apis-and-common-third-party-libraries">React APIs and common third-party libraries</h3>
+
+<p>Building upon the fundamentals, you of course need to know a fair bit about React itself to be proficient with it. To me, knowing React as a front-end developer starts with understanding its component-driven paradigm, JSX, props, state, (basic) hooks, and the component lifecycle. How to do forms with React. Knowing things like PropTypes also helps, as well as usage of popular libraries from the React ecosystem like classnames, react-modal, formik.</p>
+
+<p>It’s also important to know about tooling for all of this – ESLint rules for React, and unit tests for React components. Storybook and similar tools are also much more prevalent these days.</p>
+
+<p>There are a lot of courses on this, which generally also cover more advanced topics.</p>
+
+<h2 id="2-single-page-app-builds">#2 Single-page-app builds</h2>
+
+<p>All of the above should cover enough bases to be proficient building UI components with React. Now there’s quite a big gap from UI components development, to creating the architecture of a whole app / site around React. “React” is quite a small library, but generally when we talk about a”React build” we also encompass a lot of other aspects of client-side app development that don’t have that much to do with React itself.</p>
+
+<h3 id="api-integrations">API integrations</h3>
+
+<p>Generally we use React for UIs that are (much) more dynamic than a CMS-driven web page, where React’s client-rendered nature excels. However, in order to display any UI at all – we need to load the correct data for the app. Generally for us this means integrating with a REST(ish) API over JSON, served by a Django back-end. To be proficient here one needs to have a fair amount of knowledge about APIs, serialisation, HTTP, network constraints, error handling. Practical knowledge of the corresponding browser DevTools is also a must, and related development tools (curl, Swagger, Postman) helps a lot too. This work is generally about integrating with a Django back-end, and the skills needed here were historically used most for back-end development on the web / general programming (e.g. scripting) outside of web development. So some basic back-end development skill, or programming skills outside of the browser, will help a lot.</p>
+
+<p>This isn’t really specific to React but generally falls within the “React development” umbrella nonetheless. Learning this would generally be covered in any full-stack React dev course. For example a MEAN stack tutorial, or <a href="https://github.com/gothinkster/realworld">RealWorld App</a>.</p>
+
+<h3 id="data-management">Data management</h3>
+
+<p>Dynamic UIs generally have a lot of data to manipulate, whether that’s app state from interactions, or data that was loaded. Here some knowledge of data manipulation is important – functional programming, algorithmic complexity, normalisation. Back-end skills also help a lot since generally this work would have happened server-side for more traditional web apps. In our React stack, data management is done with Redux so any knowledge of it (or Flux, its predecessor) also helps a lot. As well as knowledge of React’s Context API.</p>
+
+<p>Out of all skills that tend to fall under the “React” umbrella these are probably the ones that are hardest to train. Things like <a href="https://redux-starter-kit.js.org/">Redux Toolkit</a> help a lot, which provide more framework-like opinions. There are a lot of good resources for Redux (for example the official <a href="https://redux.js.org/style-guide/style-guide">Redux styleguide</a>).</p>
+
+<h3 id="single-page-app-considerations">Single-page app considerations</h3>
+
+<p>Beyond data management, architecting a React app generally also requires knowledge of “single-page apps” (PWAs). This roughly means being aware of the corresponding DOM / browser APIs:</p>
+
+<ul>
+  <li>Client-side routing with HTML5 history and the React-specific routing libraries (react-router, Reach router)</li>
+  <li>Data storage with HTML5 storage backends (localstorage, indexeddb, etc)</li>
+  <li>(Service workers – although that feels quite advanced)</li>
+</ul>
+
+<p>This isn’t relevant on all projects but generally falls within the React sphere where appropriate. There are good learning resources for this in the React world.</p>
+
+<h2 id="3-other-advanced-topics">#3 Other advanced topics</h2>
+
+<p>There are a few other topics that are worth mentioning but I would not classify as fundamentals. In no particular order,</p>
+
+<ul>
+  <li>TypeScript. Knowledge about type systems in general also helps.</li>
+  <li>CSS-in-JS. Particularly styled-components.</li>
+  <li>Server-side rendering.</li>
+  <li>Animations with React. I would like this to not be an advanced topic, but realistically it is.</li>
+  <li>Integration with other libraries, e.g. D3</li>
+  <li>The Context API</li>
+  <li>Advanced React hooks / custom hooks</li>
+  <li>Error monitoring for client-side code. With Sentry for example.</li>
+  <li>GraphQL. Most likely with Gatsby for us. Otherwise Apollo.</li>
+  <li>“Meta-frameworks” like Next / Gatsby</li>
+  <li>Code splitting</li>
+  <li>ES6 modules</li>
+  <li>Third-party components selection</li>
+  <li>(React Native)</li>
+  <li>Publishing React components for reuse on npm</li>
+  <li>Design systems with React</li>
+  <li>Enzyme and snapshot tests for unit tests for React components</li>
+  <li>Async/await</li>
+  <li>Authentication and security-related concepts – CORS, SSO, CSRF, JWTs, same-origin policies, CSP</li>
+  <li>React performance – virtual DOM, memoization</li>
+  <li>Error boundaries</li>
+  <li>Higher-order components</li>
+  <li>React Suspense</li>
+  <li>React’s Strict mode</li>
+</ul>
+
+<p>Last but not least – React app architecture is worth a line item in here, although I wouldn’t know where to put it. For React apps this means things like:</p>
+
+<ul>
+  <li>Deciding where and how to do API integrations, and related auxiliary data management – error handling, loading states</li>
+  <li>Making components that are reusable, since that’s React’s strength</li>
+  <li>Using a code structure that works – “app” folders like Django or file type folders, with what naming conventions</li>
+  <li>Deciding how to do code splitting – app level, route level, component level</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrading to a stricter ESLint config]]></title>
+    <link href="https://thib.me/upgrading-to-stricter-eslint-config"/>
+    <updated>2020-01-13T00:18:03+00:00</updated>
+    <id>https://thib.me/upgrading-to-stricter-eslint-config</id>
+    <content type="html"><![CDATA[<p>Updating a codebase from one <a href="https://eslint.org/">ESLint</a> config to another can be daunting, especially if switching to something more strict. This post proposes a methodology to do those config overhauls step by step, and get the benefits of a new config without putting in all of the effort upfront.</p>
+
+<!-- more -->
+
+<p>As an example of such a switch, consider moving from <a href="https://www.npmjs.com/package/eslint-config-react-app">Create React App’s ESLint config</a> to something more opinionated like <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>, my own <a href="https://github.com/thibaudcolas/eslint-plugin-cookbook">eslint-plugin-cookbook</a>, or Torchbox’s <a href="https://github.com/torchbox/eslint-config-torchbox">eslint-config-torchbox</a>.</p>
+
+<h2 id="retrofitting-strict-rules-on-existing-projects">Retrofitting strict rules on existing projects</h2>
+
+<p>First, let’s remove the project’s existing ESLint-related dependencies (inspect the <code class="language-plaintext highlighter-rouge">package.json</code> to determine what they are for your project), and upgrade ESLint to the latest version.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm uninstall <span class="nt">--save-dev</span> eslint-config-prettier eslint-plugin-react
+npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint@latest
+</code></pre></div></div>
+
+<p>Then, install the config as described in its documentation and replace the project’s config file with one that just extends the installed config. Once you’re done, now is a good time to commit the work so far. Here is what this would look like with <a href="https://github.com/torchbox/eslint-config-torchbox">eslint-config-torchbox</a>:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx install-peerdeps <span class="nt">--dev</span> eslint-config-torchbox@latest
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// See https://github.com/torchbox/eslint-config-torchbox for rules.</span>
+  <span class="na">extends</span><span class="p">:</span> <span class="dl">"</span><span class="s2">torchbox</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>In all likelihood, this configuration is more opinionated / checks more aspects of the code than what the project was using before, and ESLint now reports a lot of errors. This is good! It means that the project will benefit from having a newer, stricter config in place, and as a developer you get to learn about more JavaScript anti-patterns.</p>
+
+<p>For ESLint and the new config to be useful, we need them to be put to use as soon as possible, and to fail CI builds whenever issues are reported – it’s not good to work on a project where ESLint reports countless issues. So, our goal is to get to 0 errors and warnings reported by ESLint.</p>
+
+<h2 id="initial-cleanup">Initial cleanup</h2>
+
+<h3 id="autofix">Autofix</h3>
+
+<p>Let’s start by doing what ESLint suggests in its output – using its auto-fixing capabilities!</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># At the root of the project to automatically apply ESLint’s fixes:</span>
+npx eslint <span class="nb">.</span> <span class="nt">--fix</span>
+<span class="c"># If your project uses Prettier, also run it afterwards,</span>
+<span class="c"># to guarantee that ESLint’s changes still match your formatting.</span>
+npm run format
+<span class="c"># Or if your project has Prettier set up differently,</span>
+npx prettier <span class="nt">--write</span> <span class="s1">'&lt;where your JS files are&gt;/**/*.js'</span>
+<span class="c"># Or if you want to reformat **all** of your project’s JS files.</span>
+npx prettier <span class="nt">--write</span> <span class="s1">'**/?(.)*.{js,ts,jsx,tsx}'</span>
+</code></pre></div></div>
+
+<p>Autofixes are aware of the syntax, and generally can be considered highly reliable – review the changes, <strong>commit them</strong>, and let’s move on to the next phase.</p>
+
+<h4 id="disable-problematic-rules">Disable problematic rules</h4>
+
+<p>Now, let’s look at the remaining problems, and extract a list of the rules they relate to, using some command-line magic:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npx eslint <span class="nb">.</span> <span class="nt">--format</span> tap | <span class="nb">grep </span>ruleId | <span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">':'</span> <span class="nt">-f</span> 2 | <span class="nb">cut</span> <span class="nt">-c</span> 2- | <span class="nb">sort</span> | <span class="nb">uniq
+</span>class-methods-use-this
+consistent-return
+<span class="o">[</span>...]
+react/prop-types
+</code></pre></div></div>
+
+<p>Let’s add this list to our <code class="language-plaintext highlighter-rouge">.eslintrc.js</code> config, disabling all of the rules that were reporting problems:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">legacyCode</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">class-methods-use-this</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">consistent-return</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="c1">// [...]</span>
+  <span class="dl">"</span><span class="s2">react/prop-types</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// See https://github.com/torchbox/eslint-config-torchbox for rules.</span>
+  <span class="na">extends</span><span class="p">:</span> <span class="dl">"</span><span class="s2">torchbox</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">rules</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">legacyCode</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Note how we put the rules in a “legacyCode” bucket, so we can clearly distinguish between rules we choose to configure differently from this project, and the ones that are enforced by the new config but we’re not ready to turn on yet.</p>
+
+<p>Running ESLint again, there shouldn’t be any errors reported 🎉.</p>
+
+<h3 id="calling-it-a-day">Calling it a day</h3>
+
+<p><strong>Now is a good time to commit – and potentially stop there</strong>. We’ve upgraded the config, disabled all of the rules and got our linting back to 0 problems reported. 🌈 We might not be leveraging all of the checks that the new config comes with, but we don’t necessarily need to do this right away. And your project can already benefit from the work done so far!</p>
+
+<h2 id="extra-cleanup---group-disabled-rules">Extra cleanup - group disabled rules</h2>
+
+<blockquote>
+  <p>🚧 To proceed, you will need a good amount of knowledge of ESLint rules, or time set aside to investigate rules one by one.</p>
+</blockquote>
+
+<p>Now, if there is time, the ideal next step is to re-enable all of the disabled rules to ensure we make the most of the linting. Proceeding with this is generally very time-consuming, so we’ll go through it gradually – the first step is for us to assess how big of an investment is ahead of us, and what the benefits may be. Let’s assess the rules we’ve just disabled, and group them into meaningful chunks.</p>
+
+<p>Here are starting groups I would recommend:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Rules which should ideally be re-enabled, that are about consistent code style more than anything.</span>
+<span class="kd">const</span> <span class="nx">legacyConventions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">class-methods-use-this</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">react/prefer-stateless-function</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">react/sort-comp</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// Rules which are not necessarily issues on their own but can make the code confusing or hard to troubleshoot, leading to bugs.</span>
+<span class="kd">const</span> <span class="nx">codeSmells</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">import/no-named-as-default</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">prefer-const</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">prefer-template</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// Rules which point out patterns that are commonly sources of bugs.</span>
+<span class="kd">const</span> <span class="nx">sourcesOfBugs</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">eqeqeq</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">react/button-has-type</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="na">radix</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">parser</span><span class="p">:</span> <span class="dl">"</span><span class="s2">babel-eslint</span><span class="dl">"</span><span class="p">,</span>
+  <span class="c1">// See https://github.com/torchbox/eslint-config-torchbox for rules.</span>
+  <span class="na">extends</span><span class="p">:</span> <span class="dl">"</span><span class="s2">torchbox</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">rules</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">legacyConventions</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">codeSmells</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">sourcesOfBugs</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>When deciding in what group a given rule belongs, it’s useful to think of:</p>
+
+<ul>
+  <li>The effort it would take to fix all of the violations of the rules,
+    <ul>
+      <li>Is the code’s behavior going to be different, or identical? If identical this should be a safe change.</li>
+      <li>Can the change be done semi-automatically, e.g. with a search-and-replace?</li>
+      <li>How many places in the codebase are there that violate this rule?</li>
+      <li>Does the project have tests, types, or another form of static analysis that would make it easy to tell if something broke because of the changes?</li>
+    </ul>
+  </li>
+  <li>The impact of fixing the violations to the rule,
+    <ul>
+      <li>Does enforcing the rule protect us from a certain type of bugs?</li>
+      <li>Would using a more consistent code style make it easier for people to understand the code?</li>
+    </ul>
+  </li>
+</ul>
+
+<p>In terms of impact and effort, the three groups above generally fall into the following areas:</p>
+
+<pre><code class="language-txt">        ▲
+        │                                    ┌───────────────┐
+        │                            │       │               │
+        │                                    │    Sources    │
+        │                            │       │      of       │
+ High   │                                    │     bugs      │
+ impact │                            │       │               │
+        │                                    └───────────────┘
+        │                            │
+        │
+        │                            │
+        │                ┌───────────────┐
+        │                │               │
+        │ ─ ─ ─ ─ ─ ─ ─ ─│               │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+        │                │  Code smells  │
+        │                │               │
+        │                │               │    ┌───────────────┐
+        │                └───────────────┘    │               │
+        │                            │        │    Legacy     │
+ Low    │                                     │  conventions  │
+ impact │                            │        │               │
+        │                                     │               │
+        │                            │        └───────────────┘
+        │
+        │                            │
+        │
+        │                            │
+        └────────────────────────────────────────────────────────▶
+                   Low effort                High effort
+</code></pre>
+
+<ul>
+  <li>Addressing sources of bugs generally has a high impact on the project, but generally involves changes that might alter the behavior of the programme (if there are actual bugs!), so takes a high effort.</li>
+  <li>Refactoring project conventions generally takes a high effort compared to the impact on the project (too many conventions / outdated conventions).</li>
+  <li>Code smells are a mixed bag, can generally be addressed safely but might take a lot of manual work.</li>
+</ul>
+
+<p>The “High impact, low effort” area of our chart feels a bit empty – in practice there are a few rules in there, from all three categories, and that’s the rules we will want to identify next and have a look at fixing.</p>
+
+<hr />
+
+<p>For now – <strong>this is a good time to commit</strong>. If you’re working on the project with other people, now is also a good time to make a pull request, and get it reviewed and merged. Further cleanup requires making changes to the code that go beyond what autofixing does, and will be trickier to review – so let’s get the config to be used first.</p>
+
+<h2 id="going-further">Going further</h2>
+
+<blockquote>
+  <p>🚧 To proceed, you will need a good amount of knowledge of JavaScript.</p>
+</blockquote>
+
+<p>If you have more time than strictly needed for the initial cleanup, let’s go further. Our goal from now on is to remove all legacy rule overrides we added during the initial setup, while making sure linting still passes. There are a few different ways to approach this depending on the rule:</p>
+
+<ul>
+  <li>Refactoring the code in a safe way</li>
+  <li>Disabling rules via inline code comments</li>
+  <li>Disabling rules with nested ESLint configs</li>
+  <li>Changing the code and its behavior</li>
+  <li>Doing nothing (😄)</li>
+</ul>
+
+<p>Which of these is appropriate is for you to determine case-by-case. The general workflow from now on is:</p>
+
+<ol>
+  <li>Run ESLint and get 0 problems reported.</li>
+  <li>Comment out one of the rules overrides from our <code class="language-plaintext highlighter-rouge">.eslintrc.js</code>, for example <code class="language-plaintext highlighter-rouge">// "consistent-return": 0,</code>.</li>
+  <li>Run ESLint and get problems from the commented-out rules reported.</li>
+  <li>Decide which approach to take for what was reported.</li>
+  <li>Apply your changes if any.</li>
+  <li>Fully remove the commented-out rule override, or add back the line un-commented.</li>
+  <li>Run ESLint again and get 0 problems reported.</li>
+  <li>Commit your changes if any.</li>
+</ol>
+
+<p>We can go through all of the rule overrides like this, or stop when time is up. Here is a one-liner to automatically watch files and re-run ESLint for us that will help speed up the process:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">-g</span> nodemon@latest
+nodemon <span class="nt">-w</span> <span class="s1">'&lt;path to our project’s JS files&gt;/**/*.js'</span> <span class="nt">-w</span> .eslintrc.js <span class="nt">--exec</span> <span class="s1">'npx eslint .'</span>
+</code></pre></div></div>
+
+<h3 id="refactoring-the-code-in-a-safe-way">Refactoring the code in a safe way</h3>
+
+<p>It’s not always possible to refactor code without altering its behaviour, and realising where this is an option requires a high level of JavaScript (and DOM) expertise. If in doubt, this isn’t a good option – it would be too time-consuming to re-test working software for each and every change.</p>
+
+<p>Here’s an example of a change that could be considered a safe refactoring:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">getParams</span><span class="p">();</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">getCategoryURL</span> <span class="o">=</span> <span class="p">(</span><span class="nx">category</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">getParams</span><span class="p">();</span>
+    <span class="nx">params</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">category</span><span class="dl">'</span><span class="p">,</span> <span class="nx">category</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">getURL</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">params</code> variable inside <code class="language-plaintext highlighter-rouge">getCategoryURL</code> raises a problem with <a href="https://eslint.org/docs/rules/no-shadow"><code class="language-plaintext highlighter-rouge">no-shadow</code></a>. We can remove the shadowing by renaming the local variable:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">getParams</span><span class="p">();</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">getCategoryURL</span> <span class="o">=</span> <span class="p">(</span><span class="nx">category</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">getParams</span><span class="p">();</span>
+    <span class="nx">p</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">category</span><span class="dl">'</span><span class="p">,</span> <span class="nx">category</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">getURL</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="disabling-rules-via-code-comments">Disabling rules via code comments</h3>
+
+<p>This is the next best option – if a rule doesn’t raise too many problems around the codebase, adding <a href="https://eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments"><code class="language-plaintext highlighter-rouge">eslint-disable</code></a> comments where relevant makes it possible to only disable the rule for a few lines of legacy code, rather than the whole codebase.</p>
+
+<p>This is always completely safe, and the only drawback is the manual effort involved. Here is an example:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// eslint-disable-next-line eqeqeq</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">!=</span> <span class="k">this</span><span class="p">.</span><span class="nx">windowWidth</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Update the window width for next time</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">windowWidth</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here, we’re not really interested in figuring out whether it’s safe to replace <code class="language-plaintext highlighter-rouge">!=</code> with <code class="language-plaintext highlighter-rouge">!==</code> – we just want to move on and be able to benefit from <a href="https://eslint.org/docs/rules/eqeqeq"><code class="language-plaintext highlighter-rouge">eqeqeq</code></a> elsewhere in the code.</p>
+
+<h3 id="disabling-rules-for-a-group-of-files">Disabling rules for a group of files</h3>
+
+<p>ESLint supports overrides for only some of the files in the project: <a href="https://eslint.org/docs/user-guide/configuring#disabling-rules-only-for-a-group-of-files">Disallowing Rules Only for a Group of Files</a>. Generally I would recommend using inline comments instead of config-level overrides. The overrides might seem a bit cleaner (we don’t have to change the code, and litter it with comments), but they are harder to keep track of since they are decoupled from the code they are for.</p>
+
+<h3 id="changing-the-code-and-its-behavior">Changing the code and its behavior</h3>
+
+<p>If an option, this can be a great way to progress – but it requires good knowledge of the project, and time to test. Here is an example:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">itemLevel</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">navItem</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">navLevel</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Here, ESLint expects <code class="language-plaintext highlighter-rouge">parseInt</code> to be provided with a <a href="https://eslint.org/docs/rules/radix"><code class="language-plaintext highlighter-rouge">radix</code></a> parameter instead of relying on the default behavior, which can be confusing or a source of bug. While it might seem harmless enough to add a radix of 10 as a parameter, we can’t really tell from the code alone whether <code class="language-plaintext highlighter-rouge">navLevel</code> is indeed in base 10 – so we would effectively be changing the code in a way that could be very significant.</p>
+
+<h3 id="doing-nothing-">Doing nothing (😄)</h3>
+
+<p>Again, if none of those options seem appropriate – it’s also perfectly fine to leave the newly updated config with its overrides and move on. Updating the config, even if only partially, already goes towards addressing technical debt and raising quality standards.</p>
+
+<h2 id="wrapping-up">Wrapping up</h2>
+
+<p>Beyond updating the config, here are additional steps you should consider to make the most of ESLint on your project:</p>
+
+<ul>
+  <li>Use <a href="https://prettier.io/">Prettier</a>, if you aren’t already. With Prettier’s great support for many languages, in 2020 formatting code manually is a complete waste of time.</li>
+  <li>Make sure you and your team have editor / IDE extensions for ESLint. This will make it much easier for everyone to understand the new config and address problems as they arise.</li>
+  <li>Consider using <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">pre-commit hooks</a> on your project. While these might seem annoying at first, they can save you a lot of back-and-forth with CI (and code reviews!).</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python static type checking: field test]]></title>
+    <link href="https://thib.me/python-static-type-checking-field-test"/>
+    <updated>2019-12-28T17:10:26+00:00</updated>
+    <id>https://thib.me/python-static-type-checking-field-test</id>
+    <content type="html"><![CDATA[<p>A few years ago, with the release of <a href="https://pyre-check.org/">Pyre</a> from Facebook, I got really excited about the potential of type annotations and type checkers for Python codebases. Having spent a lot of time with <a href="https://flow.org/">Flow</a>, also from Facebook, I was full of hope. Now, let’s see how well static type checking actually works in modern Python.</p>
+
+<!-- more -->
+
+<h2 id="tldr">TL;DR;</h2>
+
+<p>After my experiments, I was really hoping I could heartily recommend using type annotations and static type checkers for most projects in most cases. In reality it feels like it’s too early still, unless:</p>
+
+<ul>
+  <li>You’re already sold on the idea of static typing, and you already know type systems from other languages – you’ll be able to navigate the messy Python landscape.</li>
+  <li>You only work on projects that are kept up-to-date with Python releases – so Python 3.8+ only.</li>
+  <li>You maintain large codebases, and have a large enough team to invest into tooling.</li>
+</ul>
+
+<p>For the rest of us, who work on teams with varying degrees of knowledge and buy-in about types, in projects that use Python 3.5, with lots of untyped dependencies, and little budget for maintenance – it just feels too early.</p>
+
+<h2 id="type-annotations">Type annotations</h2>
+
+<p>The first thing I learned while investigating static typing more thoroughly was that even though PEP-484, which started it all, was implemented in Python 3.5 – it really was just the beginning, and much more is needed to fully benefit from typing code. Here are all type-related PEPs I looked into using while typing my <a href="https://github.com/springload/draftjs_exporter/issues/101">±4000 SLOC project</a> on which I wanted to try this:</p>
+
+<ul>
+  <li><a href="https://www.python.org/dev/peps/pep-3107/">PEP 3107 – Function annotations</a> (Python 3.0)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0484/">PEP 484 – Type annotations for function parameters and return values</a> (Python 3.5)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0526/">PEP 526 – Syntax for Variable Annotations</a> (Python 3.6)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0561/">PEP 561 – Distributing and Packaging Type Information</a> (Python 3.7)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0563/">PEP 563 – Postponed Evaluation of Annotations</a> (Python 3.7)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0586/">PEP 586 – Literal Types</a> (Python 3.8)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0589/">PEP 589 – TypedDict: Type Hints for Dictionaries with a Fixed Set of Keys</a> (Python 3.8)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0544/">PEP 544 – Protocols: Structural subtyping (static duck typing)</a> (Python 3.8)</li>
+  <li><a href="https://www.python.org/dev/peps/pep-0591/">PEP 591 – Adding a final qualifier to typing</a> (Python 3.8)</li>
+  <li>Not a PEP but also worth mentioning: the <a href="https://pypi.org/classifiers/"><code class="language-plaintext highlighter-rouge">Typing :: Typed</code></a> trove classifier</li>
+</ul>
+
+<p>I’m used to leveraging dictionaries with fixed set of keys in other languages (e.g. JSON with a set structure). Literal types are also very useful. So is structural subtyping, especially in a language like Python. Without these available, it felt really strange to write annotations using very broad categories – e.g. <code class="language-plaintext highlighter-rouge">Dict[str, Any]</code> when really the dictionary should only have a few keys for which the types are well-known. Or use <code class="language-plaintext highlighter-rouge">str</code> for a very limited set of literals.</p>
+
+<p>I found the <a href="https://mypy.readthedocs.io/en/latest/index.html">mypy documentation</a> to be the best source of information on what was and wasn’t available in the type system / type checkers. It’s important to note that some of the above are available as backports in <a href="https://github.com/python/typing/tree/master/typing_extensions">typing_extensions</a>, but I felt somewhat funny adding a dependency for my project just for the sole purpose of adding type definitions that are only ever used statically. All in all, if it wasn’t for mypy’s type reference this would have been really hard to navigate. Hopefully this will get easier once Python 3.8+ is more established, and there are more resources available online dedicated to static typing in Python.</p>
+
+<h2 id="type-checkers">Type checkers</h2>
+
+<p>On the topic of type checkers, here are the ones I tried:</p>
+
+<ul>
+  <li><a href="https://github.com/google/pytype">pytype</a> from Google.</li>
+  <li><a href="https://github.com/Microsoft/pyright">pyright</a> from Microsoft.</li>
+  <li><a href="https://pyre-check.org/">Pyre</a> from Facebook.</li>
+  <li><a href="https://github.com/python/mypy">mypy</a> from Dropbox (and more).</li>
+</ul>
+
+<p>Out of these four, mypy is by far the most established, having been around the longest, and having the best documentation. Even though I liked Flow from Facebook, Pyre still feels very experimental and poorly documented – as far as I could remember the official docs are the exact same as they were when I checked it out a year ago, and I couldn’t get it to understand type aliases. I also had similar documentation issues with pytype – I could get it working, but couldn’t get it to read my project’s stubs. Finally, pyright gets an honorable mention. Its README clearly states that it’s only a side project (and has been created only a few months ago), but it was very straightforward to set up and get meaningful results with.</p>
+
+<p>I would recommend using mypy for people starting with static typing in Python – it’s the easiest to use as of now, has the <a href="https://mypy.readthedocs.io/en/latest/">best documentation</a> by far, and seems like it has a bright future ahead of itself. It even has a <a href="https://mypy.readthedocs.io/en/latest/mypy_daemon.html">daemon/server mode</a> to get better performance for large codebases.</p>
+
+<h2 id="starting-to-use-types-on-a-project">Starting to use types on a project</h2>
+
+<p>Here is the process I would recommend, for small projects where the whole codebase can be typed in one go:</p>
+
+<ol>
+  <li>Research whether types are suitable on your project – do you have major dependencies that might be untyped and hard to stub? Are there JSON-like data structures that will need special attention to be typed correctly?</li>
+  <li>Set up mypy with the most permissive settings possible. We can turn on the strictness later.</li>
+  <li>Consider using a tool like <a href="https://github.com/dropbox/pyannotate">pyannotate</a> (also from Dropbox) to automatically add annotations to your code.</li>
+  <li>Start manually annotating internal modules that have straightforward signatures (e.g. utility code, or basic data processing, without external dependencies)</li>
+  <li>Expand annotations to reach your public API.</li>
+  <li>Turn on stricter mypy settings.</li>
+</ol>
+
+<h2 id="resources">Resources</h2>
+
+<p>Here are resources I would also recommend checking out:</p>
+
+<ul>
+  <li><a href="https://realpython.com/python-type-checking/">https://realpython.com/python-type-checking/</a>, the best all-in-one resource that is not mypy’s type system reference.</li>
+  <li><a href="https://github.com/typeddjango/awesome-python-typing">https://github.com/typeddjango/awesome-python-typing</a>, a list of resources on typing in Python.</li>
+  <li><a href="https://github.com/psf/black/blob/master/black.py">https://github.com/psf/black/blob/master/black.py</a>, a real-world codebase that uses type annotations.</li>
+  <li><a href="https://github.com/JelleZijlstra/lxml-stubs">https://github.com/JelleZijlstra/lxml-stubs</a>, an example of type stubs outside of typeshed.</li>
+  <li><a href="https://www.destroyallsoftware.com/talks/ideology">https://www.destroyallsoftware.com/talks/ideology</a>, an inslightful talk from Gary Bernhardt about types, unit tests, and ideology.</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing with multiple versions of npm packages]]></title>
+    <link href="https://thib.me/testing-with-multiple-versions-of-npm-packages"/>
+    <updated>2019-12-09T20:36:37+00:00</updated>
+    <id>https://thib.me/testing-with-multiple-versions-of-npm-packages</id>
+    <content type="html"><![CDATA[<p>Have you ever wondered how to test your library against multiple versions of a project like React? Well, there is a way – and it’s not even that complex!</p>
+
+<!-- more -->
+
+<h2 id="installing-multiple-versions">Installing multiple versions</h2>
+
+<p>With Yarn – it’s been around for ages, and is <a href="https://yarnpkg.com/lang/en/docs/cli/add/#toc-yarn-add-alias">very well documented</a>:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add &lt;alias-package&gt;@npm:&lt;package&gt;
+</code></pre></div></div>
+
+<p>This aliasing feature allows us to add as many packages as we need, all resolving to different versions of the same package.</p>
+
+<p>With npm – package aliases have been available since <a href="https://github.com/npm/cli/releases/tag/v6.9.0">v6.9.0</a>. Sadly, the only good resource I could find on this is a StackOverflow answer: <a href="https://stackoverflow.com/a/56495651/1798491">how to install multiple versions of package using npm</a>.</p>
+
+<p>For my need with Draft.js, this is what the result looks like in <code class="language-plaintext highlighter-rouge">package.json</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"draft-js"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.10.5"</span><span class="err">,</span><span class="w">
+</span><span class="nl">"draft-js-11"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm:draft-js@0.11.3"</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="configuring-mocks-for-tests">Configuring mocks for tests</h2>
+
+<p>Using <a href="https://jestjs.io/">Jest</a>, this also turns out to be very straightforward. The setup even works with <code class="language-plaintext highlighter-rouge">create-react-app</code>. In <code class="language-plaintext highlighter-rouge">setupTests.js</code>:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">jest</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="dl">"</span><span class="s2">draft-js</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">packages</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">0.10</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">draft-js</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">0.11</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">draft-js-11</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">};</span>
+  <span class="kd">const</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DRAFTJS_VERSION</span> <span class="o">||</span> <span class="dl">"</span><span class="s2">0.10</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="c1">// Require the original module.</span>
+  <span class="kd">const</span> <span class="nx">originalModule</span> <span class="o">=</span> <span class="nx">jest</span><span class="p">.</span><span class="nx">requireActual</span><span class="p">(</span><span class="nx">packages</span><span class="p">[</span><span class="nx">version</span><span class="p">]);</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">__esModule</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">originalModule</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>We simply have a mock for the dependency, and then require either of the packages depending on an environment variable.</p>
+
+<h2 id="testing-both-versions-in-ci">Testing both versions in CI</h2>
+
+<p>In CI, we can then set up a build (or environment, or job) matrix to run tests with different environment variables. With Travis CI, this looks like:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">language</span><span class="pi">:</span> <span class="s">node_js</span>
+<span class="na">install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">npm ci</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">include</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">env</span><span class="pi">:</span> <span class="s">DRAFTJS_VERSION=0.10</span>
+    <span class="pi">-</span> <span class="na">env</span><span class="pi">:</span> <span class="s">DRAFTJS_VERSION=0.11</span>
+<span class="na">script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">npm run test</span>
+</code></pre></div></div>
+
+<p>And that’s it!</p>
+
+<p>See the end results over at <a href="https://github.com/thibaudcolas/draftjs-filters">thibaudcolas/draftjs-filters</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Draftail v1.3.0: community improvements, beyond Wagtail]]></title>
+    <link href="https://thib.me/draftail-v1-3-0-community-improvements-beyond-wagtail"/>
+    <updated>2019-08-14T23:56:37+00:00</updated>
+    <id>https://thib.me/draftail-v1-3-0-community-improvements-beyond-wagtail</id>
+    <content type="html"><![CDATA[<p>Time for a new release! Draftail <a href="https://github.com/springload/draftail/blob/master/CHANGELOG.md#v130">v1.3.0</a> is out, and this is the first release to solely focus on improvements or fixes requested by users of Draftail outside of Wagtail, its first large-scale implementation.</p>
+
+<!-- more -->
+
+<h2 id="bug-fixes-and-new-features">Bug fixes and new features</h2>
+
+<h3 id="readonly-editor-support">readOnly editor support</h3>
+
+<p>The editor now supports being set to <a href="https://www.draftail.org/docs/api#draftaileditor"><code class="language-plaintext highlighter-rouge">readOnly</code></a> mode, just like vanilla Draft.js. Thanks to <a href="https://github.com/SpearThruster">@SpearThruster</a> for requesting this, <em>and</em> making the pull request to implement this new prop for the editor 🎉.</p>
+
+<h3 id="controlled-editor">Controlled editor</h3>
+
+<p>Another commonly requested feature was for using the editor as a <a href="https://reactjs.org/docs/forms.html#controlled-components">controlled component</a> – the recommended mode of operation for form elements in React, and again how vanilla Draft.js works.</p>
+
+<p>This is now implemented with two props: <a href="https://www.draftail.org/docs/api#editorstate-and-onchange"><code class="language-plaintext highlighter-rouge">editorState</code> and <code class="language-plaintext highlighter-rouge">onChange</code></a>. People familiar with vanilla Draft.js will feel right at home. This will also make it much easier to integrate the editor in apps where state is centrally managed, or where forms have specific reset / validation behavior.</p>
+
+<p>To help with Draft.js state initialisation and persistence, Draftail now also exposes APIs to help with <a href="https://www.draftail.org/docs/controlled-component#data-conversion-helpers">data conversion</a>, which are built-in with the uncontrolled editor API.</p>
+
+<h3 id="customisable-undoredo-button-icons">Customisable undo/redo button icons</h3>
+
+<p>Thanks to <a href="https://github.com/rmakovyak">@rmakovyak</a> for fixing this – icons should be <a href="https://www.draftail.org/docs/customising-icons">customisable in the toolbar</a> for all buttons, but there was a bug preventing this for undo/redo buttons via the <code class="language-plaintext highlighter-rouge">showUndoControl</code> and <code class="language-plaintext highlighter-rouge">showRedoControl</code> props.</p>
+
+<h2 id="state-of-draftail">State of Draftail</h2>
+
+<p>Put simply, none of the above changes are going to be useful for Draftail’s first use case: as an editor for <a href="https://wagtail.io">Wagtail</a>. I find this wonderful: this reflects that the editor is beneficial for people outside of the Wagtail bubble, and, with those changes, it will become useful for even more use cases that I didn’t initially identify.</p>
+
+<p>According to GitHub and npm statistics, the editor is used in <a href="https://github.com/springload/draftail/network/dependents">118 public repositories</a> and gets downloaded <a href="https://www.npmjs.com/package/draftail">1’772 times per week on npm</a>. There are well known names in there – the <a href="https://github.com/fecgov/fec-cms">FEC</a> in the US for their CMS, <a href="https://github.com/NCI-Agency/anet">NATO’s Communication and Information Agency</a>, <a href="https://medialab.sciencespo.fr">Sciences Po’s médialab</a>. <a href="https://getsaleor.com/">Saleor</a>, an up-and-coming e-commerce platform built on modern technologies also <a href="https://medium.com/saleor/february-release-of-saleor-three-new-dashboard-2-0-sections-6d775479882e">announced on their blog</a> that the upcoming version of Saleor would be using Draftail for rich text content.</p>
+
+<p><img src="/images/blog/draftail-v1-3-0-community-improvements-beyond-wagtail/draftail-in-saleor.png" alt="Screenshot of Draftail as it is used in Saleor 2.0, for a product description field" /></p>
+
+<blockquote>
+  <p>Draftail looking good in Saleor dashboard 2.0!</p>
+</blockquote>
+
+<p>I’m sure there are many more. If you’re using Draftail, please do <a href="https://github.com/thibaudcolas/draftail.org/issues/13">get in touch</a> so others can see all of the cool things you’re doing with it!</p>
+
+<h3 id="up-next">Up next</h3>
+
+<p>With those improvements in place to make Draftail usable in more scenarios, I’d really like to go back to focusing on features again. Here are things that look really cool that I’d like to look at next:</p>
+
+<ul>
+  <li><a href="https://github.com/springload/draftail/issues/198">Table support #198</a>. This is lots of work, but would be really cool to have basic support out of the box or as an “official” extension.</li>
+  <li><a href="https://github.com/springload/draftail/issues/158">Support image blocks without wrapper text blocks #158</a> – and generally better built-in support for images, most likely as an “official” extension with good defaults.</li>
+  <li><a href="https://github.com/springload/draftail/issues/113">Add character replacements for typing convenience &amp; typographic correctness #113</a>. This is one of those little things that make an editor much more pleasant to use, if done well.</li>
+  <li><a href="https://github.com/springload/draftail/issues/118">Add support for emojis #118</a>. I’d really like to nail this one!</li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Making Wagtail accessible]]></title>
+    <link href="https://thib.me/making-wagtail-accessible"/>
+    <updated>2019-07-25T18:15:08+00:00</updated>
+    <id>https://thib.me/making-wagtail-accessible</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk at <a href="https://us.wagtail.space/">Wagtail Space US 2019</a> about making Wagtail accessible – an ongoing effort over the last few months. This is a blog post version of the same talk.</p>
+
+<!-- more -->
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/tdB1I_gSCeY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>Slides: <a href="https://docs.google.com/presentation/d/15y8XIe7SL-RYEO9tEE8n9chx80_X4j4PbczGGM-cEGE/edit">Making Wagtail accessible – Wagtail Space US 2019</a></p>
+
+<hr />
+
+<p>There’s good news for accessibility back in the Wagtail 2.6 release notes:</p>
+
+<blockquote>
+  <p>Wagtail now has official accessibility support targets: we are aiming for compliance with WCAG2.1, AA level. WCAG 2.1 is the international standard which underpins many national accessibility laws.</p>
+
+  <p>Wagtail isn’t fully compliant just yet, but we have made many changes to the admin interface to get there. We thank the UK Government (in particular the CMS team at the Department for International Trade), who commissioned many of these improvements.</p>
+</blockquote>
+
+<h2 id="why-this-matters">Why this matters</h2>
+
+<p>For users of assistive technologies, using Wagtail’s admin interface can be <a href="https://github.com/wagtail/wagtail/issues/4199#issue-288601594">difficult</a>. Organisations shopping for a CMS also are very aware of accessibility – because of legislation that mandates compliance with accessibility standards (<a href="https://www.digital.govt.nz/standards-and-guidance/nz-government-web-standards/web-accessibility-standard-1-0/">NZ</a>, <a href="https://www.section508.gov/">USA</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2016.327.01.0001.01.ENG">EU</a>, <a href="https://www.legislation.gov.uk/uksi/2018/952/introduction/made">UK</a>, and more).</p>
+
+<p>We also simply want Wagtail users to have a good experience, regardless of how they access Wagtail. And accessibility improvements for people relying on assistive technology usually also lead to usability improvements for everyone.</p>
+
+<p><strong>And this reasoning also applies beyond Wagtail</strong> – whether you’re building working on an intranet platform, CRM, ERP, dashboard tools. Building an internal app with the Django admin. The same standards should apply, even if the audience is smaller or restricted to a specific organisation.</p>
+
+<h2 id="what-weve-done-so-far">What we’ve done so far</h2>
+
+<p>We started by setting our target: compliance with <a href="https://www.w3.org/TR/WCAG21/">WCAG 2.1</a>, AA level.</p>
+
+<ul>
+  <li>Why WCAG2.1? Because it’s a well-established standard internationally, and the basis of many national accessibility laws.</li>
+  <li>Why AA level instead of AAA? Because AAA compliance generally mandates a lot when it comes to visual design, and it didn’t feel realistic. AAA-level compliance will be achieved on some parts of Wagtail, but not all of it.</li>
+</ul>
+
+<p>To complement this target, we also decided to make a shortlist of specific assistive technologies we wanted to support and use in our testing:</p>
+
+<ul>
+  <li><a href="https://www.nvaccess.org/download/">NVDA</a> on Windows with Firefox ESR</li>
+  <li><a href="https://support.apple.com/en-gb/guide/voiceover-guide/welcome/web">VoiceOver</a> on macOS with Safari</li>
+  <li>Windows Magnifier</li>
+  <li>macOS Zoom</li>
+  <li>Windows Speech Recognition</li>
+  <li>macOS Dictation</li>
+  <li>Mobile VoiceOver on iOS, or TalkBack on Android</li>
+</ul>
+
+<p>Like for cross-browser testing, having explicit targets helps a lot in understanding what to test. When choosing those targets, we tried to have a representative selection of assistive technology in use (thanks to the <a href="https://accessibility.blog.gov.uk/2016/11/01/results-of-the-2016-gov-uk-assistive-technology-survey/">2016 GOV.UK assistive technology survey</a>), but also choose tools that we could reasonably expect people contributing to Wagtail to install and test with. There are things not covered here – high-contrast modes, dyslexia fonts, etc.</p>
+
+<h3 id="tooling">Tooling</h3>
+
+<p>To assist with our audits and accessibility testing we picked a selection of tools centred on <a href="https://www.deque.com/axe/">Axe</a>, an accessibility rules engine. We specifically chose three integrations of Axe:</p>
+
+<ul>
+  <li><a href="https://accessibilityinsights.io/docs/en/web/overview">Accessibility Insights</a> – a set of accessibility compliance browser extenstions, built upon Axe for automated checks.</li>
+  <li><a href="https://pa11y.org/">Pa11y</a> – Command line tool for accessibility checks with Axe &amp; HTML_CS.</li>
+  <li><a href="https://github.com/dequelabs/react-axe">React Axe</a> – integrated directly in our build tools, to identify actionable issues. Logs its results in the browser console.</li>
+</ul>
+
+<p>Here again, our choice of Axe over other tools is largely thanks to excellent work from the GDS – its <a href="https://alphagov.github.io/accessibility-tool-audit/">accessibility tools audit</a> in this case. While Axe doesn’t top this list, it has one of the lowest rates of false positives, making it particularly suitable for automated tests, which are paramount for an open-source project with a lot of contributors.</p>
+
+<p>To make the most of those tools, we also worked on an <a href="https://github.com/thibaudcolas/wagtail-tooling">automated accessibility and visual regression test suite</a>, which helped us seeing our progress as we started fixing issues.</p>
+
+<h3 id="audit">Audit</h3>
+
+<p>There is no better start to an accessibility push than an audit – to understand where we are at, create a backlog of improvements to improve the user experience, and reach compliance. Auditing can be automated (to cover lots of UI at a high-level), semi-automated , or fully manual (to have a more qualitative assessment).</p>
+
+<p>But first – we needed to figure out what to audit. We made a big spreadsheet:</p>
+
+<p><img src="/images/blog/making-wagtail-accessible/ui-overview.png" alt="Screenshot of a spreadsheet – different parts of Wagtail as rows, with columns for whether they are used or not, by whom, what states they can be in, and whether automated tests are set up or not" /></p>
+
+<p>…and from there, we could start to audit our way through the Wagtail admin!</p>
+
+<p>The results</p>
+
+<ul>
+  <li>We identified <strong>344 different scenarios</strong> / parts of Wagtail to test.</li>
+  <li>We tested 189 of those 344.</li>
+</ul>
+
+<p>The discrepancy between the two is due to the scenarios either being seldom used (e.g. Sites management), hard to reach, or hard to test (e.g. the inside of the datepicker).</p>
+
+<p>From this, <strong>we found 336 issues via automated testing 🙀.</strong> While this can feel like a big number, there were a lot of issues that were duplicated between the different parts of Wagtail, and a few false positives as well. But 336 is a big number nonetheless.</p>
+
+<h2 id="the-issues">The issues</h2>
+
+<p>We made a big spreadsheet with the 336 automated test failures, and the manual ones too. It’s not that interesting to look at (<em>and a lot of them have been fixed since!</em>), but let’s have a look at a selection of my personal favourites.</p>
+
+<h3 id="colour-contrast">Colour contrast</h3>
+
+<p>Can you spot the error message? Hint: it’s red.</p>
+
+<p><img src="/images/blog/making-wagtail-accessible/color-contrast-error-solution-v25.png" alt="Screenshot of Wagtail’s Documents search, with an error message barely visible under the search field" /></p>
+
+<p>What can we learn from this? Testing all variations of a given UI is mandatory – focusing on the “success” path is not enough.</p>
+
+<hr />
+
+<p>If you can’t see colours, can you tell which message is a warning, and which one is a critical error? Hint: one is slightly darker.</p>
+
+<p><img src="/images/blog/making-wagtail-accessible/color-contrast-warning.png" alt="Screenshot of Wagtail’s info, warning and error messages, in greyscale." /></p>
+
+<p>Here, the takeaway is to never rely on colour alone. Sure – the messages come with icons, but they are identical for warnings and critical messages.</p>
+
+<h3 id="focus-outlines">Focus outlines</h3>
+
+<p>Can you spot where the focus is? I can’t either.</p>
+
+<p><img src="/images/blog/making-wagtail-accessible/focus-outline2.png" alt="Screenshot of Wagtail’s page editing UI, with a few fields, and a faint focus outline around one of the buttons of the image chooser" /></p>
+
+<p>Good, consistent focus styles are fundamental to an interface being usable with the keyboard. Don’t build different styles for each component.</p>
+
+<h3 id="tab-stops">Tab stops</h3>
+
+<p>Tab stops are a measure of how many “tab” presses are needed to reach a given part of the page. Wagtail currently doesn’t score well at this, to say the least.</p>
+
+<p><img src="/images/blog/making-wagtail-accessible/tab-stops-solution-v25.png" alt="Screenshot of the Wagtail page editing UI, with a visualisation of tab stops overlayed – the tabs start on random buttons, then go through the menu, and finally arrive on the main content" /></p>
+
+<hr />
+
+<p>As a bonus, here is a recording of testing Wagtail 2.5 with a screen reader:</p>
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/f98wE4SwGLk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h2 id="what-we-fixed">What we fixed</h2>
+
+<p>Quite simply, we went from 336 to 172 issues, with the remainder essentially on parts of Wagtail we chose not to cover (yet!). The <a href="https://docs.wagtail.io/en/latest/releases/2.6.html">Wagtail 2.6 release notes</a> have more information about the fixes:</p>
+
+<ul>
+  <li>Better text-to-background color contrast across the whole CMS</li>
+  <li>Increased font size across the board as well</li>
+  <li>Added focus outline styles</li>
+  <li>Added more ARIA landmarks and refactored heading structure</li>
+  <li>Added a lot more contextual information to links for screen reader users</li>
+  <li>Fixed the icons implementation (more or less)</li>
+  <li>Fixed focus not moving to the pages explorer</li>
+</ul>
+
+<h2 id="up-next">Up next</h2>
+
+<p>Even though this was a wonderful push to make Wagtail more accessible, in practice this really should be part of ongoing development. Accessibility should be taken into account in the design &amp; dev workflow for any UI changes. Contributors to Wagtail should have clear information on what to do to make sure they build accessible UIs.</p>
+
+<p>We’re not there yet, but you can follow our progress and get involved by:</p>
+
+<ul>
+  <li>Looking at the accessibility RFC: <a href="https://github.com/wagtail/rfcs/pull/37">Making Wagtail Accessible for users of assistive technologies</a>. Comments welcome!</li>
+  <li>Reviewing our backlog: <a href="https://github.com/wagtail/wagtail/projects/5">WCAG2.1 AA compliance</a> project on GitHub.</li>
+  <li>Joining us on <a href="https://github.com/wagtail/wagtail/wiki/Slack">Wagtail’s Slack workspace</a>, in the #accessibility channel.</li>
+</ul>
+
+<p>And last but not least, this year we are organising a <a href="https://wagtail.io/blog/bristol-sprint-2020/">Wagtail sprint focused on accessibility</a> in Bristol.</p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://github.com/wagtail/wagtail/issues/4199#issue-288601594">Issue #4199: Making Wagtail Accessible for users with disabilities</a></li>
+  <li><a href="https://www.digital.govt.nz/standards-and-guidance/nz-government-web-standards/web-accessibility-standard-1-0/">NZ: Web Accessibility Standard</a></li>
+  <li><a href="https://www.section508.gov/">US: Section 508</a></li>
+  <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2016.327.01.0001.01.ENG">EU: Directive on the accessibility of public sector websites and mobile applications.</a></li>
+  <li><a href="https://www.legislation.gov.uk/uksi/2018/952/introduction/made">GB: The Public Sector Bodies (Websites and Mobile Applications) (No.2) Accessibility Regulations 2018</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Universal_design">Wikipedia: Universal design</a></li>
+  <li><a href="https://www.w3.org/TR/WCAG21/#conformance-reqs">WCAG2.1 conformance levels</a></li>
+  <li><a href="https://www.w3.org/WAI/policies/">W3C: Web Accessibility Laws and Policies</a></li>
+  <li><a href="https://github.com/dequelabs/axe-core">Axe: Accessibility engine for automated Web UI testing</a></li>
+  <li><a href="https://pa11y.org/">Pa11y: your automated accessibility testing pal</a></li>
+  <li><a href="https://medium.com/slalom-engineering/a-maturity-model-for-design-systems-93fff522c3ba">A maturity model for design systems</a></li>
+  <li><a href="https://www.deque.com/shift-left/">Deque: What is Shift Left Accessibility Testing?</a></li>
+  <li><a href="https://docs.wagtail.io/en/latest/releases/2.6.html">Wagtail 2.6 release notes</a></li>
+  <li><a href="https://github.com/wagtail/wagtail/projects/5">WCAG2.1 AA compliance roadmap</a></li>
+  <li><a href="https://github.com/wagtail/wagtail/pull/5245">Accessibility support targets &amp; tooling setup (#4871) #5245</a></li>
+  <li><a href="https://github.com/wagtail/rfcs/pull/37">RFC 37: Making Wagtail Accessible for users of assistive technologies</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes from JAMstack conf London 2019]]></title>
+    <link href="https://thib.me/jamstack-conf-london-2019"/>
+    <updated>2019-07-10T17:16:03+00:00</updated>
+    <id>https://thib.me/jamstack-conf-london-2019</id>
+    <content type="html"><![CDATA[<p>Here are my notes from JAMstack 2019 in London.</p>
+
+<!-- more -->
+
+<ul>
+  <li><a href="https://app.graphcms.com">GraphCMS</a> – SaaS</li>
+  <li><a href="https://www.contentful.com">Contentful</a> – SaaS</li>
+  <li>Netlify CMS – Git-based</li>
+  <li><a href="https://www.sanity.io">Sanity.io</a> – SaaS API, self-hosted admin?</li>
+  <li><a href="https://app.kenticocloud.com">Kentico Cloud</a> – SaaS</li>
+  <li>Forestry.io – Git-based</li>
+</ul>
+
+<h2 id="talks">Talks</h2>
+
+<h3 id="sarah-drasner--state-of-jamstack-nation">Sarah Drasner – State of JAMstack nation</h3>
+
+<h3 id="netlify-analytics">Netlify, analytics</h3>
+
+<ul>
+  <li>Netlify Dev – Run Netlify stack locally</li>
+  <li>Netlify Analytics</li>
+  <li>Privacy?</li>
+  <li>Performance</li>
+  <li>$9/site</li>
+</ul>
+
+<h3 id="knut-sanity">Knut, Sanity</h3>
+
+<p>GROQ, Graph-Relational Objects Queries</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[
+title match "Javascript"
+&amp;&amp; count(body[_type == "code])
+]
+</code></pre></div></div>
+
+<p>CSR SSR static server rendered comparison table</p>
+
+<p>Search fallback to Google smashing mag</p>
+
+<h3 id="serverless">Serverless</h3>
+
+<p>Function-as-a-service, Backend-as-a-service</p>
+
+<p>Managed services</p>
+
+<h3 id="performance">Performance</h3>
+
+<p>CharacterSet npm</p>
+
+<p>Google Chrome Labs travis-size-report</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://www.staticgen.com">https://www.staticgen.com</a></li>
+  <li><a href="https://headlesscms.org/">https://headlesscms.org/</a></li>
+  <li><a href="https://github.com/GoogleChromeLabs/travis-size-report">https://github.com/GoogleChromeLabs/travis-size-report</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+</feed>
