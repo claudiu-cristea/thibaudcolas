@@ -4,7 +4,7 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2020-12-03T10:14:30+00:00</updated>
+  <updated>2020-12-03T10:22:45+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
@@ -76,6 +76,8 @@ https://buckup-ff-stories.s3.amazonaws.com/original_images/Lockup_Logo_-_JPEG-1.
 </ul>
 
 <p>With Wappalyzer in particular, they also offer additional services based on anonymous data reporting from their detection tools. Here is their page that aggregates Wagtail usage data: <a href="https://www.wappalyzer.com/technologies/cms/wagtail/">Websites using Wagtail</a>.</p>
+
+<p>If you’re unsure which of these to use – the Wappalyzer checks are the strictest, so best used if you don’t want to manually confirm the results by inspecting the pages’ HTML.</p>
 
 <h2 id="real-world-data">Real-world data</h2>
 
