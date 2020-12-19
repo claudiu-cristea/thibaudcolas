@@ -4,7 +4,7 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2020-12-12T01:13:46+00:00</updated>
+  <updated>2020-12-19T02:32:43+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
@@ -802,29 +802,29 @@ ag <span class="s1">'\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|mi
 
 <p>All of this comes together with <a href="https://mdxjs.com/">MDX</a>, a Markdown-inspired syntax which makes it possible to use JSX directly inside documents, thereby making it possible to use React components, like the language tabs and code snippets with annotations:</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">Tabs</span>
-  <span class="nx">groupId</span><span class="o">=</span><span class="dl">"</span><span class="s2">config-language</span><span class="dl">"</span>
-  <span class="nx">defaultValue</span><span class="o">=</span><span class="dl">"</span><span class="s2">toml</span><span class="dl">"</span>
-  <span class="nx">values</span><span class="o">=</span><span class="p">{[</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="nc">Tabs</span>
+  <span class="na">groupId</span><span class="p">=</span><span class="s">"config-language"</span>
+  <span class="na">defaultValue</span><span class="p">=</span><span class="s">"toml"</span>
+  <span class="na">values</span><span class="p">=</span><span class="si">{</span><span class="p">[</span>
     <span class="p">{</span> <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">TOML</span><span class="dl">"</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="dl">"</span><span class="s2">toml</span><span class="dl">"</span> <span class="p">},</span>
     <span class="p">{</span> <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Shell</span><span class="dl">"</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="dl">"</span><span class="s2">shell</span><span class="dl">"</span> <span class="p">},</span>
-  <span class="p">]}</span>
-<span class="o">&gt;</span>
-  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value=</span><span class="s2">"toml"</span><span class="p">&gt;</span>
+  <span class="p">]</span><span class="si">}</span>
+<span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value</span><span class="p">=</span><span class="s">"toml"</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nc">CodeSnippet</span>
-      <span class="na">snippet=</span><span class="si">{</span><span class="s2">`# The \`alt\` attribute must be present.\nimage_alt = true`</span><span class="si">}</span>
-      <span class="na">annotations=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
-      <span class="na">lang=</span><span class="s2">"toml"</span>
+      <span class="na">snippet</span><span class="p">=</span><span class="si">{</span><span class="s2">`# The </span><span class="se">\`</span><span class="s2">alt</span><span class="se">\`</span><span class="s2"> attribute must be present.\nimage_alt = true`</span><span class="si">}</span>
+      <span class="na">annotations</span><span class="p">=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
+      <span class="na">lang</span><span class="p">=</span><span class="s">"toml"</span>
     <span class="p">/&gt;</span>
   <span class="p">&lt;/</span><span class="nc">TabItem</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value=</span><span class="s2">"shell"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nc">TabItem</span> <span class="na">value</span><span class="p">=</span><span class="s">"shell"</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nc">CodeSnippet</span>
-      <span class="na">snippet=</span><span class="si">{</span><span class="s2">`# The \`alt\` attribute must be present.\ncurlylint --rule 'image_alt: true' .`</span><span class="si">}</span>
-      <span class="na">annotations=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
-      <span class="na">lang=</span><span class="s2">"shell"</span>
+      <span class="na">snippet</span><span class="p">=</span><span class="si">{</span><span class="s2">`# The </span><span class="se">\`</span><span class="s2">alt</span><span class="se">\`</span><span class="s2"> attribute must be present.\ncurlylint --rule 'image_alt: true' .`</span><span class="si">}</span>
+      <span class="na">annotations</span><span class="p">=</span><span class="si">{</span><span class="p">[]</span><span class="si">}</span>
+      <span class="na">lang</span><span class="p">=</span><span class="s">"shell"</span>
     <span class="p">/&gt;</span>
   <span class="p">&lt;/</span><span class="nc">TabItem</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="err">/</span><span class="nc">Tabs</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nc">Tabs</span><span class="p">&gt;</span>
 </code></pre></div></div>
 
 <p>Docusaurus supports MDX out of the box, and provides the “Tabs” components. The CodeSnippet component is originally from Docusaurus but has been customized to support basic annotations.</p>
