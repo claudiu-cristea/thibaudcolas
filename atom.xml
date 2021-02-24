@@ -4,7 +4,7 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-02-24T08:14:10+00:00</updated>
+  <updated>2021-02-24T23:22:46+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
@@ -17,7 +17,7 @@
     <link href="https://thib.me/wagtail-accessibility-team-reloaded"/>
     <updated>2021-02-24T07:42:03+00:00</updated>
     <id>https://thib.me/wagtail-accessibility-team-reloaded</id>
-    <content type="html"><![CDATA[<p>In <a href="https://wagtail.io/blog/announcing-wagtail-sub-teams/">June last year</a>, we started Wagtail’s dedicated <a href="https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility">accessibility team</a>. 6 months on, now is a good time for us to reflect on our work to date, and go on the lookout for new contributors!</p>
+    <content type="html"><![CDATA[<p>After <a href="https://wagtail.io/blog/announcing-wagtail-sub-teams/">6 months of operations</a>, we reflect on the progress our <a href="https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility">accessibility team</a> has made, and go on the lookout for new contributors.</p>
 
 <!-- more -->
 
@@ -37,7 +37,7 @@
 <p>We ran a short <a href="https://github.com/wagtail/wagtail/wiki/Accessibility-team#2021-01-22----team-retrospective">retrospective</a> to reflect on the team’s way of working over the last 6 months.</p>
 
 <ul>
-  <li>There were a total of 5 people involved at some point over the 6 months (Scott, Andreas, Nick, Helen, and Thibaud), but only 2 people attending each meeting on average. Not as much as we’d ideally want to.</li>
+  <li>There were a total of 5 people involved at some point over the 6 months (Scott, Andreas, Nick, Helen, and Thibaud), but only 2 people attended each meeting on average. Not as much as we’d ideally want to.</li>
   <li>We met 9 times, for 30min each, scheduled once every two weeks.</li>
   <li>Overall we’re happy with what we’ve achieved and how the team works.</li>
   <li>We were keen to do more automated tests and manual auditing but didn’t get around to it.</li>
@@ -55,9 +55,18 @@
 
 <hr />
 
-<p><strong>More importantly, we’ll also want the team to be bigger!</strong></p>
+<h3 id="we-also-want-to-involve-more-people">We also want to involve more people</h3>
 
-<p>There’s only so much we can do with two to three people actively involved – we want a team twice that size! All are welcome regardless of skill level or background, and the time commitment is very reasonable, so if you’re keen to get involved do <a href="https://github.com/wagtail/wagtail/wiki/Slack">reach out to us on Slack</a> in #accessibility.</p>
+<p>There’s only so much we can do with two to three of us actively involved – ideally we’d want a team twice that size! All are welcome regardless of skill level or background, and the time commitment is very reasonable. We’re particularly keen to work with people who:</p>
+
+<ul>
+  <li>Have personal experience of access and functional needs, or who are regular users of assistive technologies.</li>
+  <li>Work on User Experience, design, or content – and can help us understand the needs of our users.</li>
+</ul>
+
+<p>And of course web developers who want to have a practical impact on making the web more accessible!</p>
+
+<p>Does this sound like your kind of jam? If you’re keen to learn more, <a href="https://github.com/wagtail/wagtail/wiki/Slack">reach out to us on Slack</a> in #accessibility.</p>
 ]]></content>
   </entry>
   
