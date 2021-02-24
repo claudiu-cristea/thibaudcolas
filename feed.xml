@@ -1,4 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-02-20T04:00:30+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">Pattern Lab goes Django</title><link href="https://thib.me/pattern-lab-goes-django" rel="alternate" type="text/html" title="Pattern Lab goes Django" /><published>2020-12-11T12:52:22+00:00</published><updated>2020-12-11T12:52:22+00:00</updated><id>https://thib.me/pattern-lab-goes-django</id><content type="html" xml:base="https://thib.me/pattern-lab-goes-django">&lt;p&gt;If you’re into UI component reuse, you may have heard of &lt;a href=&quot;https://atomicdesign.bradfrost.com/&quot;&gt;Atomic Design&lt;/a&gt; and &lt;a href=&quot;https://patternlab.io/&quot;&gt;Pattern Lab&lt;/a&gt;. We’re big fans at Torchbox, but Pattern Lab is PHP or Node-based, while we decided long ago to &lt;a href=&quot;https://torchbox.com/blog/alternatives-to-drupal/&quot;&gt;leave the PHP / Drupal world behind&lt;/a&gt;, and concentrate on Django. We took Pattern Lab with us, and built &lt;a href=&quot;https://torchbox.github.io/django-pattern-library/&quot;&gt;django-pattern-library&lt;/a&gt; – a.k.a. Pattern Lab goes Django.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-02-24T08:14:10+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">Accessibility team reloaded</title><link href="https://thib.me/wagtail-accessibility-team-reloaded" rel="alternate" type="text/html" title="Accessibility team reloaded" /><published>2021-02-24T07:42:03+00:00</published><updated>2021-02-24T07:42:03+00:00</updated><id>https://thib.me/wagtail-accessibility-team-reloaded</id><content type="html" xml:base="https://thib.me/wagtail-accessibility-team-reloaded">&lt;p&gt;In &lt;a href=&quot;https://wagtail.io/blog/announcing-wagtail-sub-teams/&quot;&gt;June last year&lt;/a&gt;, we started Wagtail’s dedicated &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility&quot;&gt;accessibility team&lt;/a&gt;. 6 months on, now is a good time for us to reflect on our work to date, and go on the lookout for new contributors!&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h2 id=&quot;progress-to-date&quot;&gt;Progress to date&lt;/h2&gt;
+
+&lt;p&gt;Early on, &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Accessibility-team#2020-07-17&quot;&gt;we chose&lt;/a&gt; to give priority to improvements we could make to sites built with Wagtail, rather than the Wagtail admin. Practically, this meant:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Putting together &lt;a href=&quot;https://docs.wagtail.io/en/latest/advanced_topics/accessibility_considerations.html&quot;&gt;Wagtail’s accessibility considerations documentation&lt;/a&gt;, as most of the accessibility issues we identified were either dependent on how Wagtail is used, or could be worked around by implementers.&lt;/li&gt;
+  &lt;li&gt;From this list, we also created a &lt;a href=&quot;https://github.com/wagtail/wagtail/projects/10&quot;&gt;backlog of known accessibility issues&lt;/a&gt;, which we would then proceed to fixing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Along the way, we also kept working on the &lt;a href=&quot;https://github.com/wagtail/wagtail/issues/6107&quot;&gt;SVG icons&lt;/a&gt; refactoring for the admin, bit by bit.&lt;/p&gt;
+
+&lt;h2 id=&quot;team-operations&quot;&gt;Team operations&lt;/h2&gt;
+
+&lt;p&gt;We ran a short &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Accessibility-team#2021-01-22----team-retrospective&quot;&gt;retrospective&lt;/a&gt; to reflect on the team’s way of working over the last 6 months.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There were a total of 5 people involved at some point over the 6 months (Scott, Andreas, Nick, Helen, and Thibaud), but only 2 people attending each meeting on average. Not as much as we’d ideally want to.&lt;/li&gt;
+  &lt;li&gt;We met 9 times, for 30min each, scheduled once every two weeks.&lt;/li&gt;
+  &lt;li&gt;Overall we’re happy with what we’ve achieved and how the team works.&lt;/li&gt;
+  &lt;li&gt;We were keen to do more automated tests and manual auditing but didn’t get around to it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;the-future&quot;&gt;The future&lt;/h2&gt;
+
+&lt;p&gt;There are a few changes we will want to see over the next 6-month tenure of the team.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;We’ll want to do a new, comprehensive accessibility audit of Wagtail&lt;/strong&gt;, either for WCAG 2.2 AA or ATAG 2.0. We want to have a clear, public record of how we’re doing.&lt;/p&gt;
+
+&lt;p&gt;We’ll review our contribution guidelines &lt;strong&gt;so accessibility is part and parcel of making changes to Wagtail&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;And we’ll also investigate having &lt;strong&gt;automated accessibility tests built into Wagtail&lt;/strong&gt;. &lt;a href=&quot;https://github.com/neon-jungle/wagtail-accessibility&quot;&gt;wagtail-accessibility&lt;/a&gt; is one of the most popular third-party packages out there, and we want to double down on having this be one of Wagtail’s strengths.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;More importantly, we’ll also want the team to be bigger!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;There’s only so much we can do with two to three people actively involved – we want a team twice that size! All are welcome regardless of skill level or background, and the time commitment is very reasonable, so if you’re keen to get involved do &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Slack&quot;&gt;reach out to us on Slack&lt;/a&gt; in #accessibility.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">In June last year, we started Wagtail’s dedicated accessibility team. 6 months on, now is a good time for us to reflect on our work to date, and go on the lookout for new contributors!</summary></entry><entry><title type="html">Pattern Lab goes Django</title><link href="https://thib.me/pattern-lab-goes-django" rel="alternate" type="text/html" title="Pattern Lab goes Django" /><published>2020-12-11T12:52:22+00:00</published><updated>2020-12-11T12:52:22+00:00</updated><id>https://thib.me/pattern-lab-goes-django</id><content type="html" xml:base="https://thib.me/pattern-lab-goes-django">&lt;p&gt;If you’re into UI component reuse, you may have heard of &lt;a href=&quot;https://atomicdesign.bradfrost.com/&quot;&gt;Atomic Design&lt;/a&gt; and &lt;a href=&quot;https://patternlab.io/&quot;&gt;Pattern Lab&lt;/a&gt;. We’re big fans at Torchbox, but Pattern Lab is PHP or Node-based, while we decided long ago to &lt;a href=&quot;https://torchbox.com/blog/alternatives-to-drupal/&quot;&gt;leave the PHP / Drupal world behind&lt;/a&gt;, and concentrate on Django. We took Pattern Lab with us, and built &lt;a href=&quot;https://torchbox.github.io/django-pattern-library/&quot;&gt;django-pattern-library&lt;/a&gt; – a.k.a. Pattern Lab goes Django.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -838,84 +878,4 @@ ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[
   &lt;li&gt;&lt;strong&gt;Testing / Tooling&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Accessibility&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Performance&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are a couple of interview exercises I like to give, which are relatively open to varied approaches.</summary></entry><entry><title type="html">Procuring accessibility audits</title><link href="https://thib.me/procuring-accessibility-audits" rel="alternate" type="text/html" title="Procuring accessibility audits" /><published>2020-07-03T18:15:08+00:00</published><updated>2020-07-03T18:15:08+00:00</updated><id>https://thib.me/procuring-accessibility-audits</id><content type="html" xml:base="https://thib.me/procuring-accessibility-audits">&lt;p&gt;Following from &lt;a href=&quot;/accessibility-audits-getting-started&quot;&gt;Accessibility audits: getting started&lt;/a&gt;, here are practical tips on how to procure / schedule an accessibility audit, and how to structure the report.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;p&gt;Accessibility audits can take anywhere from 10 minutes to a week, depending on the scope of the audit, the amount of manual testing required, and the expected report format.&lt;/p&gt;
-
-&lt;p&gt;The main factors for an estimate are:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;What’s the purpose of the audit? Do we want a “compliant = yes/no”, or create a backlog of improvements, or something in-between&lt;/li&gt;
-  &lt;li&gt;What’s the scope? How many sites / page types / pages. Provide links to a few pages so we have a sense of how many issues we’re likely to find (the more, the longer it takes to report them).&lt;/li&gt;
-  &lt;li&gt;What kind of report / output do they need? Either something for stakeholders, or developers, or both. Generally it takes nearly as much time to write the report as to find the issues.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Avoid compliance pass/fail audits, which are onerous, and for which we aren’t competent. Get in touch with &lt;a href=&quot;https://digitalaccessibilitycentre.org/&quot;&gt;DAC&lt;/a&gt;, &lt;a href=&quot;https://www.rnib.org.uk/rnib-business&quot;&gt;RNIB&lt;/a&gt;, &lt;a href=&quot;https://abilitynet.org.uk/accessibility-services/products-and-services&quot;&gt;AbilityNet&lt;/a&gt;, or &lt;a href=&quot;https://www.deque.com/&quot;&gt;Deque&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Suggested format for medium websites&lt;/strong&gt;: “backlog of improvements”, for which we can make a proposal for 1 to 4 days, based on automated tests, manual tests for 5 to 10 page types. A one-pager “executive summary” report, and adjoining list of issues / backlog as a spreadsheet or Trello board.&lt;/p&gt;
-
-&lt;h2 id=&quot;audit-strategy&quot;&gt;Audit strategy&lt;/h2&gt;
-
-&lt;h3 id=&quot;target-standards&quot;&gt;Target standards&lt;/h3&gt;
-
-&lt;p&gt;First, define the target standard for the audit. Generally WCAG 2.1 AA, or Section 508. We will consider the latest Section 508 version, post January 2018 update to track WCAG2.0 AA.&lt;/p&gt;
-
-&lt;p&gt;If relevant, also define which standards are out of scope, such as compliance for the Rehabilitation Act and ADA. Compliance for WCAG2.1 AAA is out of scope, but we may provide AAA issues as relevant if they seem to be easily solvable.&lt;/p&gt;
-
-&lt;h3 id=&quot;audit-scope&quot;&gt;Audit scope&lt;/h3&gt;
-
-&lt;p&gt;Make a clear list of URLs to audit. Define whether the audit is on a production or staging environment. If there is any dynamic functionality to audit, define to what extent.&lt;/p&gt;
-
-&lt;h3 id=&quot;report-format&quot;&gt;Report format&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Keep it actionable. We don’t want to do pass/fail compliance audits.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;“Cover sheet” / written document with overview of common issues, and a scoring of how feasible it seems to reach compliance &amp;amp; effort involved.&lt;/li&gt;
-  &lt;li&gt;Tabular data / spreadsheet with individual issues at a more granular level. Including testing tool if relevant, &amp;amp; proposed solution if time allows.&lt;/li&gt;
-  &lt;li&gt;As relevant, direct output from automated / semi-automated testing tools&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;high-level-testing-methodology&quot;&gt;High-level testing methodology&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;See &lt;a href=&quot;/accessibility-audits-getting-started&quot;&gt;Accessibility audits: getting started&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This is a baseline only, please adapt as needed. For all identified pages,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Bulk automated page checks with &lt;a href=&quot;https://validator.github.io/validator/&quot;&gt;V.Nu HTML5 validator&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Bulk automated page checks with &lt;a href=&quot;https://github.com/pa11y/pa11y&quot;&gt;Pa11y&lt;/a&gt; – HTML CodeSniffer, Axe.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;For a relevant subset of pages,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Single-page semi-automated checks with either &lt;a href=&quot;https://accessibilityinsights.io/&quot;&gt;Accessibility Insights&lt;/a&gt; or similar.&lt;/li&gt;
-  &lt;li&gt;Manual keyboard navigation checks&lt;/li&gt;
-  &lt;li&gt;Manual colour contrast check for non-text UI elements and images&lt;/li&gt;
-  &lt;li&gt;Manual screen reader navigation check with VoiceOver in macOS Safari&lt;/li&gt;
-  &lt;li&gt;Manual zoom &amp;amp; magnification testing with Chrome &amp;amp; macOS Zoom&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;For a smaller subset of high-value pages,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Full screen reader testing with VoiceOver in macOS Safari&lt;/li&gt;
-  &lt;li&gt;Full screen reader testing with NVDA in Firefox ESR&lt;/li&gt;
-  &lt;li&gt;Full screen reader testing with VoiceOver in iOS Safari&lt;/li&gt;
-  &lt;li&gt;Mobile touch interaction testing with iOS Safari&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;outcome-of-the-audit&quot;&gt;Outcome of the audit&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Report to project stakeholders&lt;/li&gt;
-  &lt;li&gt;Guidance for implementers&lt;/li&gt;
-  &lt;li&gt;Report to other vendors if needed&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Following from Accessibility audits: getting started, here are practical tips on how to procure / schedule an accessibility audit, and how to structure the report.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are a couple of interview exercises I like to give, which are relatively open to varied approaches.</summary></entry></feed>

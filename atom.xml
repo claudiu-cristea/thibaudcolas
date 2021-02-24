@@ -4,13 +4,62 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-02-20T04:00:30+00:00</updated>
+  <updated>2021-02-24T08:14:10+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Accessibility team reloaded]]></title>
+    <link href="https://thib.me/wagtail-accessibility-team-reloaded"/>
+    <updated>2021-02-24T07:42:03+00:00</updated>
+    <id>https://thib.me/wagtail-accessibility-team-reloaded</id>
+    <content type="html"><![CDATA[<p>In <a href="https://wagtail.io/blog/announcing-wagtail-sub-teams/">June last year</a>, we started Wagtail’s dedicated <a href="https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility">accessibility team</a>. 6 months on, now is a good time for us to reflect on our work to date, and go on the lookout for new contributors!</p>
+
+<!-- more -->
+
+<h2 id="progress-to-date">Progress to date</h2>
+
+<p>Early on, <a href="https://github.com/wagtail/wagtail/wiki/Accessibility-team#2020-07-17">we chose</a> to give priority to improvements we could make to sites built with Wagtail, rather than the Wagtail admin. Practically, this meant:</p>
+
+<ul>
+  <li>Putting together <a href="https://docs.wagtail.io/en/latest/advanced_topics/accessibility_considerations.html">Wagtail’s accessibility considerations documentation</a>, as most of the accessibility issues we identified were either dependent on how Wagtail is used, or could be worked around by implementers.</li>
+  <li>From this list, we also created a <a href="https://github.com/wagtail/wagtail/projects/10">backlog of known accessibility issues</a>, which we would then proceed to fixing.</li>
+</ul>
+
+<p>Along the way, we also kept working on the <a href="https://github.com/wagtail/wagtail/issues/6107">SVG icons</a> refactoring for the admin, bit by bit.</p>
+
+<h2 id="team-operations">Team operations</h2>
+
+<p>We ran a short <a href="https://github.com/wagtail/wagtail/wiki/Accessibility-team#2021-01-22----team-retrospective">retrospective</a> to reflect on the team’s way of working over the last 6 months.</p>
+
+<ul>
+  <li>There were a total of 5 people involved at some point over the 6 months (Scott, Andreas, Nick, Helen, and Thibaud), but only 2 people attending each meeting on average. Not as much as we’d ideally want to.</li>
+  <li>We met 9 times, for 30min each, scheduled once every two weeks.</li>
+  <li>Overall we’re happy with what we’ve achieved and how the team works.</li>
+  <li>We were keen to do more automated tests and manual auditing but didn’t get around to it.</li>
+</ul>
+
+<h2 id="the-future">The future</h2>
+
+<p>There are a few changes we will want to see over the next 6-month tenure of the team.</p>
+
+<p><strong>We’ll want to do a new, comprehensive accessibility audit of Wagtail</strong>, either for WCAG 2.2 AA or ATAG 2.0. We want to have a clear, public record of how we’re doing.</p>
+
+<p>We’ll review our contribution guidelines <strong>so accessibility is part and parcel of making changes to Wagtail</strong>.</p>
+
+<p>And we’ll also investigate having <strong>automated accessibility tests built into Wagtail</strong>. <a href="https://github.com/neon-jungle/wagtail-accessibility">wagtail-accessibility</a> is one of the most popular third-party packages out there, and we want to double down on having this be one of Wagtail’s strengths.</p>
+
+<hr />
+
+<p><strong>More importantly, we’ll also want the team to be bigger!</strong></p>
+
+<p>There’s only so much we can do with two to three people actively involved – we want a team twice that size! All are welcome regardless of skill level or background, and the time commitment is very reasonable, so if you’re keen to get involved do <a href="https://github.com/wagtail/wagtail/wiki/Slack">reach out to us on Slack</a> in #accessibility.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ATAG 2.0 getting started resources]]></title>
@@ -2575,60 +2624,6 @@ nodemon <span class="nt">-w</span> <span class="s1">'&lt;path to our project’s
 <p>And that’s it!</p>
 
 <p>See the end results over at <a href="https://github.com/thibaudcolas/draftjs-filters">thibaudcolas/draftjs-filters</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Draftail v1.3.0: community improvements, beyond Wagtail]]></title>
-    <link href="https://thib.me/draftail-v1-3-0-community-improvements-beyond-wagtail"/>
-    <updated>2019-08-14T23:56:37+00:00</updated>
-    <id>https://thib.me/draftail-v1-3-0-community-improvements-beyond-wagtail</id>
-    <content type="html"><![CDATA[<p>Time for a new release! Draftail <a href="https://github.com/springload/draftail/blob/master/CHANGELOG.md#v130">v1.3.0</a> is out, and this is the first release to solely focus on improvements or fixes requested by users of Draftail outside of Wagtail, its first large-scale implementation.</p>
-
-<!-- more -->
-
-<h2 id="bug-fixes-and-new-features">Bug fixes and new features</h2>
-
-<h3 id="readonly-editor-support">readOnly editor support</h3>
-
-<p>The editor now supports being set to <a href="https://www.draftail.org/docs/api#draftaileditor"><code class="language-plaintext highlighter-rouge">readOnly</code></a> mode, just like vanilla Draft.js. Thanks to <a href="https://github.com/SpearThruster">@SpearThruster</a> for requesting this, <em>and</em> making the pull request to implement this new prop for the editor 🎉.</p>
-
-<h3 id="controlled-editor">Controlled editor</h3>
-
-<p>Another commonly requested feature was for using the editor as a <a href="https://reactjs.org/docs/forms.html#controlled-components">controlled component</a> – the recommended mode of operation for form elements in React, and again how vanilla Draft.js works.</p>
-
-<p>This is now implemented with two props: <a href="https://www.draftail.org/docs/api#editorstate-and-onchange"><code class="language-plaintext highlighter-rouge">editorState</code> and <code class="language-plaintext highlighter-rouge">onChange</code></a>. People familiar with vanilla Draft.js will feel right at home. This will also make it much easier to integrate the editor in apps where state is centrally managed, or where forms have specific reset / validation behavior.</p>
-
-<p>To help with Draft.js state initialisation and persistence, Draftail now also exposes APIs to help with <a href="https://www.draftail.org/docs/controlled-component#data-conversion-helpers">data conversion</a>, which are built-in with the uncontrolled editor API.</p>
-
-<h3 id="customisable-undoredo-button-icons">Customisable undo/redo button icons</h3>
-
-<p>Thanks to <a href="https://github.com/rmakovyak">@rmakovyak</a> for fixing this – icons should be <a href="https://www.draftail.org/docs/customising-icons">customisable in the toolbar</a> for all buttons, but there was a bug preventing this for undo/redo buttons via the <code class="language-plaintext highlighter-rouge">showUndoControl</code> and <code class="language-plaintext highlighter-rouge">showRedoControl</code> props.</p>
-
-<h2 id="state-of-draftail">State of Draftail</h2>
-
-<p>Put simply, none of the above changes are going to be useful for Draftail’s first use case: as an editor for <a href="https://wagtail.io">Wagtail</a>. I find this wonderful: this reflects that the editor is beneficial for people outside of the Wagtail bubble, and, with those changes, it will become useful for even more use cases that I didn’t initially identify.</p>
-
-<p>According to GitHub and npm statistics, the editor is used in <a href="https://github.com/springload/draftail/network/dependents">118 public repositories</a> and gets downloaded <a href="https://www.npmjs.com/package/draftail">1’772 times per week on npm</a>. There are well known names in there – the <a href="https://github.com/fecgov/fec-cms">FEC</a> in the US for their CMS, <a href="https://github.com/NCI-Agency/anet">NATO’s Communication and Information Agency</a>, <a href="https://medialab.sciencespo.fr">Sciences Po’s médialab</a>. <a href="https://getsaleor.com/">Saleor</a>, an up-and-coming e-commerce platform built on modern technologies also <a href="https://medium.com/saleor/february-release-of-saleor-three-new-dashboard-2-0-sections-6d775479882e">announced on their blog</a> that the upcoming version of Saleor would be using Draftail for rich text content.</p>
-
-<p><img src="/images/blog/draftail-v1-3-0-community-improvements-beyond-wagtail/draftail-in-saleor.png" alt="Screenshot of Draftail as it is used in Saleor 2.0, for a product description field" /></p>
-
-<blockquote>
-  <p>Draftail looking good in Saleor dashboard 2.0!</p>
-</blockquote>
-
-<p>I’m sure there are many more. If you’re using Draftail, please do <a href="https://github.com/thibaudcolas/draftail.org/issues/13">get in touch</a> so others can see all of the cool things you’re doing with it!</p>
-
-<h3 id="up-next">Up next</h3>
-
-<p>With those improvements in place to make Draftail usable in more scenarios, I’d really like to go back to focusing on features again. Here are things that look really cool that I’d like to look at next:</p>
-
-<ul>
-  <li><a href="https://github.com/springload/draftail/issues/198">Table support #198</a>. This is lots of work, but would be really cool to have basic support out of the box or as an “official” extension.</li>
-  <li><a href="https://github.com/springload/draftail/issues/158">Support image blocks without wrapper text blocks #158</a> – and generally better built-in support for images, most likely as an “official” extension with good defaults.</li>
-  <li><a href="https://github.com/springload/draftail/issues/113">Add character replacements for typing convenience &amp; typographic correctness #113</a>. This is one of those little things that make an editor much more pleasant to use, if done well.</li>
-  <li><a href="https://github.com/springload/draftail/issues/118">Add support for emojis #118</a>. I’d really like to nail this one!</li>
-</ul>
 ]]></content>
   </entry>
   
