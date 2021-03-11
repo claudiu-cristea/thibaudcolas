@@ -4,13 +4,70 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-03-06T16:26:37+00:00</updated>
+  <updated>2021-03-11T15:30:10+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2021 web conferences accepting talks]]></title>
+    <link href="https://thib.me/2021-web-conferences-accepting-talks"/>
+    <updated>2021-03-04T07:42:03+00:00</updated>
+    <id>https://thib.me/2021-web-conferences-accepting-talks</id>
+    <content type="html"><![CDATA[<p>Here is a small list of conferences I put together for 2021, as I was looking for speaking opportunities, with a particular focus on Europe and America. Hope this helps!</p>
+
+<!-- more -->
+
+<h2 id="djangocon-eu-2021">DjangoCon EU 2021</h2>
+
+<p>02-06 June 2021, remote. <a href="https://2021.djangocon.eu/talks/cfp/">CFP under way</a>, ending 2020-04-01 23h59 UTC.</p>
+
+<p>Also <a href="https://www.djangoproject.com/weblog/2021/feb/16/djangocon-europe-2021-announcement/">looking for volunteers</a> to help organise &amp; run the event.</p>
+
+<h2 id="jsconf-budapest-2021">JSConf Budapest 2021</h2>
+
+<p>23-24 September 2021, Budapest. <a href="https://jsconfbp.com/call-for-speakers-2021/">CFP under way</a>, ending March 31th 2021.</p>
+
+<h2 id="djangocon-us-2021">DjangoCon US 2021</h2>
+
+<p>October 2021, remote. <a href="https://2021.djangocon.us/">No CFP announced yet</a>.</p>
+
+<h2 id="pycon-uk-2021">PyCon UK 2021</h2>
+
+<p>No date announced except for “2021”. Cardiff. <a href="https://2020.pyconuk.org/">No CFP announced yet</a>.</p>
+
+<h2 id="nordic-js-2021">Nordic JS 2021</h2>
+
+<p>October 2021, Stockholm. <a href="https://nordicjs.com/call-for-speakers">CFP under way</a>, no deadline.</p>
+
+<h2 id="mixit">MiXiT</h2>
+
+<p>18-20 May 2021, Lyon, France. Looks like there might not be <a href="https://mixitconf.org/">any CFP this year</a>.</p>
+
+<h2 id="halfstack-london-2021">HalfStack London 2021</h2>
+
+<p>November 2021, London. <a href="https://halfstackconf.com/london/">CFP under way</a>, no deadline.</p>
+
+<h2 id="halfstack-phoenix-2022">HalfStack Phoenix 2022</h2>
+
+<p>January 2022, Phoenix. <a href="https://halfstackconf.com/phoenix/">CFP under way</a>, ending 15/09/2021.</p>
+
+<h2 id="halfstack-newquay-2022">HalfStack Newquay 2022</h2>
+
+<p>July 2022, Newquay (/ˈnjuːki/) (UK). <a href="https://halfstackconf.com/newquay/">CFP under way</a>, no deadline.</p>
+
+<h2 id="halfstack-new-york-2022">HalfStack New York 2022</h2>
+
+<p>August 2022, New York. <a href="https://halfstackconf.com/newyork/">CFP under way</a>, ending 30/04/2022.</p>
+
+<h2 id="halfstack-vienna-2022">HalfStack Vienna 2022</h2>
+
+<p>September 2022, Vienna. <a href="https://halfstackconf.com/vienna/">CFP under way</a>, ending 31/05/2022.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Accessibility team reloaded]]></title>
@@ -2563,76 +2620,6 @@ nodemon <span class="nt">-w</span> <span class="s1">'&lt;path to our project’s
   <li><a href="https://github.com/JelleZijlstra/lxml-stubs">https://github.com/JelleZijlstra/lxml-stubs</a>, an example of type stubs outside of typeshed.</li>
   <li><a href="https://www.destroyallsoftware.com/talks/ideology">https://www.destroyallsoftware.com/talks/ideology</a>, an inslightful talk from Gary Bernhardt about types, unit tests, and ideology.</li>
 </ul>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing with multiple versions of npm packages]]></title>
-    <link href="https://thib.me/testing-with-multiple-versions-of-npm-packages"/>
-    <updated>2019-12-09T20:36:37+00:00</updated>
-    <id>https://thib.me/testing-with-multiple-versions-of-npm-packages</id>
-    <content type="html"><![CDATA[<p>Have you ever wondered how to test your library against multiple versions of a project like React? Well, there is a way – and it’s not even that complex!</p>
-
-<!-- more -->
-
-<h2 id="installing-multiple-versions">Installing multiple versions</h2>
-
-<p>With Yarn – it’s been around for ages, and is <a href="https://yarnpkg.com/lang/en/docs/cli/add/#toc-yarn-add-alias">very well documented</a>:</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add &lt;alias-package&gt;@npm:&lt;package&gt;
-</code></pre></div></div>
-
-<p>This aliasing feature allows us to add as many packages as we need, all resolving to different versions of the same package.</p>
-
-<p>With npm – package aliases have been available since <a href="https://github.com/npm/cli/releases/tag/v6.9.0">v6.9.0</a>. Sadly, the only good resource I could find on this is a StackOverflow answer: <a href="https://stackoverflow.com/a/56495651/1798491">how to install multiple versions of package using npm</a>.</p>
-
-<p>For my need with Draft.js, this is what the result looks like in <code class="language-plaintext highlighter-rouge">package.json</code>:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"draft-js"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.10.5"</span><span class="err">,</span><span class="w">
-</span><span class="nl">"draft-js-11"</span><span class="p">:</span><span class="w"> </span><span class="s2">"npm:draft-js@0.11.3"</span><span class="err">,</span><span class="w">
-</span></code></pre></div></div>
-
-<h2 id="configuring-mocks-for-tests">Configuring mocks for tests</h2>
-
-<p>Using <a href="https://jestjs.io/">Jest</a>, this also turns out to be very straightforward. The setup even works with <code class="language-plaintext highlighter-rouge">create-react-app</code>. In <code class="language-plaintext highlighter-rouge">setupTests.js</code>:</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">jest</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="dl">"</span><span class="s2">draft-js</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">packages</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">0.10</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">draft-js</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">0.11</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">draft-js-11</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">};</span>
-  <span class="kd">const</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DRAFTJS_VERSION</span> <span class="o">||</span> <span class="dl">"</span><span class="s2">0.10</span><span class="dl">"</span><span class="p">;</span>
-
-  <span class="c1">// Require the original module.</span>
-  <span class="kd">const</span> <span class="nx">originalModule</span> <span class="o">=</span> <span class="nx">jest</span><span class="p">.</span><span class="nx">requireActual</span><span class="p">(</span><span class="nx">packages</span><span class="p">[</span><span class="nx">version</span><span class="p">]);</span>
-
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="na">__esModule</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="p">...</span><span class="nx">originalModule</span><span class="p">,</span>
-  <span class="p">};</span>
-<span class="p">});</span>
-</code></pre></div></div>
-
-<p>We simply have a mock for the dependency, and then require either of the packages depending on an environment variable.</p>
-
-<h2 id="testing-both-versions-in-ci">Testing both versions in CI</h2>
-
-<p>In CI, we can then set up a build (or environment, or job) matrix to run tests with different environment variables. With Travis CI, this looks like:</p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">language</span><span class="pi">:</span> <span class="s">node_js</span>
-<span class="na">install</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">npm ci</span>
-<span class="na">jobs</span><span class="pi">:</span>
-  <span class="na">include</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">env</span><span class="pi">:</span> <span class="s">DRAFTJS_VERSION=0.10</span>
-    <span class="pi">-</span> <span class="na">env</span><span class="pi">:</span> <span class="s">DRAFTJS_VERSION=0.11</span>
-<span class="na">script</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">npm run test</span>
-</code></pre></div></div>
-
-<p>And that’s it!</p>
-
-<p>See the end results over at <a href="https://github.com/thibaudcolas/draftjs-filters">thibaudcolas/draftjs-filters</a>.</p>
 ]]></content>
   </entry>
   

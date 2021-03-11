@@ -1,4 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-03-06T16:26:37+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">Accessibility team reloaded</title><link href="https://thib.me/wagtail-accessibility-team-reloaded" rel="alternate" type="text/html" title="Accessibility team reloaded" /><published>2021-02-24T07:42:03+00:00</published><updated>2021-02-24T07:42:03+00:00</updated><id>https://thib.me/wagtail-accessibility-team-reloaded</id><content type="html" xml:base="https://thib.me/wagtail-accessibility-team-reloaded">&lt;p&gt;After &lt;a href=&quot;https://wagtail.io/blog/announcing-wagtail-sub-teams/&quot;&gt;6 months of operations&lt;/a&gt;, we reflect on the progress our &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility&quot;&gt;accessibility team&lt;/a&gt; has made, and go on the lookout for new contributors.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-03-11T15:30:10+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">2021 web conferences accepting talks</title><link href="https://thib.me/2021-web-conferences-accepting-talks" rel="alternate" type="text/html" title="2021 web conferences accepting talks" /><published>2021-03-04T07:42:03+00:00</published><updated>2021-03-04T07:42:03+00:00</updated><id>https://thib.me/2021-web-conferences-accepting-talks</id><content type="html" xml:base="https://thib.me/2021-web-conferences-accepting-talks">&lt;p&gt;Here is a small list of conferences I put together for 2021, as I was looking for speaking opportunities, with a particular focus on Europe and America. Hope this helps!&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h2 id=&quot;djangocon-eu-2021&quot;&gt;DjangoCon EU 2021&lt;/h2&gt;
+
+&lt;p&gt;02-06 June 2021, remote. &lt;a href=&quot;https://2021.djangocon.eu/talks/cfp/&quot;&gt;CFP under way&lt;/a&gt;, ending 2020-04-01 23h59 UTC.&lt;/p&gt;
+
+&lt;p&gt;Also &lt;a href=&quot;https://www.djangoproject.com/weblog/2021/feb/16/djangocon-europe-2021-announcement/&quot;&gt;looking for volunteers&lt;/a&gt; to help organise &amp;amp; run the event.&lt;/p&gt;
+
+&lt;h2 id=&quot;jsconf-budapest-2021&quot;&gt;JSConf Budapest 2021&lt;/h2&gt;
+
+&lt;p&gt;23-24 September 2021, Budapest. &lt;a href=&quot;https://jsconfbp.com/call-for-speakers-2021/&quot;&gt;CFP under way&lt;/a&gt;, ending March 31th 2021.&lt;/p&gt;
+
+&lt;h2 id=&quot;djangocon-us-2021&quot;&gt;DjangoCon US 2021&lt;/h2&gt;
+
+&lt;p&gt;October 2021, remote. &lt;a href=&quot;https://2021.djangocon.us/&quot;&gt;No CFP announced yet&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;pycon-uk-2021&quot;&gt;PyCon UK 2021&lt;/h2&gt;
+
+&lt;p&gt;No date announced except for “2021”. Cardiff. &lt;a href=&quot;https://2020.pyconuk.org/&quot;&gt;No CFP announced yet&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;nordic-js-2021&quot;&gt;Nordic JS 2021&lt;/h2&gt;
+
+&lt;p&gt;October 2021, Stockholm. &lt;a href=&quot;https://nordicjs.com/call-for-speakers&quot;&gt;CFP under way&lt;/a&gt;, no deadline.&lt;/p&gt;
+
+&lt;h2 id=&quot;mixit&quot;&gt;MiXiT&lt;/h2&gt;
+
+&lt;p&gt;18-20 May 2021, Lyon, France. Looks like there might not be &lt;a href=&quot;https://mixitconf.org/&quot;&gt;any CFP this year&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;halfstack-london-2021&quot;&gt;HalfStack London 2021&lt;/h2&gt;
+
+&lt;p&gt;November 2021, London. &lt;a href=&quot;https://halfstackconf.com/london/&quot;&gt;CFP under way&lt;/a&gt;, no deadline.&lt;/p&gt;
+
+&lt;h2 id=&quot;halfstack-phoenix-2022&quot;&gt;HalfStack Phoenix 2022&lt;/h2&gt;
+
+&lt;p&gt;January 2022, Phoenix. &lt;a href=&quot;https://halfstackconf.com/phoenix/&quot;&gt;CFP under way&lt;/a&gt;, ending 15/09/2021.&lt;/p&gt;
+
+&lt;h2 id=&quot;halfstack-newquay-2022&quot;&gt;HalfStack Newquay 2022&lt;/h2&gt;
+
+&lt;p&gt;July 2022, Newquay (/ˈnjuːki/) (UK). &lt;a href=&quot;https://halfstackconf.com/newquay/&quot;&gt;CFP under way&lt;/a&gt;, no deadline.&lt;/p&gt;
+
+&lt;h2 id=&quot;halfstack-new-york-2022&quot;&gt;HalfStack New York 2022&lt;/h2&gt;
+
+&lt;p&gt;August 2022, New York. &lt;a href=&quot;https://halfstackconf.com/newyork/&quot;&gt;CFP under way&lt;/a&gt;, ending 30/04/2022.&lt;/p&gt;
+
+&lt;h2 id=&quot;halfstack-vienna-2022&quot;&gt;HalfStack Vienna 2022&lt;/h2&gt;
+
+&lt;p&gt;September 2022, Vienna. &lt;a href=&quot;https://halfstackconf.com/vienna/&quot;&gt;CFP under way&lt;/a&gt;, ending 31/05/2022.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here is a small list of conferences I put together for 2021, as I was looking for speaking opportunities, with a particular focus on Europe and America. Hope this helps!</summary></entry><entry><title type="html">Accessibility team reloaded</title><link href="https://thib.me/wagtail-accessibility-team-reloaded" rel="alternate" type="text/html" title="Accessibility team reloaded" /><published>2021-02-24T07:42:03+00:00</published><updated>2021-02-24T07:42:03+00:00</updated><id>https://thib.me/wagtail-accessibility-team-reloaded</id><content type="html" xml:base="https://thib.me/wagtail-accessibility-team-reloaded">&lt;p&gt;After &lt;a href=&quot;https://wagtail.io/blog/announcing-wagtail-sub-teams/&quot;&gt;6 months of operations&lt;/a&gt;, we reflect on the progress our &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Wagtail-sub-teams#accessibility&quot;&gt;accessibility team&lt;/a&gt; has made, and go on the lookout for new contributors.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -794,97 +842,4 @@ ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[
 &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Tabs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Docusaurus supports MDX out of the box, and provides the “Tabs” components. The CodeSnippet component is originally from Docusaurus but has been customized to support basic annotations.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Have I mentioned how important I think it is for a linter to have great docs? Well, now is the time for Curlylint to live up to this!</summary></entry><entry><title type="html">Interview exercises for web developers</title><link href="https://thib.me/interview-exercises-for-web-developers" rel="alternate" type="text/html" title="Interview exercises for web developers" /><published>2020-07-05T22:05:21+00:00</published><updated>2020-07-05T22:05:21+00:00</updated><id>https://thib.me/interview-exercises-for-web-developers</id><content type="html" xml:base="https://thib.me/interview-exercises-for-web-developers">&lt;p&gt;Here are a couple of interview exercises I like to give, which are relatively open to varied approaches.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;h2 id=&quot;before-the-interview-form-validation&quot;&gt;Before the interview: Form validation&lt;/h2&gt;
-
-&lt;p&gt;I’ve always liked Springload’s &lt;a href=&quot;https://github.com/springload/form-validation-problem&quot;&gt;form validation problem&lt;/a&gt;. It’s a relatively simple problem in apparence – implementing form validation for a basic HTML form, with a few fields, and a few validation rules.&lt;/p&gt;
-
-&lt;p&gt;What I think makes it really good is that it’s possible to approach this in many different ways – and there are lots of things for candidates to demonstrate beyond the basic implementation of the form validation – knowledge in any of those areas:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Documentation&lt;/li&gt;
-  &lt;li&gt;Accessibility&lt;/li&gt;
-  &lt;li&gt;Progressive enhancement&lt;/li&gt;
-  &lt;li&gt;Browser support&lt;/li&gt;
-  &lt;li&gt;Testing&lt;/li&gt;
-  &lt;li&gt;Tooling&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Form validation is a particularly interesting problem in web development because there is a fair amount of state to manage – validation errors for each fields, as well as whether the fields have been interacted with or not to decide when to display the errors.&lt;/p&gt;
-
-&lt;p&gt;Candidates can take a shot at this with vanilla JS, a ready-made library like &lt;a href=&quot;https://parsleyjs.org/&quot;&gt;Parsley&lt;/a&gt;, or can be asked to do this with React (Redux Forms, Formik, bespoke?), or even back-end technologies.&lt;/p&gt;
-
-&lt;h2 id=&quot;at-the-interview-build-this&quot;&gt;At the interview: Build This&lt;/h2&gt;
-
-&lt;p&gt;This is my go-to “how would you do this” problem, initially encountered at Codemate, which can be used to interview full-stack developers (any stack), or front-end or back-end only. The candidate is shown a specific UI (via a wireframe, screenshot, or real-world app), and is then asked to explain how they would build it within the context of a real project.&lt;/p&gt;
-
-&lt;p&gt;Depending on the candidate’s experience level, role, (and level of interview stress), this can be run as an open-ended conversation driven by the candidate directly, or as a series of guided themes / questions.&lt;/p&gt;
-
-&lt;p&gt;The whole exercise takes 30min to 1h depending on what is covered – spend a good 5 mins on the problem statement + intro &amp;amp; architecture, then move through the themes.&lt;/p&gt;
-
-&lt;p&gt;I really like this because:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;It makes for a more conversational interview – even if the questions are fixed, it’s more natural to have them with a specific app to think about.&lt;/li&gt;
-  &lt;li&gt;For candidates, it makes it easier to relate to their past work, for example reflecting on similar apps they’ve built.&lt;/li&gt;
-  &lt;li&gt;For interviewers, it does give enough structure to the interview that candidates’ answers can easily be categorised on the fly, and then compared to those of other candidates.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This works particularly well if the wireframe has quite a few things going on visually, with different types of data, a user account, and a form or two.&lt;/p&gt;
-
-&lt;h2 id=&quot;template-build-this-twitter-clone&quot;&gt;Template: Build This Twitter Clone&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/blog/interview-exercises-for-web-developers/twitter-wireframe.png&quot; alt=&quot;Wireframe of a Twitter clone, showing a logged-in user’s timeline, with few tweets, a form to post a new tweet, and the user’s profile details&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Placeholder wireframe from &lt;a href=&quot;https://www.flickr.com/photos/doos/4689874175/in/photostream/&quot;&gt;Rob Enslin&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;fundamentals&quot;&gt;Fundamentals&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Introduction&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;Identify the features of this UI&lt;/li&gt;
-      &lt;li&gt;Identify the underlying data / models&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Tech stack and architecture&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;Rough architecture of the app (front-end and back-end)&lt;/li&gt;
-      &lt;li&gt;Overall stack, centred around &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;tech we care about&amp;gt;&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Integrations &amp;amp; APIs&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;Integration with the backend, endpoints and payloads&lt;/li&gt;
-      &lt;li&gt;Client-side integrations&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Data management&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;State management tools with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;tech&amp;gt;&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;Data flow for a given feature (e.g. search)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;electives&quot;&gt;Electives&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Mobile-friendly UI&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;RWD, cross-browser support&lt;/li&gt;
-      &lt;li&gt;Offline capabilities&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Security&lt;/strong&gt;
-    &lt;ul&gt;
-      &lt;li&gt;Security considerations for a new feature: user accounts with saved searches&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Testing / Tooling&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Accessibility&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Performance&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are a couple of interview exercises I like to give, which are relatively open to varied approaches.</summary></entry></feed>
+&lt;p&gt;Docusaurus supports MDX out of the box, and provides the “Tabs” components. The CodeSnippet component is originally from Docusaurus but has been customized to support basic annotations.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Have I mentioned how important I think it is for a linter to have great docs? Well, now is the time for Curlylint to live up to this!</summary></entry></feed>
