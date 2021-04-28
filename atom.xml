@@ -4,13 +4,93 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-04-10T07:39:23+00:00</updated>
+  <updated>2021-04-28T00:09:51+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Curlylint: Quality-of-life improvements]]></title>
+    <link href="https://thib.me/curlylint-quality-of-life-improvements"/>
+    <updated>2021-04-25T09:22:49+00:00</updated>
+    <id>https://thib.me/curlylint-quality-of-life-improvements</id>
+    <content type="html"><![CDATA[<p>Curlylint v0.13.0 is out. It’s a relatively minor release, but comes with a few nice-to-haves for users, and a lot of behind-the-scenes project changes.</p>
+
+<!-- more -->
+
+<h2 id="modern-python-support">Modern Python support</h2>
+
+<p>Curlylint now officially supports Python 3.9, and (tentatively) Python 3.10, based on the 6th alpha release. From now on, you can expect support for all Python versions <a href="https://devguide.python.org/#status-of-python-branches">actively supported by CPython maintainers</a>. In the future, this will also mean actively removing support for Python versions that reach their scheduled end-of-life.</p>
+
+<h2 id="removed-extras-for-development-dependencies">Removed extras for development dependencies</h2>
+
+<p>Python packaging is very messy. I’ve recently started using the <a href="https://python-poetry.org/">Poetry</a> package manager at work, primarily for the benefit of having lockfiles to pin transitive dependencies on application-style projects (a must, in my opinion). Here is an excerpt of what installing curlylint looks like in a <code class="language-plaintext highlighter-rouge">poetry.lock</code>:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[[package]</span><span class="err">]</span>
+<span class="py">name</span> <span class="p">=</span> <span class="s">"curlylint"</span>
+<span class="py">version</span> <span class="p">=</span> <span class="s">"0.12.2"</span>
+<span class="py">description</span> <span class="p">=</span> <span class="s">" Experimental HTML templates linting for Jinja, Nunjucks, Django templates, Twig, Liquid"</span>
+<span class="py">category</span> <span class="p">=</span> <span class="s">"main"</span>
+<span class="py">optional</span> <span class="p">=</span> <span class="s">false</span>
+<span class="py">python-versions</span> <span class="p">=</span> <span class="s">"&gt;=3.6"</span>
+
+<span class="nn">[package.dependencies]</span>
+<span class="py">attrs</span> <span class="p">=</span> <span class="s">"&gt;=17.2.0"</span>
+<span class="py">click</span> <span class="p">=</span> <span class="s">"&gt;=6.5"</span>
+<span class="py">dataclasses</span> <span class="p">=</span> <span class="s">{version = "&gt;=0.6", markers = "python_version &lt; </span><span class="se">\"</span><span class="s">3.7</span><span class="se">\"</span><span class="s">"}
+parsy = "1.1.0"</span>
+<span class="py">pathspec</span> <span class="p">=</span> <span class="s">"&gt;=0.6,&lt;1"</span>
+<span class="py">toml</span> <span class="p">=</span> <span class="s">"&gt;=0.9.4"</span>
+
+<span class="nn">[package.extras]</span>
+<span class="py">dev</span> <span class="p">=</span> <span class="s">["black (==19.10b0)", "flake8 (==3.8.4)", "mypy (==0.812)", "pytest (==6.2.2)", "coverage (==5.4)"]</span>
+</code></pre></div></div>
+
+<p>I find this last line very puzzling – there really should be no need for dependencies intended only for development to be visible in the published package. I don’t want curlylint’s development dependencies changing from release to release to cause noise in upgrade diffs, hence why the <code class="language-plaintext highlighter-rouge">dev</code> extra has been removed.</p>
+
+<p>It’s worth saying Poetry has otherwise been a pleasure to work with, with only a few minor inconveniences like this one. I would happily recommend it to people wanting more out of their Python package management.</p>
+
+<h2 id="new---template-tags-cli-flag">New <code class="language-plaintext highlighter-rouge">--template-tags</code> CLI flag</h2>
+
+<p>As the <a href="https://www.curlylint.org/docs/command-line-usage#--template-tags"><code class="language-plaintext highlighter-rouge">--template-tags</code> documentation</a> now states, this makes Curlylint aware of custom tags used in templates, so the parser can understand they contain HTML content to go through.</p>
+
+<p>This option was previously only available via a TOML configuration file, via the (now deprecated) <code class="language-plaintext highlighter-rouge">jinja-custom-elements-names</code> / <code class="language-plaintext highlighter-rouge">jinja_custom_elements_names</code> setting. The new setting works the same, but can also be set via CLI flags.</p>
+
+<h2 id="behind-the-scenes-changes">Behind-the-scenes changes</h2>
+
+<p>There really is only one I want to highlight – improvements to Curlylint’s test suite, which have resulted in a <a href="https://coveralls.io/github/thibaudcolas/curlylint?branch=main">14% increase in test coverage</a>. While test coverage percentages generally don’t mean much, in this case this means:</p>
+
+<ul>
+  <li>The command line interface now has unit tests. While relatively basic in the current iteration, they should be very easy to add to.</li>
+  <li>The parser has more unit tests, and they are now in line with the rest of the test suite.</li>
+</ul>
+
+<p><a href="https://coveralls.io/github/thibaudcolas/curlylint"><img src="/images/blog/curlylint-quality-of-life-improvements/coverage-over-time.png" alt="Screen capture of the Coveralls coverage score over time as an area chart, from 59% in early March to 74% now" /></a></p>
+
+<blockquote>
+  <p><a href="https://coveralls.io/">Coveralls</a> shows coverage increasing from 59.39% in early March to 74% in late April.</p>
+</blockquote>
+
+<p>Having comprehensive unit tests really matters to me as a maintainer, and from now on it should be much more realistic to expect all changes to the project to come with corresponding unit tests.</p>
+
+<h2 id="up-next">Up next</h2>
+
+<p>There are a lot of <a href="https://github.com/thibaudcolas/curlylint/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aparser">parser bugs</a> I will now feel much more comfortable approaching, due to having a way to easily write tests for them.</p>
+
+<p>Short-term, I want to make sure to get to all of the open pull request, hopefully fully clearing the backlog. I can see people are responding very well to Curlylint despite its experimental nature, and are eager to help making it more useful:</p>
+
+<ul>
+  <li><a href="https://github.com/thibaudcolas/curlylint/pull/53">#53 Optional HTML container parsing for if-else-endif type code</a></li>
+  <li><a href="https://github.com/thibaudcolas/curlylint/pull/75">#75 Add test for unresolved missing alt attribute inside django block (#72)</a></li>
+  <li><a href="https://github.com/thibaudcolas/curlylint/pull/76">#76 Use types_or directive for hook instead of files</a></li>
+</ul>
+
+<p>For me, the most immediate next step will be presenting Curlylint at <a href="https://us.pycon.org/2021/">PyCon US 2021</a>! I hope to get critical feedback on the tool, and am also working on an “online playground” version to try lint templates without installing anything, we should make it simpler for people to try out the linter.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2021 web conferences accepting talks]]></title>
@@ -2535,90 +2615,6 @@ nodemon <span class="nt">-w</span> <span class="s1">'&lt;path to our project’s
   <li>Use <a href="https://prettier.io/">Prettier</a>, if you aren’t already. With Prettier’s great support for many languages, in 2020 formatting code manually is a complete waste of time.</li>
   <li>Make sure you and your team have editor / IDE extensions for ESLint. This will make it much easier for everyone to understand the new config and address problems as they arise.</li>
   <li>Consider using <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">pre-commit hooks</a> on your project. While these might seem annoying at first, they can save you a lot of back-and-forth with CI (and code reviews!).</li>
-</ul>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Python static type checking: field test]]></title>
-    <link href="https://thib.me/python-static-type-checking-field-test"/>
-    <updated>2019-12-28T17:10:26+00:00</updated>
-    <id>https://thib.me/python-static-type-checking-field-test</id>
-    <content type="html"><![CDATA[<p>A few years ago, with the release of <a href="https://pyre-check.org/">Pyre</a> from Facebook, I got really excited about the potential of type annotations and type checkers for Python codebases. Having spent a lot of time with <a href="https://flow.org/">Flow</a>, also from Facebook, I was full of hope. Now, let’s see how well static type checking actually works in modern Python.</p>
-
-<!-- more -->
-
-<h2 id="tldr">TL;DR;</h2>
-
-<p>After my experiments, I was really hoping I could heartily recommend using type annotations and static type checkers for most projects in most cases. In reality it feels like it’s too early still, unless:</p>
-
-<ul>
-  <li>You’re already sold on the idea of static typing, and you already know type systems from other languages – you’ll be able to navigate the messy Python landscape.</li>
-  <li>You only work on projects that are kept up-to-date with Python releases – so Python 3.8+ only.</li>
-  <li>You maintain large codebases, and have a large enough team to invest into tooling.</li>
-</ul>
-
-<p>For the rest of us, who work on teams with varying degrees of knowledge and buy-in about types, in projects that use Python 3.5, with lots of untyped dependencies, and little budget for maintenance – it just feels too early.</p>
-
-<h2 id="type-annotations">Type annotations</h2>
-
-<p>The first thing I learned while investigating static typing more thoroughly was that even though PEP-484, which started it all, was implemented in Python 3.5 – it really was just the beginning, and much more is needed to fully benefit from typing code. Here are all type-related PEPs I looked into using while typing my <a href="https://github.com/springload/draftjs_exporter/issues/101">±4000 SLOC project</a> on which I wanted to try this:</p>
-
-<ul>
-  <li><a href="https://www.python.org/dev/peps/pep-3107/">PEP 3107 – Function annotations</a> (Python 3.0)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0484/">PEP 484 – Type annotations for function parameters and return values</a> (Python 3.5)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0526/">PEP 526 – Syntax for Variable Annotations</a> (Python 3.6)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0561/">PEP 561 – Distributing and Packaging Type Information</a> (Python 3.7)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0563/">PEP 563 – Postponed Evaluation of Annotations</a> (Python 3.7)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0586/">PEP 586 – Literal Types</a> (Python 3.8)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0589/">PEP 589 – TypedDict: Type Hints for Dictionaries with a Fixed Set of Keys</a> (Python 3.8)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0544/">PEP 544 – Protocols: Structural subtyping (static duck typing)</a> (Python 3.8)</li>
-  <li><a href="https://www.python.org/dev/peps/pep-0591/">PEP 591 – Adding a final qualifier to typing</a> (Python 3.8)</li>
-  <li>Not a PEP but also worth mentioning: the <a href="https://pypi.org/classifiers/"><code class="language-plaintext highlighter-rouge">Typing :: Typed</code></a> trove classifier</li>
-</ul>
-
-<p>I’m used to leveraging dictionaries with fixed set of keys in other languages (e.g. JSON with a set structure). Literal types are also very useful. So is structural subtyping, especially in a language like Python. Without these available, it felt really strange to write annotations using very broad categories – e.g. <code class="language-plaintext highlighter-rouge">Dict[str, Any]</code> when really the dictionary should only have a few keys for which the types are well-known. Or use <code class="language-plaintext highlighter-rouge">str</code> for a very limited set of literals.</p>
-
-<p>I found the <a href="https://mypy.readthedocs.io/en/latest/index.html">mypy documentation</a> to be the best source of information on what was and wasn’t available in the type system / type checkers. It’s important to note that some of the above are available as backports in <a href="https://github.com/python/typing/tree/master/typing_extensions">typing_extensions</a>, but I felt somewhat funny adding a dependency for my project just for the sole purpose of adding type definitions that are only ever used statically. All in all, if it wasn’t for mypy’s type reference this would have been really hard to navigate. Hopefully this will get easier once Python 3.8+ is more established, and there are more resources available online dedicated to static typing in Python.</p>
-
-<h2 id="type-checkers">Type checkers</h2>
-
-<p>On the topic of type checkers, here are the ones I tried:</p>
-
-<ul>
-  <li><a href="https://github.com/google/pytype">pytype</a> from Google.</li>
-  <li><a href="https://github.com/Microsoft/pyright">pyright</a> from Microsoft.</li>
-  <li><a href="https://pyre-check.org/">Pyre</a> from Facebook.</li>
-  <li><a href="https://github.com/python/mypy">mypy</a> from Dropbox (and more).</li>
-</ul>
-
-<p>Out of these four, mypy is by far the most established, having been around the longest, and having the best documentation. Even though I liked Flow from Facebook, Pyre still feels very experimental and poorly documented – as far as I could remember the official docs are the exact same as they were when I checked it out a year ago, and I couldn’t get it to understand type aliases. I also had similar documentation issues with pytype – I could get it working, but couldn’t get it to read my project’s stubs. Finally, pyright gets an honorable mention. Its README clearly states that it’s only a side project (and has been created only a few months ago), but it was very straightforward to set up and get meaningful results with.</p>
-
-<p>I would recommend using mypy for people starting with static typing in Python – it’s the easiest to use as of now, has the <a href="https://mypy.readthedocs.io/en/latest/">best documentation</a> by far, and seems like it has a bright future ahead of itself. It even has a <a href="https://mypy.readthedocs.io/en/latest/mypy_daemon.html">daemon/server mode</a> to get better performance for large codebases.</p>
-
-<h2 id="starting-to-use-types-on-a-project">Starting to use types on a project</h2>
-
-<p>Here is the process I would recommend, for small projects where the whole codebase can be typed in one go:</p>
-
-<ol>
-  <li>Research whether types are suitable on your project – do you have major dependencies that might be untyped and hard to stub? Are there JSON-like data structures that will need special attention to be typed correctly?</li>
-  <li>Set up mypy with the most permissive settings possible. We can turn on the strictness later.</li>
-  <li>Consider using a tool like <a href="https://github.com/dropbox/pyannotate">pyannotate</a> (also from Dropbox) to automatically add annotations to your code.</li>
-  <li>Start manually annotating internal modules that have straightforward signatures (e.g. utility code, or basic data processing, without external dependencies)</li>
-  <li>Expand annotations to reach your public API.</li>
-  <li>Turn on stricter mypy settings.</li>
-</ol>
-
-<h2 id="resources">Resources</h2>
-
-<p>Here are resources I would also recommend checking out:</p>
-
-<ul>
-  <li><a href="https://realpython.com/python-type-checking/">https://realpython.com/python-type-checking/</a>, the best all-in-one resource that is not mypy’s type system reference.</li>
-  <li><a href="https://github.com/typeddjango/awesome-python-typing">https://github.com/typeddjango/awesome-python-typing</a>, a list of resources on typing in Python.</li>
-  <li><a href="https://github.com/psf/black/blob/master/black.py">https://github.com/psf/black/blob/master/black.py</a>, a real-world codebase that uses type annotations.</li>
-  <li><a href="https://github.com/JelleZijlstra/lxml-stubs">https://github.com/JelleZijlstra/lxml-stubs</a>, an example of type stubs outside of typeshed.</li>
-  <li><a href="https://www.destroyallsoftware.com/talks/ideology">https://www.destroyallsoftware.com/talks/ideology</a>, an inslightful talk from Gary Bernhardt about types, unit tests, and ideology.</li>
 </ul>
 ]]></content>
   </entry>
