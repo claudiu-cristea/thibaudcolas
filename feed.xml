@@ -1,4 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-05-03T08:11:18+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">Curlylint: Quality-of-life improvements</title><link href="https://thib.me/curlylint-quality-of-life-improvements" rel="alternate" type="text/html" title="Curlylint: Quality-of-life improvements" /><published>2021-04-25T09:22:49+00:00</published><updated>2021-04-25T09:22:49+00:00</updated><id>https://thib.me/curlylint-quality-of-life-improvements</id><content type="html" xml:base="https://thib.me/curlylint-quality-of-life-improvements">&lt;p&gt;Curlylint v0.13.0 is out. It’s a relatively minor release, but comes with a few nice-to-haves for users, and a lot of behind-the-scenes project changes.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-05-03T22:17:18+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">PyCon US 2021: Building accessibility into open-source projects</title><link href="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects" rel="alternate" type="text/html" title="PyCon US 2021: Building accessibility into open-source projects" /><published>2021-05-03T15:03:21+00:00</published><updated>2021-05-03T15:03:21+00:00</updated><id>https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects</id><content type="html" xml:base="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects">&lt;p&gt;Talk at PyCon US 2021.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[Google Slides: PyCon US 2021&lt;/td&gt;
+          &lt;td&gt;Building accessibility into open-source projects](https://docs.google.com/presentation/d/1qjHKEWoExYY-fG4qbRBQP_EN5fxs_8z7csVIpy9bWlg/edit)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[PDF: PyCon US 2021&lt;/td&gt;
+          &lt;td&gt;Building accessibility into open-source projects](https://www.example.com/)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Talk at PyCon US 2021.</summary></entry><entry><title type="html">Curlylint: Quality-of-life improvements</title><link href="https://thib.me/curlylint-quality-of-life-improvements" rel="alternate" type="text/html" title="Curlylint: Quality-of-life improvements" /><published>2021-04-25T09:22:49+00:00</published><updated>2021-04-25T09:22:49+00:00</updated><id>https://thib.me/curlylint-quality-of-life-improvements</id><content type="html" xml:base="https://thib.me/curlylint-quality-of-life-improvements">&lt;p&gt;Curlylint v0.13.0 is out. It’s a relatively minor release, but comes with a few nice-to-haves for users, and a lot of behind-the-scenes project changes.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -541,234 +566,4 @@ ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[
 
 &lt;h2 id=&quot;thank-you&quot;&gt;Thank you!&lt;/h2&gt;
 
-&lt;p&gt;Thank you to Dan, Tom, William, Nick for helping us rehearse!&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">This is Ben Dickinson and I’s joint Wagtail Space US 2020 talk about pattern libraries at Torchbox, introducing django-pattern-library.</summary></entry><entry><title type="html">Accessibility wins for Wagtail projects</title><link href="https://thib.me/accessibility-wins-for-wagtail-projects" rel="alternate" type="text/html" title="Accessibility wins for Wagtail projects" /><published>2020-07-30T01:15:22+00:00</published><updated>2020-07-30T01:15:22+00:00</updated><id>https://thib.me/accessibility-wins-for-wagtail-projects</id><content type="html" xml:base="https://thib.me/accessibility-wins-for-wagtail-projects">&lt;p&gt;I recently gave a talk at &lt;a href=&quot;https://us.wagtail.space/&quot;&gt;Wagtail Space US 2020&lt;/a&gt; about the accessibility of Wagtail websites – following on last year’s talk about the &lt;a href=&quot;/making-wagtail-accessible&quot;&gt;accessibility of the Wagtail admin&lt;/a&gt;.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube-nocookie.com/embed/ZcHfUu_u4e0&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-
-&lt;p&gt;Slides: &lt;a href=&quot;https://docs.google.com/presentation/d/14iSPklZmrjlMZlaFOBP1Mavt_tmz6vcF_t6cHVCCek8/edit&quot;&gt;Wagtail Space US 2020 - Accessibility wins for Wagtail projects&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;why-accessibility-matters&quot;&gt;Why accessibility matters&lt;/h2&gt;
-
-&lt;h3 id=&quot;inclusive-experiences&quot;&gt;Inclusive experiences&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;We want all users to have a great experience, no matter how they use the web.&lt;/li&gt;
-  &lt;li&gt;Accessibility improvements lead to usability improvements for all.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Search: “Curb cut effect”&lt;/p&gt;
-
-&lt;h3 id=&quot;accessibility-is-not-an-optional-extra&quot;&gt;Accessibility is not an optional extra&lt;/h3&gt;
-
-&lt;p&gt;USA:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://section508.gov/&quot;&gt;Section 508&lt;/a&gt; for recipients of federal funding, &lt;a href=&quot;https://www.ada.gov/&quot;&gt;ADA&lt;/a&gt; for all*.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;EU/UK:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016L2102&quot;&gt;EU Directive 2016/2102&lt;/a&gt; for the public sector, UK &lt;a href=&quot;https://www.legislation.gov.uk/ukpga/2010/15/contents&quot;&gt;Equality Act 2010&lt;/a&gt; for all.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In the end it’s all based on &lt;a href=&quot;https://www.w3.org/TR/WCAG21/&quot;&gt;WCAG 2.1 AA&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;* I’m not a lawyer. See &lt;a href=&quot;https://gizmodo.com/gimlet-media-sued-for-not-making-podcasts-accessible-to-1844369021&quot;&gt;Gimlet Media lawsuit&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;oh-and-its-not-just-about-wagtail-sites&quot;&gt;Oh and it’s not just about Wagtail sites&lt;/h3&gt;
-
-&lt;p&gt;Intranets, CRMs, ERPs, dashboards. Django admin.&lt;/p&gt;
-
-&lt;p&gt;Internal-only tools shouldn’t compromise on accessibility just because their audience is smaller.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://alistapart.com/article/building-the-woke-web/&quot;&gt;alistapart.com/article/building-the-woke-web&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;common-wagtail-issues&quot;&gt;Common* Wagtail issues&lt;/h2&gt;
-
-&lt;p&gt;* Very common. Go check your sites after the talk&lt;/p&gt;
-
-&lt;h3 id=&quot;alt-text-for-images&quot;&gt;Alt text for images&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Images’ Title fields are auto-populated with file names on upload&lt;/li&gt;
-  &lt;li&gt;Wagtail sets alt text based on image Title by default&lt;/li&gt;
-  &lt;li&gt;????&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Solution: always have an “alt text” field wherever an image is used.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/wagtail/rfcs/pull/51&quot;&gt;RFC #51&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/issues/4945&quot;&gt;#4945&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/rfcs/pull/44&quot;&gt;RFC #44&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/pull/5789&quot;&gt;#5789&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;alt-text-for-images-2&quot;&gt;Alt text for images, #2&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Have a mandatory alt text field when images aren’t decorative…&lt;/li&gt;
-  &lt;li&gt;Display it&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Solution: always have an “alt text” field wherever an image is used.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/wagtail/rfcs/pull/51&quot;&gt;RFC #51&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/issues/4945&quot;&gt;#4945&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/rfcs/pull/44&quot;&gt;RFC #44&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/pull/5789&quot;&gt;#5789&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;alt-text-for-images-3&quot;&gt;Alt text for images, #3&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Always have an alt text field for each usage of an image&lt;/li&gt;
-  &lt;li&gt;Make sure the field is optional when appropriate so decorative images can be hidden&lt;/li&gt;
-  &lt;li&gt;Give appropriate guidance to editors, &lt;a href=&quot;https://axesslab.com/alt-texts/&quot;&gt;axesslab.com/alt-texts&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Wagtail’s rich text images alt text needs to become optional&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Solution: always have an “alt text” field wherever an image is used.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/wagtail/rfcs/pull/51&quot;&gt;RFC #51&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/issues/4945&quot;&gt;#4945&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/rfcs/pull/44&quot;&gt;RFC #44&lt;/a&gt;, &lt;a href=&quot;https://github.com/wagtail/wagtail/pull/5789&quot;&gt;#5789&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;embed-titles&quot;&gt;Embed titles&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;In some cases, Wagtail embeds don’t have a title attribute set&lt;/li&gt;
-  &lt;li&gt;Screen reader users need it to know what the embed is, and decide to browse it, or skip it&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Solution: either check your embed provider returns a title in 100% of the cases, or add a mandatory “Title” field for all embeds.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/wagtail/wagtail/issues/5982&quot;&gt;#5982&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;heading-levels&quot;&gt;Heading levels&lt;/h3&gt;
-
-&lt;p&gt;Screen reader users rely on logical, lean heading outlines to navigate pages&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Wagtail makes it easy to restrict which heading levels are available in any rich text field. Do it.&lt;/li&gt;
-  &lt;li&gt;Also restrict which heading levels are available via StreamField&lt;/li&gt;
-  &lt;li&gt;Keep your templates in check too.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Solution: &lt;a href=&quot;https://docs.wagtail.io/en/stable/advanced_topics/customisation/page_editing_interface.html#limiting-features-in-a-rich-text-field&quot;&gt;Limiting features in a rich text field&lt;/a&gt;. Use &lt;a href=&quot;https://github.com/neon-jungle/wagtail-accessibility&quot;&gt;wagtail-accessibility&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;heading-levels-2&quot;&gt;Heading levels, #2&lt;/h3&gt;
-
-&lt;p&gt;Heading levels&lt;/p&gt;
-
-&lt;p&gt;Screen reader users rely on logical, lean heading outlines to navigate pages&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Validate that no heading is left empty&lt;/li&gt;
-  &lt;li&gt;Or, consider hiding empty headings with CSS (h2:empty { display: none; })&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Solution: &lt;a href=&quot;https://docs.wagtail.io/en/stable/advanced_topics/customisation/page_editing_interface.html#limiting-features-in-a-rich-text-field&quot;&gt;Limiting features in a rich text field&lt;/a&gt;. Use &lt;a href=&quot;https://github.com/neon-jungle/wagtail-accessibility&quot;&gt;wagtail-accessibility&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the future – rich text rewriting to remove empty headings? &lt;a href=&quot;https://github.com/wagtail/wagtail/issues/4223&quot;&gt;#4223&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;other-issues-worth-knowing-about&quot;&gt;Other issues worth knowing about&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;TableBlock
-    &lt;ul&gt;
-      &lt;li&gt;The Caption field should be mandatory&lt;/li&gt;
-      &lt;li&gt;The header cells field should be mandatory (&lt;a href=&quot;https://github.com/wagtail/wagtail/issues/5989&quot;&gt;#5989&lt;/a&gt;)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Links
-    &lt;ul&gt;
-      &lt;li&gt;We need a way to flag / validate link text to avoid “Read more”, “Click here”, “Find out more”&lt;/li&gt;
-      &lt;li&gt;Or having a way to add custom aria-label where relevant&lt;/li&gt;
-      &lt;li&gt;Broken links should be user-friendly, not href=”None”.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Forms
-    &lt;ul&gt;
-      &lt;li&gt;Avoid Django’s as_table, as_ul rendering.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;content-wins&quot;&gt;Content wins&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/neon-jungle/wagtail-accessibility&quot;&gt;wagtail-accessibility&lt;/a&gt; (based on &lt;a href=&quot;https://khan.github.io/tota11y/&quot;&gt;tota11y&lt;/a&gt;)&lt;/li&gt;
-  &lt;li&gt;help_text (example: &lt;a href=&quot;https://github.com/nhsuk/wagtail-nhsuk-frontend&quot;&gt;wagtail-nhsuk-frontend&lt;/a&gt;)&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.wagtail.io/en/stable/reference/pages/panels.html#helppanel&quot;&gt;HelpPanel&lt;/a&gt; – help_text but bigger&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://vixdigital.github.io/draftail-plugins/&quot;&gt;wagtail-readinglevel&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Rich text experiments: guidelines-aware spellcheck&lt;/li&gt;
-  &lt;li&gt;Rich text experiments: sentence length, &lt;a href=&quot;https://wooorm.com/readability/&quot;&gt;wooorm.com/readability&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;developer-wins&quot;&gt;Developer wins&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://torchbox.com/blog/accessibility-audits/&quot;&gt;Accessibility audits: getting started&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;django-html-validator&quot;&gt;&lt;a href=&quot;https://github.com/peterbe/django-html-validator&quot;&gt;django-html-validator&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;Based on the official v.Nu validator. Very easy to integrate into your workflow with Docker.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Finds &lt;a href=&quot;https://alphagov.github.io/accessibility-tool-audit/&quot;&gt;about 15% of issues&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;v.Nu also has a CLI which I recommend as part of accessibility audits&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;static-analysis&quot;&gt;Static analysis&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;React: &lt;a href=&quot;https://github.com/evcohen/eslint-plugin-jsx-a11y&quot;&gt;eslint-plugin-jsx-a11y&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Vue: &lt;a href=&quot;https://github.com/maranran/eslint-plugin-vue-a11y&quot;&gt;eslint-plugin-vue-a11y&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Styles: &lt;a href=&quot;https://github.com/YozhikM/stylelint-a11y&quot;&gt;stylelint-a11y&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;curlylint&quot;&gt;Curlylint&lt;/h3&gt;
-
-&lt;h3 id=&quot;learn-how-to-use-a-screen-reader&quot;&gt;Learn how to use a screen reader&lt;/h3&gt;
-
-&lt;p&gt;On a Mac with VoiceOver,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Cmd + F5 to open VoiceOver. Same to close it.&lt;/li&gt;
-  &lt;li&gt;Ctrl to silence it&lt;/li&gt;
-  &lt;li&gt;Ctrl + U to open the rotor&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;That’s it.&lt;/p&gt;
-
-&lt;p&gt;Even simpler on iOS.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://a11ysupport.io/learn/&quot;&gt;a11ysupport.io / learn&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;community-wins&quot;&gt;Community wins&lt;/h2&gt;
-
-&lt;p&gt;A cultural shift?&lt;/p&gt;
-
-&lt;h3 id=&quot;you-can-be-the-person-on-your-team-who-advocates-for-those-issues-to-be-fixed&quot;&gt;You can be the person on your team who advocates for those issues to be fixed&lt;/h3&gt;
-
-&lt;p&gt;It matters on all projects, all audiences&lt;/p&gt;
-
-&lt;p&gt;There are well-defined standards, and readily available tools.&lt;/p&gt;
-
-&lt;p&gt;You can be the person who knows how to use a screen reader and shows others how to do it.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://alistapart.com/article/building-the-woke-web/&quot;&gt;alistapart.com/article/building-the-woke-web&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;wagtail-can-be-a-cms-thats-part-of-the-solution&quot;&gt;Wagtail can be a CMS that’s part of the solution&lt;/h3&gt;
-
-&lt;p&gt;The &lt;a href=&quot;https://webaim.org/projects/million/&quot;&gt;WebAIM Million&lt;/a&gt; keeps track of the accessibility of 1M websites’ homepages&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Numbers are appalling&lt;/li&gt;
-  &lt;li&gt;We can do better&lt;/li&gt;
-  &lt;li&gt;Wagtail can help people make accessible websites – better defaults, starter templates, documentation&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;accessibility-team-&quot;&gt;Accessibility team 🌈&lt;/h3&gt;
-
-&lt;p&gt;The &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Accessibility-team&quot;&gt;accessibility team&lt;/a&gt; focuses on improvements to the accessibility of Wagtail, and of websites built with Wagtail. Everyone is welcome regardless of skill level or background.&lt;/p&gt;
-
-&lt;p&gt;Find us on the Wagtail Slack in &lt;a href=&quot;https://github.com/wagtail/wagtail/wiki/Slack&quot;&gt;#accessibility&lt;/a&gt;&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">I recently gave a talk at Wagtail Space US 2020 about the accessibility of Wagtail websites – following on last year’s talk about the accessibility of the Wagtail admin.</summary></entry></feed>
+&lt;p&gt;Thank you to Dan, Tom, William, Nick for helping us rehearse!&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">This is Ben Dickinson and I’s joint Wagtail Space US 2020 talk about pattern libraries at Torchbox, introducing django-pattern-library.</summary></entry></feed>
