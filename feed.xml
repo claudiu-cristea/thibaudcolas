@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-05-03T22:17:18+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">PyCon US 2021: Building accessibility into open-source projects</title><link href="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects" rel="alternate" type="text/html" title="PyCon US 2021: Building accessibility into open-source projects" /><published>2021-05-03T15:03:21+00:00</published><updated>2021-05-03T15:03:21+00:00</updated><id>https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects</id><content type="html" xml:base="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects">&lt;p&gt;Talk at PyCon US 2021.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-05-03T23:28:50+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">PyCon US 2021: Building accessibility into open-source projects</title><link href="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects" rel="alternate" type="text/html" title="PyCon US 2021: Building accessibility into open-source projects" /><published>2021-05-03T15:03:21+00:00</published><updated>2021-05-03T15:03:21+00:00</updated><id>https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects</id><content type="html" xml:base="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects">&lt;p&gt;Talk at PyCon US 2021.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -18,7 +18,7 @@
       &lt;tbody&gt;
         &lt;tr&gt;
           &lt;td&gt;[PDF: PyCon US 2021&lt;/td&gt;
-          &lt;td&gt;Building accessibility into open-source projects](https://www.example.com/)&lt;/td&gt;
+          &lt;td&gt;Building accessibility into open-source projects](https://drive.google.com/file/d/1hN554kNicuEvBcWK_VsiRazBTfbBGt6X/view?usp=sharing)&lt;/td&gt;
         &lt;/tr&gt;
       &lt;/tbody&gt;
     &lt;/table&gt;
