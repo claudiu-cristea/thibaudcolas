@@ -4,7 +4,7 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-05-11T21:03:11+00:00</updated>
+  <updated>2021-05-11T22:12:29+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
@@ -15,7 +15,7 @@
   <entry>
     <title type="html"><![CDATA[PyCon US 2021: Building accessibility into open-source projects]]></title>
     <link href="https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects"/>
-    <updated>2021-05-03T15:03:21+00:00</updated>
+    <updated>2021-05-09T15:03:21+00:00</updated>
     <id>https://thib.me/pycon-us-2021-building-accessibility-into-open-source-projects</id>
     <content type="html"><![CDATA[<p>This is a lightning talk I gave at PyCon US 2021’s <a href="https://us.pycon.org/2021/summits/maintainers/">Maintainers Summit</a>, intended for an audience of project maintainers / open-source contributors.</p>
 
