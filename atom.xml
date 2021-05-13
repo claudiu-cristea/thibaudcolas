@@ -4,13 +4,28 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-05-11T22:12:29+00:00</updated>
+  <updated>2021-05-13T06:47:48+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PyCon US 2021: Web Accessibility ♥ Python]]></title>
+    <link href="https://thib.me/pycon-us-2021-python-accessibility-ftw"/>
+    <updated>2021-05-13T06:43:49+00:00</updated>
+    <id>https://thib.me/pycon-us-2021-python-accessibility-ftw</id>
+    <content type="html"><![CDATA[<p>Presentation at PyCon US 2021.</p>
+
+<!-- more -->
+
+<ul>
+  <li>Demo site: <a href="https://accessibility-loves-python.vercel.app/">accessibility-loves-python.vercel.app</a></li>
+</ul>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PyCon US 2021: Building accessibility into open-source projects]]></title>
@@ -340,17 +355,6 @@ parsy = "1.1.0"</span>
 <p>And of course web developers who want to have a practical impact on making the web more accessible!</p>
 
 <p>Does this sound like your kind of jam? If you’re keen to learn more, <a href="https://github.com/wagtail/wagtail/wiki/Slack">reach out to us on Slack</a> in #accessibility.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PyCon US 2021: Improving web accessibility with Python]]></title>
-    <link href="https://thib.me/pycon-us-2021-python-accessibility-ftw"/>
-    <updated>2021-02-16T12:22:49+00:00</updated>
-    <id>https://thib.me/pycon-us-2021-python-accessibility-ftw</id>
-    <content type="html"><![CDATA[<p>Upcoming presentation at PyCon US 2021.</p>
-
-<!-- more -->
 ]]></content>
   </entry>
   
