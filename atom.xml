@@ -4,7 +4,7 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-05-15T03:38:06+00:00</updated>
+  <updated>2021-05-27T08:20:53+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
@@ -17,13 +17,21 @@
     <link href="https://thib.me/pycon-us-2021-python-accessibility-ftw"/>
     <updated>2021-05-13T06:43:49+00:00</updated>
     <id>https://thib.me/pycon-us-2021-python-accessibility-ftw</id>
-    <content type="html"><![CDATA[<p>Presentation at PyCon US 2021.</p>
+    <content type="html"><![CDATA[<p>This is a poster presentation for <a href="https://us.pycon.org/2021/">PyCon US 2021</a>, which covers two separate projects:</p>
+
+<ul>
+  <li><a href="https://www.curlylint.org/">Curlylint</a>, an experimental linter for HTML templates focusing on accessibility issues.</li>
+  <li><a href="https://kontrasto.netlify.app/">Kontrasto</a>, a library automatically improving the contrast of text over images.</li>
+</ul>
 
 <!-- more -->
 
 <ul>
   <li>Demo site: <a href="https://accessibility-loves-python.vercel.app/">accessibility-loves-python.vercel.app</a></li>
+  <li>GitHub: <a href="https://github.com/thibaudcolas/accessibility-loves-python">thibaudcolas/accessibility-loves-python</a></li>
 </ul>
+
+<p>The poster explains what the two projects are, and offers interactive demos. For Curlylint, the demo allows linting any templates with basic configuration. For Kontrasto, users can upload an image and get the Kontrasto results.</p>
 ]]></content>
   </entry>
   
