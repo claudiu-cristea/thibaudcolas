@@ -294,8 +294,6 @@ article > footer p.meta { margin-bottom: 0.8em; font-size: 0.85em; clear: both; 
 
 #content .blog-index a[rel="full-article"]:hover { background: #0181eb; text-shadow: none; color: #f8f8f8; }
 
-#content .blog-index .edit-link { float: right; margin-top: -2em; }
-
 #content .blog-index footer { margin-top: 1em; }
 
 .separator, article > footer .byline + time:before, article > footer time + time:before, article > footer .comments:before, article > footer .byline ~ .categories:before { content: "\2022 "; padding: 0 0.4em 0 0.2em; display: inline-block; }
@@ -595,5 +593,7 @@ body > footer p:last-child { margin-bottom: 0; }
 .card__detail { padding-bottom: 1.5rem; }
 
 article .card__depiction { display: block; border-radius: 0; box-shadow: none; border: 0; }
+
+.edit-link { float: right; margin-top: -2em; }
 
 /*# sourceMappingURL=screen.css.map */
