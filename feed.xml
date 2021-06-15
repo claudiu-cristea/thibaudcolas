@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-06-14T20:28:22+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics</title><link href="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics" rel="alternate" type="text/html" title="DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics" /><published>2021-06-05T21:07:49+00:00</published><updated>2021-06-05T21:07:49+00:00</updated><id>https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics</id><content type="html" xml:base="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics">&lt;p&gt;Here are the results of an accessibility audit I did for &lt;a href=&quot;https://github.com/django-postgres-metrics/django-postgres-metrics/issues/57&quot;&gt;Django Postgres Metrics&lt;/a&gt;, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: &lt;a href=&quot;https://youtu.be/8pegTdRaUDg&quot;&gt;DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-06-15T23:58:16+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania</title><link href="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania" rel="alternate" type="text/html" title="DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania" /><published>2021-06-07T18:21:03+00:00</published><updated>2021-06-07T18:21:03+00:00</updated><id>https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania</id><content type="html" xml:base="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania">&lt;p&gt;Here are the results of an accessibility audit I did for the &lt;a href=&quot;https://github.com/PyConLT/pyconlt.github.io/pull/12&quot;&gt;PyCon Lithuania website&lt;/a&gt;, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: &lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&quot;&gt;DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania’s website&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;iframe title=&quot;DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania’s website&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube-nocookie.com/embed/NH4VWUguxUw&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;I think the most problematic issue was with the animating banner on Safari, which made it completely impossible to navigate the page with a screen reader. Other than this, most issues were relatively minor.&lt;/p&gt;
+
+&lt;p&gt;The main issues I didn’t get to are the ones with buttons / links – the fact having disabled buttons is confusing, and that there are lots of contrast issues with those disabled styles. The focus styles also have poor contrast for the buttons that are focusable.&lt;/p&gt;
+
+&lt;p&gt;My recommended fix for these would be to completely remove any button that’s currently disabled from the page, so there is no confusion.&lt;/p&gt;
+
+&lt;p&gt;Sections:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=0s&quot;&gt;00:00&lt;/a&gt; Intro&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=40s&quot;&gt;00:40&lt;/a&gt; Audit methodology&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=109s&quot;&gt;01:49&lt;/a&gt; HTML5 validation&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=260s&quot;&gt;04:20&lt;/a&gt; Reviewing HTML templates&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=780s&quot;&gt;13:00&lt;/a&gt; Alt text for photos&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1190s&quot;&gt;19:50&lt;/a&gt; Accessibility Insights automated checks&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1290s&quot;&gt;21:30&lt;/a&gt; Checking landmarks&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1380s&quot;&gt;23:00&lt;/a&gt; Color contrast checks&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1515s&quot;&gt;25:15&lt;/a&gt; Checking headings&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1605s&quot;&gt;26:45&lt;/a&gt; Using h123 for the document outline&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1665s&quot;&gt;27:45&lt;/a&gt; Tab stops&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1778s&quot;&gt;29:38&lt;/a&gt; Mobile support&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1900s&quot;&gt;31:40&lt;/a&gt; Looping animations&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=1960s&quot;&gt;32:40&lt;/a&gt; Testing with VoiceOver in Safari&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&amp;amp;t=2160s&quot;&gt;36:00&lt;/a&gt; Performance issues with banner animation&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are the results of an accessibility audit I did for the PyCon Lithuania website, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania’s website.</summary></entry><entry><title type="html">DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics</title><link href="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics" rel="alternate" type="text/html" title="DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics" /><published>2021-06-05T21:07:49+00:00</published><updated>2021-06-05T21:07:49+00:00</updated><id>https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics</id><content type="html" xml:base="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-django-postgres-metrics">&lt;p&gt;Here are the results of an accessibility audit I did for &lt;a href=&quot;https://github.com/django-postgres-metrics/django-postgres-metrics/issues/57&quot;&gt;Django Postgres Metrics&lt;/a&gt;, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: &lt;a href=&quot;https://youtu.be/8pegTdRaUDg&quot;&gt;DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics&lt;/a&gt;.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -665,39 +695,4 @@ ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.google.com/presentation/d/1JWroGeYl7JlP2OHbG4a4h0SxSlMsWJvRTvDm0kFkqhQ/edit&quot;&gt;Google Slides: DjangoCon EU 2020 - Accessibility wins for Django projects&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://drive.google.com/file/d/12tedghT8bRGhnZgWt7tXWv_qtvJ1YKCA/view?usp=sharing&quot;&gt;PDF: DjangoCon EU 2020 - Accessibility wins for Django projects&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Talk at DjangoCon EU 2020</summary></entry><entry><title type="html">Testing accessibility in Continuous Integration with Pa11y and beyond</title><link href="https://thib.me/testing-accessibility-in-ci-with-pa11y-and-beyond" rel="alternate" type="text/html" title="Testing accessibility in Continuous Integration with Pa11y and beyond" /><published>2020-08-13T21:21:08+00:00</published><updated>2020-08-13T21:21:08+00:00</updated><id>https://thib.me/testing-accessibility-in-ci-with-pa11y-and-beyond</id><content type="html" xml:base="https://thib.me/testing-accessibility-in-ci-with-pa11y-and-beyond">&lt;p&gt;Here are tools I recommend to test for accessibility issues in continuous integration, where automation is the only option, and reliability is paramount.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;h2 id=&quot;the-requirements-of-ci&quot;&gt;The requirements of CI&lt;/h2&gt;
-
-&lt;p&gt;It’s worth pointing out early – no accessibility testing tool can &lt;a href=&quot;https://alphagov.github.io/accessibility-tool-audit/&quot;&gt;find all issues&lt;/a&gt; . With this in mind, in CI, we need to focus on tools that find as much as possible… but don’t create false positives, which are very damaging when they fail your build. It’s more important for a tool to have a &lt;a href=&quot;https://en.wikipedia.org/wiki/Precision_and_recall&quot;&gt;high precision, than a high recall&lt;/a&gt;).&lt;/p&gt;
-
-&lt;h2 id=&quot;static-analysis&quot;&gt;Static analysis&lt;/h2&gt;
-
-&lt;p&gt;This is always a valuable first line of defense.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Basic checks for stylesheets: &lt;a href=&quot;https://github.com/YozhikM/stylelint-a11y&quot;&gt;stylelint-a11y&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Relatively advanced checks for React code: &lt;a href=&quot;https://github.com/yannickcr/eslint-plugin-react&quot;&gt;eslint-plugin-react&lt;/a&gt;, &lt;a href=&quot;https://github.com/evcohen/eslint-plugin-jsx-a11y&quot;&gt;eslint-plugin-jsx-a11y&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;And a Vue equivalent: &lt;a href=&quot;https://github.com/maranran/eslint-plugin-vue-a11y&quot;&gt;eslint-plugin-vue-a11y&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;For HTML templates, you can try my own experimental HTML templates linter, &lt;a href=&quot;https://github.com/thibaudcolas/curlylint&quot;&gt;Curlylint&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;accessibility-tests-in-unit-and-integration-tests&quot;&gt;Accessibility tests in unit and integration tests&lt;/h2&gt;
-
-&lt;p&gt;Here are the options, from simplest to most complex:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/nickcolley/jest-axe&quot;&gt;jest-axe&lt;/a&gt; in jsdom for React projects. It’s very lightweight to set up, and gives surprisingly good results.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/nickcolley/jest-axe&quot;&gt;jest-axe&lt;/a&gt; in Puppeteer. It’s not lightweight to set up, far from it, but does a bit more.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://pa11y.org/&quot;&gt;Pa11y&lt;/a&gt;, or &lt;a href=&quot;https://github.com/pa11y/pa11y-ci&quot;&gt;pa11y-ci&lt;/a&gt;. Not lightweight either, but simple to configure.&lt;/li&gt;
-  &lt;li&gt;Google’s Lighthouse also has a &lt;a href=&quot;https://github.com/GoogleChrome/lighthouse-ci&quot;&gt;Lighthouse CI&lt;/a&gt; variant which may be useful when also wanting to have performance and best practice checks.&lt;/li&gt;
-  &lt;li&gt;An alternative could also be to run HTML validation with &lt;a href=&quot;https://validator.github.io/validator/&quot;&gt;V.Nu HTML5 validator&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;what-to-test&quot;&gt;What to test&lt;/h2&gt;
-
-&lt;p&gt;It’s not always easy to have test content to run the checks against of in CI. My personal preference is to run the tests against a pattern library’s components, for example &lt;a href=&quot;https://storybook.js.org/&quot;&gt;Storybook&lt;/a&gt; or &lt;a href=&quot;https://github.com/torchbox/django-pattern-library&quot;&gt;django-pattern-library&lt;/a&gt;. As part of creating the components, we naturally create test data for them similarly to unit tests (TDD or not) – this test content can then be used to test the components’ variations for accessibility issues.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are tools I recommend to test for accessibility issues in continuous integration, where automation is the only option, and reliability is paramount.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Talk at DjangoCon EU 2020</summary></entry></feed>
