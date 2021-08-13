@@ -1,4 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-06-26T10:51:42+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania</title><link href="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania" rel="alternate" type="text/html" title="DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania" /><published>2021-06-07T18:21:03+00:00</published><updated>2021-06-07T18:21:03+00:00</updated><id>https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania</id><content type="html" xml:base="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania">&lt;p&gt;Here are the results of an accessibility audit I did for the &lt;a href=&quot;https://github.com/PyConLT/pyconlt.github.io/pull/12&quot;&gt;PyCon Lithuania website&lt;/a&gt;, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: &lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&quot;&gt;DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania’s website&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://thib.me/feed.xml" rel="self" type="application/atom+xml" /><link href="https://thib.me/" rel="alternate" type="text/html" /><updated>2021-08-13T23:43:16+00:00</updated><id>https://thib.me/feed.xml</id><title type="html">Thibaud’s blog</title><subtitle>Logbook of a software engineer navigating web development</subtitle><author><name>Thibaud Colas</name></author><entry><title type="html">WCAG 2.2: new accessibility guidelines on the way</title><link href="https://thib.me/wcag-22-accessibility-guidelines" rel="alternate" type="text/html" title="WCAG 2.2: new accessibility guidelines on the way" /><published>2021-08-13T16:52:22+00:00</published><updated>2021-08-13T16:52:22+00:00</updated><id>https://thib.me/wcag-22-accessibility-guidelines</id><content type="html" xml:base="https://thib.me/wcag-22-accessibility-guidelines">&lt;p&gt;In web accessibility testing, WCAG 2.1 is the gold standard. But talk to experts – and they’ll be quick to tell you it’s a very low baseline. WCAG 2.2’s latest draft introduces new criteria, relevant for all websites.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h2 id=&quot;whats-new-in-wcag-22&quot;&gt;What’s new in WCAG 2.2&lt;/h2&gt;
+
+&lt;p&gt;Plenty of good things – there are 9 new success criteria:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Guideline 2.4 Navigable
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2411-focus-appearance-minimum-aa&quot;&gt;2.4.11 Focus Appearance (Minimum) (AA)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2412-focus-appearance-enhanced-aaa&quot;&gt;2.4.12 Focus Appearance (Enhanced) (AAA)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2413-page-break-navigation-a&quot;&gt;2.4.13 Page Break Navigation (A)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Guideline 2.5 Input Modalities
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#257-dragging-movements-aa&quot;&gt;2.5.7 Dragging Movements (AA)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#258-target-size-minimum-aa&quot;&gt;2.5.8 Target Size (Minimum) (AA)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Guideline 3.2 Predictable
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#326-consistent-help-a&quot;&gt;3.2.6 Consistent Help (A)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#327-visible-controls-aa&quot;&gt;3.2.7 Visible Controls (AA)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Guideline 3.3 Input Assistance
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#337-accessible-authentication-a&quot;&gt;3.3.7 Accessible Authentication (A)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#338-redundant-entry-a&quot;&gt;3.3.8 Redundant Entry (A)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As well as the normative guidelines, all criteria also use &lt;a href=&quot;https://www.w3.org/WAI/people-use-web/user-stories/&quot;&gt;stories of web users&lt;/a&gt; to better convey what problems we are trying to prevent with those guidelines – and what “success” looks like.&lt;/p&gt;
+
+&lt;p&gt;There are a lot of good resources covering the new criteria in much better detail than we ever could – we’d highly recommend taking a look at Alastair Campbell’s talk &lt;a href=&quot;https://www.youtube.com/watch?v=EZlqSwgKuZE&quot;&gt;WCAG 2.2: What’s new and what to do with it&lt;/a&gt; at the Virtua11y conference.&lt;/p&gt;
+
+&lt;h2 id=&quot;applying-wcag-22-to-sites&quot;&gt;Applying WCAG 2.2 to sites&lt;/h2&gt;
+
+&lt;p&gt;There won’t be any legal requirements to follow this new draft version for quite a while. That said, the new guidelines are so good they are well worth implementing and testing for right away.&lt;/p&gt;
+
+&lt;p&gt;WCAG 2.1 is a good baseline, but there are a lot of areas where it falls short and we should aim beyond. To illustrate – here is a color contrast fail, generated with &lt;a href=&quot;https://whocanuse.com/&quot;&gt;Who Can Use&lt;/a&gt;. According to WCAG 2.1 rules, the black text would be higher-contrast over this shade of blue than white text:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/blog/wcag-22-accessibility-guidelines/whocanuse-blue.png&quot; alt=&quot;Comparison of lorem copy in white and black, over a blue background (hex code #2E7CD6). White has a contrast ratio of 4.23:1, non-compliant, black has 4.97:1, passing level AA.&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Comparison of lorem copy in white and black, over a blue background (hex code #2E7CD6). White has a contrast ratio of 4.23:1, non-compliant, black has 4.97:1, passing level AA&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is due to how basic the contrast calculations are in WCAG 2.1. This specific issue will – hopefully – be addressed in the upcoming &lt;a href=&quot;https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/&quot;&gt;WCAG 3.0&lt;/a&gt;. It’s still a very early draft, but is well worth being aware of as well if you’re critically thinking of where else WCAG 2.1 might be falling short.&lt;/p&gt;
+
+&lt;h2 id=&quot;we-can-help&quot;&gt;We can help&lt;/h2&gt;
+
+&lt;p&gt;Torchbox offers standalone &lt;a href=&quot;https://torchbox.com/digital-products/accessibility-testing/&quot;&gt;accessibility consulting services&lt;/a&gt;, with the goal of helping organisations aim beyond compliance. Don’t hesitate to get in touch if you want your site to get ahead of the curve.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">In web accessibility testing, WCAG 2.1 is the gold standard. But talk to experts – and they’ll be quick to tell you it’s a very low baseline. WCAG 2.2’s latest draft introduces new criteria, relevant for all websites.</summary></entry><entry><title type="html">DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania</title><link href="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania" rel="alternate" type="text/html" title="DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania" /><published>2021-06-07T18:21:03+00:00</published><updated>2021-06-07T18:21:03+00:00</updated><id>https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania</id><content type="html" xml:base="https://thib.me/djangocon-europe-2021-sprints-accessibility-review-pycon-lithuania">&lt;p&gt;Here are the results of an accessibility audit I did for the &lt;a href=&quot;https://github.com/PyConLT/pyconlt.github.io/pull/12&quot;&gt;PyCon Lithuania website&lt;/a&gt;, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: &lt;a href=&quot;https://www.youtube.com/watch?v=NH4VWUguxUw&quot;&gt;DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania’s website&lt;/a&gt;.&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -193,7 +249,81 @@
   &lt;li&gt;RTD ads are particularly poorly done&lt;/li&gt;
   &lt;li&gt;There are two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;h1&lt;/code&gt; in the index page. Fixed in &lt;a href=&quot;https://github.com/django-postgres-metrics/django-postgres-metrics/pull/58&quot;&gt;#58&lt;/a&gt;.&lt;/li&gt;
   &lt;li&gt;The RTD version picker is reachable, but impossible to open&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are the results of an accessibility audit I did for Django Postgres Metrics, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics.</summary></entry><entry><title type="html">PyCon US 2021: Web Accessibility ♥ Python</title><link href="https://thib.me/pycon-us-2021-python-accessibility-ftw" rel="alternate" type="text/html" title="PyCon US 2021: Web Accessibility ♥ Python" /><published>2021-05-13T06:43:49+00:00</published><updated>2021-05-13T06:43:49+00:00</updated><id>https://thib.me/pycon-us-2021-python-accessibility-ftw</id><content type="html" xml:base="https://thib.me/pycon-us-2021-python-accessibility-ftw">&lt;p&gt;This is a poster presentation for &lt;a href=&quot;https://us.pycon.org/2021/&quot;&gt;PyCon US 2021&lt;/a&gt;, which covers two separate projects:&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Here are the results of an accessibility audit I did for Django Postgres Metrics, as part of the DjangoCon Europe 2021 sprints. I recorded myself going through this and put it up on YouTube, so we have a demo for each of the issues: DjangoCon Europe 2021 sprints – Accessibility review of Django Postgres Metrics.</summary></entry><entry><title type="html">DjangoCon Europe 2021 field notes</title><link href="https://thib.me/djangocon-europe-field-notes" rel="alternate" type="text/html" title="DjangoCon Europe 2021 field notes" /><published>2021-06-04T06:43:49+00:00</published><updated>2021-06-04T06:43:49+00:00</updated><id>https://thib.me/djangocon-europe-field-notes</id><content type="html" xml:base="https://thib.me/djangocon-europe-field-notes">&lt;p&gt;Notes from the conference.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/mxsasha/lessobviouschecklist&quot;&gt;https://github.com/mxsasha/lessobviouschecklist&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;climate&quot;&gt;Climate&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=upiK4du5vUI&quot;&gt;https://www.youtube.com/watch?v=upiK4du5vUI&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://cloud.google.com/sustainability/region-carbon&quot;&gt;https://cloud.google.com/sustainability/region-carbon&lt;/a&gt;
+&lt;a href=&quot;https://pypi.org/project/energyusage/&quot;&gt;https://pypi.org/project/energyusage/&lt;/a&gt;
+&lt;a href=&quot;https://www.cloudcarbonfootprint.org/docs/gcp&quot;&gt;https://www.cloudcarbonfootprint.org/docs/gcp&lt;/a&gt;
+&lt;a href=&quot;https://codeascraft.com/2020/04/23/cloud-jewels-estimating-kwh-in-the-cloud/&quot;&gt;https://codeascraft.com/2020/04/23/cloud-jewels-estimating-kwh-in-the-cloud/&lt;/a&gt;
+&lt;a href=&quot;https://www.cloudcarbonfootprint.org/docs/methodology&quot;&gt;https://www.cloudcarbonfootprint.org/docs/methodology&lt;/a&gt;
+&lt;a href=&quot;https://github.com/hubblo-org/scaphandre&quot;&gt;https://github.com/hubblo-org/scaphandre&lt;/a&gt;
+&lt;a href=&quot;https://pypi.org/project/pyJoules&quot;&gt;https://pypi.org/project/pyJoules&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/responsibleproblemsolving/energy-usage/issues/16&quot;&gt;https://github.com/responsibleproblemsolving/energy-usage/issues/16&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;indexes&quot;&gt;Indexes&lt;/h2&gt;
+
+&lt;p&gt;db_index=True on fields&lt;/p&gt;
+
+&lt;p&gt;class-based indexes on classes&lt;/p&gt;
+
+&lt;p&gt;Functional indexes?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://adamj.eu/tech/2020/07/27/how-to-modernize-your-django-index-definitions/&quot;&gt;https://adamj.eu/tech/2020/07/27/how-to-modernize-your-django-index-definitions/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;database-migrations&quot;&gt;Database migrations&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://speakerdeck.com/markush/writing-safe-database-migrations-djangocon-europe-2021&quot;&gt;https://speakerdeck.com/markush/writing-safe-database-migrations-djangocon-europe-2021&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;hunting-performance-in-django-code&quot;&gt;Hunting Performance in Django code&lt;/h2&gt;
+
+&lt;p&gt;Tracing profilers vs sampling profilers&lt;/p&gt;
+
+&lt;p&gt;Good overview of different profiler options for Python (for example the ones that support multi-threading)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/plasma-umass/scalene&quot;&gt;https://github.com/plasma-umass/scalene&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;dd-with-graphql-and-django&quot;&gt;DD with GraphQL and Django&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.cosmicpython.com/&quot;&gt;https://www.cosmicpython.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Leaner framework could be better? (FastAPI?)&lt;/p&gt;
+
+&lt;h2 id=&quot;django--sphinx&quot;&gt;Django + Sphinx&lt;/h2&gt;
+
+&lt;h2 id=&quot;clean-architecture-with-django&quot;&gt;Clean architecture with Django&lt;/h2&gt;
+
+&lt;p&gt;Best use case for Django&lt;/p&gt;
+
+&lt;p&gt;Dependency inversion&lt;/p&gt;
+
+&lt;h2 id=&quot;htmx-frontend-revolution&quot;&gt;HTMX: Frontend Revolution&lt;/h2&gt;
+
+&lt;h2 id=&quot;absolutely-no-javascript&quot;&gt;Absolutely no JavaScript&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/adamghill/djangocon-eu-2021-conference-talk&quot;&gt;https://github.com/adamghill/djangocon-eu-2021-conference-talk&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;sprint&quot;&gt;Sprint&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/django/django/pull/14391&quot;&gt;https://github.com/django/django/pull/14391&lt;/a&gt;
+&lt;a href=&quot;https://github.com/django/django/pull/14389&quot;&gt;https://github.com/django/django/pull/14389&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aeltanawy/Receptor&quot;&gt;https://github.com/aeltanawy/Receptor&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/adamghill/djangocon-eu-2021-conference-talk&quot;&gt;https://github.com/adamghill/djangocon-eu-2021-conference-talk&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://code.djangoproject.com/ticket/32819&quot;&gt;https://code.djangoproject.com/ticket/32819&lt;/a&gt;
+&lt;a href=&quot;https://code.djangoproject.com/ticket/32820&quot;&gt;https://code.djangoproject.com/ticket/32820&lt;/a&gt;&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Notes from the conference.</summary></entry><entry><title type="html">PyCon US 2021: Web Accessibility ♥ Python</title><link href="https://thib.me/pycon-us-2021-python-accessibility-ftw" rel="alternate" type="text/html" title="PyCon US 2021: Web Accessibility ♥ Python" /><published>2021-05-13T06:43:49+00:00</published><updated>2021-05-13T06:43:49+00:00</updated><id>https://thib.me/pycon-us-2021-python-accessibility-ftw</id><content type="html" xml:base="https://thib.me/pycon-us-2021-python-accessibility-ftw">&lt;p&gt;This is a poster presentation for &lt;a href=&quot;https://us.pycon.org/2021/&quot;&gt;PyCon US 2021&lt;/a&gt;, which covers two separate projects:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.curlylint.org/&quot;&gt;Curlylint&lt;/a&gt;, an experimental linter for HTML templates focusing on accessibility issues.&lt;/li&gt;
@@ -558,141 +688,4 @@ parsy = &quot;1.1.0&quot;&lt;/span&gt;
 
 &lt;h2 id=&quot;whats-next&quot;&gt;What’s next&lt;/h2&gt;
 
-&lt;p&gt;Hopefully more of the above – new features, more stability, better documentation. We’re particulary keen on &lt;a href=&quot;https://github.com/torchbox/django-pattern-library/issues/106&quot;&gt;finding ways to mock templates with factories rather than plain data structures&lt;/a&gt;, and &lt;a href=&quot;https://github.com/torchbox/django-pattern-library/issues/103&quot;&gt;combining our Django rendering features with Storybook’s developer experience&lt;/a&gt;.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">If you’re into UI component reuse, you may have heard of Atomic Design and Pattern Lab. We’re big fans at Torchbox, but Pattern Lab is PHP or Node-based, while we decided long ago to leave the PHP / Drupal world behind, and concentrate on Django. We took Pattern Lab with us, and built django-pattern-library – a.k.a. Pattern Lab goes Django.</summary></entry><entry><title type="html">Detecting Wagtail in the wild</title><link href="https://thib.me/detecting-wagtail-in-the-wild" rel="alternate" type="text/html" title="Detecting Wagtail in the wild" /><published>2020-11-18T15:15:22+00:00</published><updated>2020-11-18T15:15:22+00:00</updated><id>https://thib.me/detecting-wagtail-in-the-wild</id><content type="html" xml:base="https://thib.me/detecting-wagtail-in-the-wild">&lt;p&gt;How can you tell if a site is made with Wagtail or not? There are more ways than people might think at first sight, and after a few years of toying with the idea I finally put together a way to detect Wagtail sites, that strikes a good balance between reliability and convenience. Let’s go birdwatching.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;h2 id=&quot;ways-to-detect-wagtail&quot;&gt;Ways to detect Wagtail&lt;/h2&gt;
-
-&lt;p&gt;I could think of a few &lt;a href=&quot;https://github.com/springload/madewithwagtail/issues/62&quot;&gt;when I first started thinking of this problem&lt;/a&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Determine if the site is &lt;a href=&quot;https://stackoverflow.com/questions/721934/how-can-you-tell-if-a-site-has-been-made-with-django&quot;&gt;built with Django&lt;/a&gt;. That’s a start&lt;/li&gt;
-  &lt;li&gt;Check if the site uses a &lt;a href=&quot;https://wagtail.io/wagtail-badges/&quot;&gt;Wagtail badge&lt;/a&gt;. Cute, but not used much in practice.&lt;/li&gt;
-  &lt;li&gt;Load &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/admin/login&lt;/code&gt; and check for “wagtail” in the response – that would surely be an almost certain match.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The problem with a lot of those approaches is their relance on crawling the site, which is quite invasive, not very reliable, and can be time-consuming across a lot of sites. It’s also unclear how common those cues would be across the breadth of Wagtail sites out there.&lt;/p&gt;
-
-&lt;p&gt;The ideal approach would be HTTP response headers – which could be obtained from any page with a lightweight HEAD request. Wagtail unfortunately doesn’t have any custom header, so the next best thing is to inspect the pages’ markup:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Wagtail’s (legacy) rich text uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rich-text&lt;/code&gt; class to wrap the HTML of rich text fields&lt;/li&gt;
-  &lt;li&gt;Rich text images use hard-coded classes like &lt;a href=&quot;https://github.com/wagtail/wagtail/blob/bb2e460c0b92fba802fc3f369730004d6b648e64/wagtail/images/formats.py#L91-L94&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;richtext-image full-width&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Wagtail’s documents are served from a &lt;a href=&quot;https://github.com/wagtail/wagtail/blob/bb2e460c0b92fba802fc3f369730004d6b648e64/wagtail/documents/urls.py#L6&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/documents/&lt;/code&gt;&lt;/a&gt; sub-path.&lt;/li&gt;
-  &lt;li&gt;And last but not least, &lt;a href=&quot;https://docs.wagtail.io/en/stable/topics/images.html?highlight=renditions#generating-image-renditions-in-python&quot;&gt;image renditions&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Image renditions are very common on Wagtail sites. The detection would only work for pages that have user-uploaded images, but lucky for us a site’s homepage tends to be the type of high-value page where there are CMS-managed images. Here are a few examples of URLs from renditions:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;https://www.jazzfestival.nz/media/images/video-fallback-image_1.width-1920.png
-
-/media/images/bevi_3_mob.original.format-png.png
-
-/media/original_images/Social_Distancing_Dashboard_-_image_1_TU_DelftAMS_Institute.png
-
-https://buckup-ff-stories.s3.amazonaws.com/original_images/Lockup_Logo_-_JPEG-1.png
-
-/media/images/UE4LowPolyVehicleTh.2e16d0ba.fill-960x540-c0.jpg
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The distinctive features are the folders – always either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;images&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;original_images&lt;/code&gt;, and frequently either placed directly at the root of a site, or from a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/media&lt;/code&gt; subfolder at the root, or a single level up. And then the fact that all of the site’s images are placed in those two folders without any additional sub-folders, with file name suffixes following a set format for all files under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;images/&lt;/code&gt; like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.width-1920&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.fill-960x450-c0&lt;/code&gt; above. I came up with the particular regex used here after trying out different variations on 800’000 homepages from the &lt;a href=&quot;https://majestic.com/reports/majestic-million&quot;&gt;Majestic Million&lt;/a&gt; list of domains.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-regex&quot;&gt;The regex&lt;/h2&gt;
-
-&lt;p&gt;Here is a simplified diagram of the logic (created with &lt;a href=&quot;https://regexper.com/#%5C%2F%28original_images%5C%2F%5B%5Cw-%5D%2B%5C.%7Cimages%5C%2F%5B%5Cw-.%5D%2B%5C.%28%28fill%7Cmax%7Cmin%7Cwidth%7Cheight%7Cscale%29-%5Cd%7Coriginal%29%29&quot;&gt;regexper&lt;/a&gt;):&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/blog/detecting-wagtail-in-the-wild/regexper-diagram.svg&quot; alt=&quot;regexper train diagram of Wagtail regular expressions&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;real-world-usage&quot;&gt;Real-world usage&lt;/h2&gt;
-
-&lt;p&gt;The regex could be more complex and precise but this wouldn’t actually change much to its real-world usefulness, so I gradually simplified it to the above. With this in place, we can then create different ways to run this detection on arbitrary websites:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;An online website, &lt;a href=&quot;https://detect-wagtail.netlify.app/&quot;&gt;detect-wagtail.netlify.app&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;A bookmarket, also available from &lt;a href=&quot;https://detect-wagtail.netlify.app/&quot;&gt;detect-wagtail.netlify.app&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;A browser extension thanks to &lt;a href=&quot;https://github.com/AliasIO/wappalyzer&quot;&gt;Wappalyzer&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;A Node CLI, also thanks to &lt;a href=&quot;https://github.com/AliasIO/wappalyzer&quot;&gt;Wappalyzer&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;As an npm package for more custom needs, &lt;a href=&quot;https://www.npmjs.com/package/detect-wagtail&quot;&gt;detect-wagtail&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;With Wappalyzer in particular, they also offer additional services based on anonymous data reporting from their detection tools. Here is their page that aggregates Wagtail usage data: &lt;a href=&quot;https://www.wappalyzer.com/technologies/cms/wagtail/&quot;&gt;Websites using Wagtail&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you’re unsure which of these to use – the Wappalyzer checks are the strictest, so best used if you don’t want to manually confirm the results by inspecting the pages’ HTML.&lt;/p&gt;
-
-&lt;h2 id=&quot;real-world-data&quot;&gt;Real-world data&lt;/h2&gt;
-
-&lt;p&gt;With this regex in place, I tried it out on a few lists of websites. See &lt;a href=&quot;https://github.com/thibaudcolas/detect-wagtail/tree/main/docs/analysis&quot;&gt;detect-wagtail/docs/analysis&lt;/a&gt; for the full details.&lt;/p&gt;
-
-&lt;h3 id=&quot;eu-public-sector-websites&quot;&gt;EU public sector websites&lt;/h3&gt;
-
-&lt;p&gt;Dataset from &lt;a href=&quot;https://www.funka.com/en/projekt/we4authors/&quot;&gt;We4authors&lt;/a&gt;. Based on this analysis, I could find 3 national EU public sector websites built with Wagtail:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;www.danepubliczne.gov.pl
-www.nhs.uk
-www.nesta.org.uk
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are many more public sector websites built with Wagtail at the national and regional / local level, but this type of analysis already shows the value in having the ability to detect Wagtail – the CMS could be part of &lt;a href=&quot;https://www.funka.com/en/projekt/we4authors/we4authors-main-activities-and-results/market-analysis-and-benchmarking-process-of-existing-cms/&quot;&gt;market analysis&lt;/a&gt; for research projects like We4authors, from which we can learn a lot.&lt;/p&gt;
-
-&lt;h3 id=&quot;us-federal-websites&quot;&gt;US federal websites&lt;/h3&gt;
-
-&lt;p&gt;Analysis of the US federal websites from the &lt;a href=&quot;https://github.com/GSA/digitalgov.gov/blob/main/content/resources/content-management-systems-used-by-government-agencies.md&quot;&gt;digital.gov list&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;fec.gov
-www.peacecorps.gov
-www.consumerfinance.gov
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;made-with-wagtail&quot;&gt;Made with Wagtail&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://madewithwagtail.org/&quot;&gt;Made with Wagtail&lt;/a&gt; is a showcase of a lot of Wagtail sites and apps. About two thirds of sites listed are detected with the following regular expressions.&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min|width|height|scale)-\d|original))&apos;&lt;/span&gt; mww &lt;span class=&quot;nt&quot;&gt;--stats-only&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 382 files contained matches&lt;/span&gt;
-ag &lt;span class=&quot;s1&quot;&gt;&apos;\/media\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min)-\d+x\d+(-c\d+)?|(width|height|scale)-\d+|original)\.)&apos;&lt;/span&gt; mww &lt;span class=&quot;nt&quot;&gt;--stats-only&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 292 files contained matches&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The remaining third are largely made up of sites that… actually aren’t made with Wagtail, either because Wagtail is only used for a specific section of a site (and not the homepage), or because the site got rebuilt with another technology since being listed there.&lt;/p&gt;
-
-&lt;h3 id=&quot;majestic-million&quot;&gt;Majestic Million&lt;/h3&gt;
-
-&lt;p&gt;The &lt;a href=&quot;https://majestic.com/reports/majestic-million&quot;&gt;Majestic Million&lt;/a&gt; is a dataset of 1M domain names ordered by popularity. We can also use the above methodology to assess how many websites are made with Wagtail on this list (about 0.05%).&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ag &lt;span class=&quot;s1&quot;&gt;&apos;\/media\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min)-\d+x\d+(-c\d+)?|(width|height|scale)-\d+|original)\.)&apos;&lt;/span&gt; million &lt;span class=&quot;nt&quot;&gt;--stats-only&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 296 files contained matches&lt;/span&gt;
-ag &lt;span class=&quot;s1&quot;&gt;&apos;\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|min|width|height|scale)-\d|original))&apos;&lt;/span&gt; ../detect-wagtail-data/million &lt;span class=&quot;nt&quot;&gt;--stats-only&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 528 files contained matches&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Those numbers neatly match those of &lt;a href=&quot;https://whatcms.org/c/Wagtail&quot;&gt;WhatCMS&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;security-implications&quot;&gt;Security implications&lt;/h2&gt;
-
-&lt;p&gt;Telling whether a given site is built with Wagtail or not really doesn’t take that much effort. The image renditions methodology also shows it’s very easy to do at scale. There is nothing here that can prevent bad actors from scanning the web for vulnerable Wagtail sites, as is commonplace for other platforms. For all intents and purposes, you should assume this is happening already.&lt;/p&gt;
-
-&lt;p&gt;What should we do then? For a start, don’t rely on &lt;a href=&quot;https://en.wikipedia.org/wiki/Security_through_obscurity&quot;&gt;security through obscurity&lt;/a&gt;. Take the time to establish a threat model for your site, and protect it accordingly by restricting access to anything exploitable, and implementing brute force protections where relevant. Take a multi-layered approach to security – with defenses at the network level (e.g. a WAF), application level (e.g. rate limiting, defensive programming, handling of untrusted input, etc.), and also monitoring (logs analysis).&lt;/p&gt;
-
-&lt;p&gt;An old but still relevant example of this in the Wagtail world is &lt;a href=&quot;https://github.com/springload/wagtailenforcer&quot;&gt;WagtailEnforcer&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;And of course, keep your site up-to-date with security fixes for all its dependencies. While the approach described here doesn’t make it possible to determine which version of Wagtail is used – there are other very viable approaches that make this equally as easy (see &lt;a href=&quot;https://github.com/caioariede/detect-django-version&quot;&gt;detect-django-version&lt;/a&gt; for inspiration).&lt;/p&gt;
-
-&lt;h2 id=&quot;applications&quot;&gt;Applications&lt;/h2&gt;
-
-&lt;p&gt;There are a lot more applications to being able to detect Wagtail websites than just knowing how many there are out there. &lt;a href=&quot;WhatCMS.org&quot;&gt;WhatCMS.org&lt;/a&gt; has had some amount of Wagtail data for years and is a good example of the potential for market analysis. For me, I’m more interested in seeing how Wagtail is used in the wild. Here are interesting questions this can help answer:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Wagtail headless usage – which static site generators are the most common with Wagtail, that would be worth documenting the usage of better. In my analysis, I found a lot of Next and Gatsby websites in particular.&lt;/li&gt;
-  &lt;li&gt;Security best practices – how many websites have the Wagtail admin accessible from any IP vs being restricted.&lt;/li&gt;
-  &lt;li&gt;Accessibility – how accessible Wagtail sites are.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This last point is the one I’m the most interested in – in particular, comparing Wagtail’s results to those of other technologies in the &lt;a href=&quot;https://webaim.org/projects/million/&quot;&gt;WebAIM Million&lt;/a&gt;. We’ll see how that goes!&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">How can you tell if a site is made with Wagtail or not? There are more ways than people might think at first sight, and after a few years of toying with the idea I finally put together a way to detect Wagtail sites, that strikes a good balance between reliability and convenience. Let’s go birdwatching.</summary></entry><entry><title type="html">Accessibility wins for Django projects</title><link href="https://thib.me/accessibility-wins-for-django-projects" rel="alternate" type="text/html" title="Accessibility wins for Django projects" /><published>2020-09-15T22:15:22+00:00</published><updated>2020-09-15T22:15:22+00:00</updated><id>https://thib.me/accessibility-wins-for-django-projects</id><content type="html" xml:base="https://thib.me/accessibility-wins-for-django-projects">&lt;p&gt;Talk at DjangoCon EU 2020&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.google.com/presentation/d/1JWroGeYl7JlP2OHbG4a4h0SxSlMsWJvRTvDm0kFkqhQ/edit&quot;&gt;Google Slides: DjangoCon EU 2020 - Accessibility wins for Django projects&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://drive.google.com/file/d/12tedghT8bRGhnZgWt7tXWv_qtvJ1YKCA/view?usp=sharing&quot;&gt;PDF: DjangoCon EU 2020 - Accessibility wins for Django projects&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">Talk at DjangoCon EU 2020</summary></entry></feed>
+&lt;p&gt;Hopefully more of the above – new features, more stability, better documentation. We’re particulary keen on &lt;a href=&quot;https://github.com/torchbox/django-pattern-library/issues/106&quot;&gt;finding ways to mock templates with factories rather than plain data structures&lt;/a&gt;, and &lt;a href=&quot;https://github.com/torchbox/django-pattern-library/issues/103&quot;&gt;combining our Django rendering features with Storybook’s developer experience&lt;/a&gt;.&lt;/p&gt;</content><author><name>Thibaud Colas</name></author><summary type="html">If you’re into UI component reuse, you may have heard of Atomic Design and Pattern Lab. We’re big fans at Torchbox, but Pattern Lab is PHP or Node-based, while we decided long ago to leave the PHP / Drupal world behind, and concentrate on Django. We took Pattern Lab with us, and built django-pattern-library – a.k.a. Pattern Lab goes Django.</summary></entry></feed>

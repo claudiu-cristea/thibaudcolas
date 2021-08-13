@@ -4,13 +4,78 @@
   <title><![CDATA[Thibaud’s blog]]></title>
   <link href="https://thib.me/atom.xml" rel="self"/>
   <link href="https://thib.me/"/>
-  <updated>2021-06-26T10:51:42+00:00</updated>
+  <updated>2021-08-13T23:43:16+00:00</updated>
   <id>https://thib.me/</id>
   <author>
     <name><![CDATA[Thibaud Colas]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[WCAG 2.2: new accessibility guidelines on the way]]></title>
+    <link href="https://thib.me/wcag-22-accessibility-guidelines"/>
+    <updated>2021-08-13T16:52:22+00:00</updated>
+    <id>https://thib.me/wcag-22-accessibility-guidelines</id>
+    <content type="html"><![CDATA[<p>In web accessibility testing, WCAG 2.1 is the gold standard. But talk to experts – and they’ll be quick to tell you it’s a very low baseline. WCAG 2.2’s latest draft introduces new criteria, relevant for all websites.</p>
+
+<!-- more -->
+
+<h2 id="whats-new-in-wcag-22">What’s new in WCAG 2.2</h2>
+
+<p>Plenty of good things – there are 9 new success criteria:</p>
+
+<ul>
+  <li>Guideline 2.4 Navigable
+    <ul>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2411-focus-appearance-minimum-aa">2.4.11 Focus Appearance (Minimum) (AA)</a></li>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2412-focus-appearance-enhanced-aaa">2.4.12 Focus Appearance (Enhanced) (AAA)</a></li>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#2413-page-break-navigation-a">2.4.13 Page Break Navigation (A)</a></li>
+    </ul>
+  </li>
+  <li>Guideline 2.5 Input Modalities
+    <ul>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#257-dragging-movements-aa">2.5.7 Dragging Movements (AA)</a></li>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#258-target-size-minimum-aa">2.5.8 Target Size (Minimum) (AA)</a></li>
+    </ul>
+  </li>
+  <li>Guideline 3.2 Predictable
+    <ul>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#326-consistent-help-a">3.2.6 Consistent Help (A)</a></li>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#327-visible-controls-aa">3.2.7 Visible Controls (AA)</a></li>
+    </ul>
+  </li>
+  <li>Guideline 3.3 Input Assistance
+    <ul>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#337-accessible-authentication-a">3.3.7 Accessible Authentication (A)</a></li>
+      <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/#338-redundant-entry-a">3.3.8 Redundant Entry (A)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>As well as the normative guidelines, all criteria also use <a href="https://www.w3.org/WAI/people-use-web/user-stories/">stories of web users</a> to better convey what problems we are trying to prevent with those guidelines – and what “success” looks like.</p>
+
+<p>There are a lot of good resources covering the new criteria in much better detail than we ever could – we’d highly recommend taking a look at Alastair Campbell’s talk <a href="https://www.youtube.com/watch?v=EZlqSwgKuZE">WCAG 2.2: What’s new and what to do with it</a> at the Virtua11y conference.</p>
+
+<h2 id="applying-wcag-22-to-sites">Applying WCAG 2.2 to sites</h2>
+
+<p>There won’t be any legal requirements to follow this new draft version for quite a while. That said, the new guidelines are so good they are well worth implementing and testing for right away.</p>
+
+<p>WCAG 2.1 is a good baseline, but there are a lot of areas where it falls short and we should aim beyond. To illustrate – here is a color contrast fail, generated with <a href="https://whocanuse.com/">Who Can Use</a>. According to WCAG 2.1 rules, the black text would be higher-contrast over this shade of blue than white text:</p>
+
+<p><img src="/images/blog/wcag-22-accessibility-guidelines/whocanuse-blue.png" alt="Comparison of lorem copy in white and black, over a blue background (hex code #2E7CD6). White has a contrast ratio of 4.23:1, non-compliant, black has 4.97:1, passing level AA." /></p>
+
+<blockquote>
+  <p>Comparison of lorem copy in white and black, over a blue background (hex code #2E7CD6). White has a contrast ratio of 4.23:1, non-compliant, black has 4.97:1, passing level AA</p>
+</blockquote>
+
+<p>This is due to how basic the contrast calculations are in WCAG 2.1. This specific issue will – hopefully – be addressed in the upcoming <a href="https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/">WCAG 3.0</a>. It’s still a very early draft, but is well worth being aware of as well if you’re critically thinking of where else WCAG 2.1 might be falling short.</p>
+
+<h2 id="we-can-help">We can help</h2>
+
+<p>Torchbox offers standalone <a href="https://torchbox.com/digital-products/accessibility-testing/">accessibility consulting services</a>, with the goal of helping organisations aim beyond compliance. Don’t hesitate to get in touch if you want your site to get ahead of the curve.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[DjangoCon Europe 2021 sprints – Accessibility review of PyCon Lithuania]]></title>
@@ -222,6 +287,89 @@
   <li>There are two <code class="language-plaintext highlighter-rouge">h1</code> in the index page. Fixed in <a href="https://github.com/django-postgres-metrics/django-postgres-metrics/pull/58">#58</a>.</li>
   <li>The RTD version picker is reachable, but impossible to open</li>
 </ul>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DjangoCon Europe 2021 field notes]]></title>
+    <link href="https://thib.me/djangocon-europe-field-notes"/>
+    <updated>2021-06-04T06:43:49+00:00</updated>
+    <id>https://thib.me/djangocon-europe-field-notes</id>
+    <content type="html"><![CDATA[<p>Notes from the conference.</p>
+
+<!-- more -->
+
+<p><a href="https://github.com/mxsasha/lessobviouschecklist">https://github.com/mxsasha/lessobviouschecklist</a></p>
+
+<h2 id="climate">Climate</h2>
+
+<p><a href="https://www.youtube.com/watch?v=upiK4du5vUI">https://www.youtube.com/watch?v=upiK4du5vUI</a></p>
+
+<p><a href="https://cloud.google.com/sustainability/region-carbon">https://cloud.google.com/sustainability/region-carbon</a>
+<a href="https://pypi.org/project/energyusage/">https://pypi.org/project/energyusage/</a>
+<a href="https://www.cloudcarbonfootprint.org/docs/gcp">https://www.cloudcarbonfootprint.org/docs/gcp</a>
+<a href="https://codeascraft.com/2020/04/23/cloud-jewels-estimating-kwh-in-the-cloud/">https://codeascraft.com/2020/04/23/cloud-jewels-estimating-kwh-in-the-cloud/</a>
+<a href="https://www.cloudcarbonfootprint.org/docs/methodology">https://www.cloudcarbonfootprint.org/docs/methodology</a>
+<a href="https://github.com/hubblo-org/scaphandre">https://github.com/hubblo-org/scaphandre</a>
+<a href="https://pypi.org/project/pyJoules">https://pypi.org/project/pyJoules</a></p>
+
+<p><a href="https://github.com/responsibleproblemsolving/energy-usage/issues/16">https://github.com/responsibleproblemsolving/energy-usage/issues/16</a></p>
+
+<h2 id="indexes">Indexes</h2>
+
+<p>db_index=True on fields</p>
+
+<p>class-based indexes on classes</p>
+
+<p>Functional indexes?</p>
+
+<p><a href="https://adamj.eu/tech/2020/07/27/how-to-modernize-your-django-index-definitions/">https://adamj.eu/tech/2020/07/27/how-to-modernize-your-django-index-definitions/</a></p>
+
+<h2 id="database-migrations">Database migrations</h2>
+
+<p><a href="https://speakerdeck.com/markush/writing-safe-database-migrations-djangocon-europe-2021">https://speakerdeck.com/markush/writing-safe-database-migrations-djangocon-europe-2021</a></p>
+
+<h2 id="hunting-performance-in-django-code">Hunting Performance in Django code</h2>
+
+<p>Tracing profilers vs sampling profilers</p>
+
+<p>Good overview of different profiler options for Python (for example the ones that support multi-threading)</p>
+
+<p><a href="https://github.com/plasma-umass/scalene">https://github.com/plasma-umass/scalene</a></p>
+
+<h2 id="dd-with-graphql-and-django">DD with GraphQL and Django</h2>
+
+<p><a href="https://www.cosmicpython.com/">https://www.cosmicpython.com/</a></p>
+
+<p>Leaner framework could be better? (FastAPI?)</p>
+
+<h2 id="django--sphinx">Django + Sphinx</h2>
+
+<h2 id="clean-architecture-with-django">Clean architecture with Django</h2>
+
+<p>Best use case for Django</p>
+
+<p>Dependency inversion</p>
+
+<h2 id="htmx-frontend-revolution">HTMX: Frontend Revolution</h2>
+
+<h2 id="absolutely-no-javascript">Absolutely no JavaScript</h2>
+
+<p><a href="https://github.com/adamghill/djangocon-eu-2021-conference-talk">https://github.com/adamghill/djangocon-eu-2021-conference-talk</a></p>
+
+<h2 id="sprint">Sprint</h2>
+
+<p><a href="https://github.com/django/django/pull/14391">https://github.com/django/django/pull/14391</a>
+<a href="https://github.com/django/django/pull/14389">https://github.com/django/django/pull/14389</a></p>
+
+<p><a href="https://github.com/aeltanawy/Receptor">https://github.com/aeltanawy/Receptor</a></p>
+
+<hr />
+
+<p><a href="https://github.com/adamghill/djangocon-eu-2021-conference-talk">https://github.com/adamghill/djangocon-eu-2021-conference-talk</a></p>
+
+<p><a href="https://code.djangoproject.com/ticket/32819">https://code.djangoproject.com/ticket/32819</a>
+<a href="https://code.djangoproject.com/ticket/32820">https://code.djangoproject.com/ticket/32820</a></p>
 ]]></content>
   </entry>
   
@@ -1702,168 +1850,6 @@ ag <span class="s1">'\/(original_images\/[\w-]+\.|images\/[\w-.]+\.((fill|max|mi
   <li>Report to project stakeholders</li>
   <li>Guidance for implementers</li>
   <li>Report to other vendors if needed</li>
-</ul>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Welcome to curlylint.org!]]></title>
-    <link href="https://thib.me/welcome-to-curlylint"/>
-    <updated>2020-06-19T22:03:29+00:00</updated>
-    <id>https://thib.me/welcome-to-curlylint</id>
-    <content type="html"><![CDATA[<p>Curlylint now has a website! 🎉</p>
-
-<!-- more -->
-
-<p>While the linter itself is still very experimental, and subject to major changes, I believe that having great documentation is a much more important step than any single feature or linting rule of the linter. Particularly:</p>
-
-<ul>
-  <li>Documenting the rules, with their respective configuration options, with lots of examples.</li>
-  <li>Documenting CLI options, and (hopefully) future editor integrations.</li>
-</ul>
-
-<p>With a standalone site (as opposed to Markdown files in GitHub), I can create clean URLs for each of the rules, that can then be used directly in the CLI’s output. This is all inspired by <a href="https://eslint.org/">ESLint</a>, which is years ahead of any other static analysis tool I’ve ever used.</p>
-
-<p><img src="/images/blog/welcome-to-curlylint/eslint-awesome.gif" alt="Screen capture of ESLint in VS Code, with link to a rule’s documentation, and options to automatically disable the rule" /></p>
-
-<blockquote>
-  <p>ESLint’s VS Code integration, with link straight to the rule’s documentation, and options to auto-disable the violation.</p>
-</blockquote>
-
-<h2 id="the-website">The website</h2>
-
-<p>The website itself is built with <a href="https://v2.docusaurus.io/">Docusaurus v2</a>. I don’t think this matters too much – the main features I was after were:</p>
-
-<ul>
-  <li>A focus on documentation websites – with versioning, code highlighting.</li>
-  <li>Being able to write docs in Markdown without having to worry about creating a theme, or manually writing HTML / CSS.</li>
-  <li>Having a blog section and blogging features directly on the same docs website.</li>
-</ul>
-
-<p>The fact that it’s built with React is a plus that will come in handy should I want to build more bespoke pages. MDX is a plus too.</p>
-
-<h2 id="up-next">Up next</h2>
-
-<p>Once the website is up and running, there are two things I’d really like to make:</p>
-
-<ul>
-  <li>An editor integration with VS Code. I’ve had some exposure to this with <a href="https://github.com/stylelint/vscode-stylelint">vscode-stylelint</a>, but still don’t have the clearest understanding of how best to do this for a Python CLI.</li>
-  <li>An online playground similar to that of <a href="https://prettier.io/">Prettier</a>. I think it’s the best demonstrator of a tool’s capabilities, and it simplifies bug reports / quick tests greatly.</li>
-</ul>
-
-<p>Onwards!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Timing attacks, everywhere]]></title>
-    <link href="https://thib.me/timing-attacks-everywhere"/>
-    <updated>2020-05-04T21:15:08+00:00</updated>
-    <id>https://thib.me/timing-attacks-everywhere</id>
-    <content type="html"><![CDATA[<p>Ever heard of <a href="https://en.wikipedia.org/wiki/Timing_attack">timing attacks</a>? Turns out timing attack vulnerabilities are pretty common. It’s unclear to me how practical those attacks are, but I wouldn’t risk it.</p>
-
-<!-- more -->
-
-<h2 id="finding-timing-attack-vulnerabilities">Finding timing attack vulnerabilities</h2>
-
-<p>The gist of a timing attack is an <em><a href="http://cwe.mitre.org/data/definitions/208.html">observable timing discrepancy</a></em> in access control code:</p>
-
-<ul>
-  <li>Some code compares two values in order to determine whether something is authorised or not, for example comparing the user input with a stored plaintext password, or even comparing a hashed version of the user input against a password hash.</li>
-  <li>Turns out, the programming language executing that comparison is smart enough to stop the comparison as early as one of the characters stops matching – instead of having to compare all of the characters of the two strings.</li>
-  <li>If the execution time of the comparison can be observed – then an attacker can determine whether their supplied input is getting closer to the compared value, by seeing the execution take gradually longer.</li>
-</ul>
-
-<p>What does this look like in practice? This:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PasswordViewRestrictionForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="p">[...]</span>
-
-    <span class="k">def</span> <span class="nf">clean_password</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">'password'</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">.</span><span class="n">restriction</span><span class="p">.</span><span class="n">password</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">forms</span><span class="p">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">"The password you have entered is not correct. Please try again."</span><span class="p">))</span>
-</code></pre></div></div>
-
-<p>or that:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">configured_username</span><span class="p">,</span> <span class="n">configured_password</span><span class="p">):</span>
-    <span class="c1"># [...]
-</span>    <span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="n">configured_username</span> <span class="ow">and</span> <span class="n">password</span> <span class="o">==</span> <span class="n">configured_password</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-</code></pre></div></div>
-
-<p>…or <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7576">in Ruby (Rails)</a>,</p>
-
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nn">ClassMethods</span>
-  <span class="k">def</span> <span class="nf">http_basic_authenticate_with</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
-    <span class="n">before_filter</span><span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="nf">except</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:password</span><span class="p">,</span> <span class="ss">:realm</span><span class="p">))</span> <span class="k">do</span>
-      <span class="n">authenticate_or_request_with_http_basic</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="ss">:realm</span><span class="p">]</span> <span class="o">||</span> <span class="s2">"Application"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
-        <span class="nb">name</span> <span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="n">options</span><span class="p">[</span><span class="ss">:password</span><span class="p">]</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div></div>
-
-<p>or <a href="https://github.com/flawyte/now-basic-auth/issues/4">in Node (Express)</a>,</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">protect</span><span class="p">(</span>
-  <span class="dl">"</span><span class="s2">/admin</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">user</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span> <span class="o">&amp;&amp;</span> <span class="nx">pass</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">admin</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">{</span>
-    <span class="na">directory</span><span class="p">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">/_static</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">realm</span><span class="p">:</span> <span class="dl">"</span><span class="s2">now-basic-auth.node-static-auth</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">onAuthFailed</span><span class="p">:</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="dl">"</span><span class="s2">Restricted area, please login (admin:admin).</span><span class="dl">"</span><span class="p">);</span>
-    <span class="p">},</span>
-  <span class="p">}</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<p>Once you know what to look for, timing attack vulnerabilities really are everywhere. In <a href="https://github.com/flawyte/now-basic-auth/issues/4">basic auth code</a>. In <a href="https://github.com/tm-kn/django-basic-auth-ip-whitelist/security/advisories/GHSA-m38j-pmg3-v5x5">more basic auth code</a>, and also in <a href="https://github.com/wagtail/wagtail/security/advisories/GHSA-jjjr-3jcw-f8v6">password-protected content</a>.</p>
-
-<p>For me, this came up because I was looking for a good Express basic auth implementation, stumbled upon <a href="https://github.com/LionC/express-basic-auth">express-basic-auth</a>, which works well, and then wondered – “oh, are other libraries using a <a href="https://nodejs.org/api/crypto.html#crypto_crypto_timingsafeequal_a_b">timing-safe comparison function</a>?” Lots weren’t.</p>
-
-<h2 id="protecting-yourself">Protecting yourself</h2>
-
-<p>As mentioned above, all sensitive comparison checks should use timing-safe comparison functions such as Node’s <a href="https://nodejs.org/api/crypto.html#crypto_crypto_timingsafeequal_a_b">crypto.timingSafeEqual</a> or Python 3.4+’s <a href="https://docs.python.org/3/library/hmac.html#hmac.compare_digest">hmac.compare_digest</a> (or Django’s <a href="https://github.com/django/django/blob/659a73bc0a2df9be856e23fcfc6cc66d0d1a35fd/django/utils/crypto.py#L77"><code class="language-plaintext highlighter-rouge">crypto.constant_time_compare</code></a>).</p>
-
-<h3 id="proactively-looking-for-similar-issues">Proactively looking for similar issues</h3>
-
-<p>You will want to look for all access control code that uses the programming language’s built-in comparison operators (<code class="language-plaintext highlighter-rouge">==</code> or <code class="language-plaintext highlighter-rouge">!=</code>). I’m very excited about the potential of platforms like <a href="https://lgtm.com/">LGTM</a> and their <a href="https://securitylab.github.com/tools/codeql">CodeQL language</a> to find vulnerabilities like this automaticaly. Here is a sample query:</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">python</span>
-
-<span class="k">from</span> <span class="nx">Compare</span> <span class="nx">eq</span>
-<span class="nx">where</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%key%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%password%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%auth%</span><span class="dl">"</span><span class="p">)</span> <span class="nx">or</span> <span class="nx">eq</span><span class="p">.</span><span class="nx">getAComparator</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">matches</span><span class="p">(</span><span class="dl">"</span><span class="s2">%sign%</span><span class="dl">"</span><span class="p">)</span>
-<span class="nx">select</span> <span class="nx">eq</span>
-</code></pre></div></div>
-
-<p>This is a relatively naive query, but it helped me identify issues like Wagtail’s bypass-able <a href="https://github.com/wagtail/wagtail/issues/6127">image serve signature check</a>.</p>
-
-<p>If you want to try this out for yourself, <a href="https://securitylab.github.com/tools/codeql">GitHub’s Security Labs</a> have the most extensive documentation on how to use this.</p>
-
-<h2 id="references">References</h2>
-
-<ul>
-  <li>Tools to probe for timing attack vulnerabilities:
-    <ul>
-      <li><a href="https://github.com/ffleming/timing_attack">https://github.com/ffleming/timing_attack</a></li>
-      <li><a href="https://github.com/SakiiR/timeauth">https://github.com/SakiiR/timeauth</a></li>
-    </ul>
-  </li>
-  <li><a href="https://www.blackhat.com/docs/us-15/materials/us-15-Morgan-Web-Timing-Attacks-Made-Practical.pdf">Timing Attacks Made Practical, Blackhat 2015</a></li>
-  <li><a href="https://gist.github.com/thibaudcolas/f68fb257abb6dc6164be0c01c4f42367">Initial research for django-basic-auth-ip-whitelist vulnerability</a>
-    <ul>
-      <li><a href="https://github.com/tm-kn/django-basic-auth-ip-whitelist/security/advisories/GHSA-m38j-pmg3-v5x5">CVE-2020-4071</a></li>
-    </ul>
-  </li>
-  <li><a href="https://gist.github.com/thibaudcolas/bf80b119225dacb8463aab7d7e527bd6">Initial research for Wagtail vulnerability</a>
-    <ul>
-      <li><a href="https://github.com/wagtail/wagtail/security/advisories/GHSA-jjjr-3jcw-f8v6">CVE-2020-11037</a></li>
-    </ul>
-  </li>
 </ul>
 ]]></content>
   </entry>
